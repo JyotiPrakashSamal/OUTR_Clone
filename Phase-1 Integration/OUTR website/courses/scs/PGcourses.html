@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC - PG Courses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../courses.css">
+    <link rel="stylesheet" href="../PGcourses.css">
+    
+</head>
+
+<body>
+    <header class="hero">
+        <img src="https://outr.ac.in/public/uploads/b1_5.jpg" alt="OUTR Campus">
+        <div class="overlay">
+            <div class="hero-content">
+                <span class="badge">Academics</span>
+                <h1>Postgraduate Courses</h1>
+                <p class="subtitle">School of Computer Sciences</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h2>Academic Programs</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="main-container">
+        <!-- PG COURSES -->
+        <div class="glass-card">
+            <div class="course-header">
+                <h3>Postgraduate (PG)</h3>
+                <span class="course-badge">Master's</span>
+            </div>
+
+            <div class="desc">
+                <ul class="course-list">
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech IT</h4>
+                            <p>Master of Technology in Information Technology</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-it">View details</button>
+                    </li>
+                    
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech CSC</h4>
+                            <p>Master of Technology in Computer Science & Engineering</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-csc">View details</button>
+                    </li>
+                    
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech IT (Part time)</h4>
+                            <p>Part-time Master of Technology in Information Technology</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-it-pt">View details</button>
+                    </li>
+                    
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MCA</h4>
+                            <p>Master of Computer Applications</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mca">View details</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay hidden"></div>
+
+    <div class="modal hidden" id="modal-mtech-it">
+        <button class="close-modal">&times;</button>
+        <h3>MTech IT</h3>
+        <div class="modal-subtitle">Master of Technology in Information Technology</div>
+        <p>The M.Tech program in Information Technology is designed to equip students with advanced technical skills, research methodologies, and industry-oriented practical knowledge in the field of IT.</p>
+        <ul class="modal-features">
+            <li>Duration: 2 Years (4 Semesters)</li>
+            <li>Advanced computing and software development</li>
+            <li>Research-focused curriculum with dissertation</li>
+            <li>Strong industry-academia collaboration</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-mtech-csc">
+        <button class="close-modal">&times;</button>
+        <h3>MTech CSC</h3>
+        <div class="modal-subtitle">Master of Technology in Computer Science</div>
+        <p>This program offers specialized training in advanced concepts of Computer Science, including artificial intelligence, machine learning, data structures, and algorithms to prepare students for research and top-tier industry roles.</p>
+        <ul class="modal-features">
+            <li>Duration: 2 Years (4 Semesters)</li>
+            <li>Focus on core CS principles and emerging technologies</li>
+            <li>State-of-the-art laboratory facilities</li>
+            <li>Placement assistance in leading tech companies</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-mtech-it-pt">
+        <button class="close-modal">&times;</button>
+        <h3>MTech IT (Part time)</h3>
+        <div class="modal-subtitle">Part-Time Master of Technology in Information Technology</div>
+        <p>Designed for working professionals, this part-time program allows students to pursue an advanced degree while continuing their careers. The curriculum is tailored to bridge the gap between academic research and industry practice.</p>
+        <ul class="modal-features">
+            <li>Duration: 3 Years (6 Semesters)</li>
+            <li>Flexible class timings for working professionals</li>
+            <li>Focus on continuous learning and skill upgrade</li>
+            <li>Opportunity to implement academic learnings at work</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-mca">
+        <button class="close-modal">&times;</button>
+        <h3>MCA</h3>
+        <div class="modal-subtitle">Master of Computer Applications</div>
+        <p>The MCA program provides a comprehensive foundation in modern software development, enterprise applications, and IT management. It aims to create highly skilled software engineers ready for the dynamic IT landscape.</p>
+        <ul class="modal-features">
+            <li>Duration: 2 Years (4 Semesters)</li>
+            <li>Extensive software engineering and programming curriculum</li>
+            <li>Real-world project development and internships</li>
+            <li>Excellent career prospects in software development and consulting</li>
+        </ul>
+    </div>
+
+    <script>
+        'use strict';
+
+        const modals = document.querySelectorAll('.modal');
+        const overlay = document.querySelector('.modal-overlay');
+        const btnsOpenModal = document.querySelectorAll('.show-modal');
+        const btnsCloseModal = document.querySelectorAll('.close-modal');
+
+        const openModal = function (e) {
+            const modalId = e.currentTarget.getAttribute('data-modal');
+            const targetModal = document.getElementById(modalId);
+            
+            if (targetModal) {
+                targetModal.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        };
+
+        const closeModal = function () {
+            modals.forEach(modal => modal.classList.add('hidden'));
+            overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+        };
+
+        btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+        btnsCloseModal.forEach(btn => btn.addEventListener('click', closeModal));
+        overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

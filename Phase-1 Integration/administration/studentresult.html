@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OUTR-Student Result</title>
+<style>
+  :root {
+    --navy: #1d4ba0;
+    --maroon: #8b0000;
+    --gold: #cc8800;
+    --green: #1b5e20;
+    --magenta: #c0008a;
+    --text: #111111;
+    --muted: #555555;
+    --border: #cccccc;
+    --bg: #f0f0f0;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: Arial, sans-serif; min-height: 100vh; font-size: 14px; }
+
+   /*headr */
+   .result-header{
+    text-align: center;
+    padding-top: 20px;
+}
+
+.result-header h1{
+    font-size:32px;
+    font-weight:700;
+    color:#1e40af;
+    font-family:'Poppins',sans-serif;
+    margin-bottom:6px;
+}
+
+.result-header p{
+    font-size:14px;
+    color:#64748b;
+    font-family:'Inter',sans-serif;
+}
+  /* ── LOGIN ── */
+  #loginPage {
+    
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: #6394f0;
+  }
+  .login-wrap { background: var(--white); width: 380px; box-shadow: 0 8px 40px rgba(0,0,0,.35); overflow: hidden; }
+  .login-hdr { background: var(--navy); padding: 26px 30px 20px; text-align: center; color: white; }
+  .login-hdr .u1 { font-size: 14px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.4; font-family: Georgia, serif; }
+  .login-hdr .u2 { font-size: 11px; font-style: italic; opacity: .85; margin-top: 3px; }
+  .login-hdr .u3 { font-size: 12px; font-weight: 700; color: #ffd54f; margin-top: 3px; letter-spacing: 0.8px; }
+  .login-hdr .badge { background: rgba(255,255,255,.15); font-size: 10px; letter-spacing: 1.2px; padding: 4px 12px; border-radius: 2px; display: inline-block; margin-top: 10px; }
+  .login-bdy { padding: 10px 30px; }
+  .login-bdy h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .login-bdy p { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+  .lf { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+  .lf label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .7px; }
+  .lf input {
+    border: 1.5px solid var(--border); padding: 10px 12px; font-size: 13px;
+    outline: none; transition: border-color .2s; font-family: Arial, sans-serif; width: 100%;
+  }
+  .lf input:focus { border-color: var(--navy); }
+  .btn-login {
+    width: 100%; padding: 12px; background: var(--navy); border: none; color: white;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; transition: background .2s; margin-top: 4px;
+  }
+  .btn-login:hover { background: #00205a; }
+  .err-box { background: #fff0f0; border: 1px solid #f5c6c6; color: #c0392b; padding: 9px 12px; font-size: 12px; margin-bottom: 12px; display: none; }
+
+  /* ── PORTAL SHELL ── */
+  #studentPortal { display: none; }
+  .s-topbar {
+    background: var(--navy); padding: 0 28px; height: 50px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2); position: sticky; top: 0; z-index: 100;
+  }
+  .s-brand { color: white; }
+  .s-brand .t1 { font-size: 13px; font-weight: 700; }
+  .s-brand .t2 { font-size: 10px; opacity: .75; margin-top: 1px; }
+  .btn-lo { background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25); color: white; padding: 6px 16px; font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: background .2s; }
+  .btn-lo:hover { background: rgba(255,255,255,.22); }
+
+  /* ── DASHBOARD BODY ── */
+  .s-body { max-width: 880px; margin: 0 auto; padding: 24px 18px; }
+
+  .profile-card {
+    background: var(--white); border: 1px solid var(--border); border-left: 5px solid var(--navy);
+    padding: 18px 22px; margin-bottom: 18px; display: flex; gap: 18px; align-items: center;
+  }
+  .avatar { width: 56px; height: 56px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; flex-shrink: 0; font-family: Georgia, serif; }
+  .pi h2 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 6px; font-family: Georgia, serif; }
+  .pi-row { display: flex; gap: 22px; flex-wrap: wrap; }
+  .pi-row span { font-size: 12px; color: var(--muted); }
+  .pi-row strong { color: var(--text); font-weight: 700; }
+
+  .sel-card { background: var(--white); border: 1px solid var(--border); padding: 18px 22px; margin-bottom: 18px; }
+  .sel-card h4 { font-size: 11px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .sel-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+  .sf { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 150px; }
+  .sf label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .7px; }
+  .sf select { border: 1.5px solid var(--border); padding: 9px 11px; font-size: 13px; outline: none; transition: border-color .2s; cursor: pointer; font-family: Arial, sans-serif; background: white; color: var(--text); width: 100%; }
+  .sf select:focus { border-color: var(--navy); }
+  .btn-view { padding: 10px 26px; background: var(--navy); border: none; color: white; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background .2s; height: 40px; white-space: nowrap; }
+  .btn-view:hover { background: #00205a; }
+
+  /* ── GRADE SHEET ── */
+  #gradeSheet { display: none; }
+  .sheet-acts { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 12px; }
+  .btn-pa { background: white; border: 1.5px solid var(--border); color: var(--text); padding: 8px 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; }
+  .btn-pa:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-dl { background: var(--navy); border: none; color: white; padding: 8px 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-dl:hover { background: #00205a; }
+
+  /* ── OUTR GRADE SHEET (matches reference image) ── */
+  .gsheet { background: white; border: 2px solid #444; }
+
+  .gsh-top { text-align: center; padding: 16px 20px 12px; border-bottom: 3px solid #003087; }
+  .gsh-u1 { font-size: 20px; font-weight: 700; color: #003087; font-family: Georgia, serif; text-transform: uppercase; line-height: 1.3; }
+  .gsh-u2 { font-size: 14px; color: var(--magenta); font-weight: 700; font-style: italic; margin: 4px 0 2px; font-family: Georgia, serif; }
+  .gsh-u3 { font-size: 15px; font-weight: 700; color: var(--gold); font-family: Georgia, serif; letter-spacing: .5px; }
+
+  .gsh-bar { background: #003087; color: white; padding: 7px 18px; font-size: 13px; font-weight: 700; }
+
+  .gsh-info { padding: 10px 18px; border-bottom: 1px solid #ddd; }
+  .gsh-info-row { display: flex; gap: 4px; margin-bottom: 4px; font-size: 13px; }
+  .gsh-lbl { min-width: 135px; color: var(--text); }
+  .gsh-val { font-weight: 700; color: #003087; }
+  .gsh-branch { font-weight: 700; color: var(--green); }
+
+  .gsh-table-wrap { padding: 0 18px 14px; }
+  .gsh-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  .gsh-table th { font-weight: 700; padding: 8px 10px; border: 1px solid #444; background: #f5f5f5; text-align: left; }
+  .gsh-table th.c, .gsh-table td.c { text-align: center; }
+  .gsh-table td { padding: 7px 10px; border: 1px solid #bbb; vertical-align: middle; }
+  .gsh-table tr:nth-child(even) td { background: #fafafa; }
+  .gsh-table tfoot td { font-weight: 700; background: #ebebeb; border: 1px solid #999; }
+
+  /* Grade colors matching OUTR style */
+  .g-O  { color: #1b5e20; font-weight: 700; }
+  .g-A  { color: #1565c0; font-weight: 700; }
+  .g-B  { color: #6a1b9a; font-weight: 700; }
+  .g-C  { color: #e65100; font-weight: 700; }
+  .g-SA { color: #2e7d32; font-weight: 700; }
+  .g-F  { color: #b71c1c; font-weight: 700; }
+
+  .gsh-foot { border-top: 2px solid #003087; padding: 10px 18px 14px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .gsh-pub { font-size: 12px; font-weight: 700; }
+  .gsh-sgpa { font-size: 15px; font-weight: 700; color: #003087; }
+
+  .no-res { text-align: center; padding: 48px 24px; color: var(--muted); }
+  .no-res .ic { font-size: 36px; margin-bottom: 10px; }
+  .no-res p { font-size: 13px; line-height: 1.7; }
+
+  @media print {
+    body { background: white !important; }
+    #loginPage { display: none !important; }
+    #studentPortal { display: block !important; }
+    .s-topbar, .profile-card, .sel-card, .sheet-acts { display: none !important; }
+    #gradeSheet { display: block !important; }
+    .gsheet { box-shadow: none !important; }
+    .gsh-u1, .gsh-u2, .gsh-u3, .gsh-val, .gsh-branch, .gsh-bar,
+    .g-O, .g-A, .g-B, .g-C, .g-SA, .g-F, .gsh-sgpa {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .gsh-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .s-body { padding: 0 !important; }
+  }
+  
+</style>
+</head>
+<body>
+<!-- STUDENT LOGIN -->
+<div id="loginPage">
+  <div class="login-wrap">
+    <div class="login-hdr">
+      <div class="u1">ODISHA UNIVERSITY OF TECHNOLOGY<br>AND RESEARCH</div>
+      <div class="u2"></div>
+      <div class="u3">BHUBANESWAR</div>
+      <div class="badge">STUDENT RESULT PORTAL</div>
+    </div>
+    <div class="login-bdy">
+      <h3>Student Login</h3>
+      <p>Enter your Registration No. and password to view your result.</p>
+      <div class="err-box" id="sErr">&#9888; Invalid Registration No. or Password.</div>
+      <div class="lf">
+        <label>Registration Number * </label>
+        <input type="text" id="s_regd" placeholder="Enter Regd. No." autocomplete="off">
+      </div>
+      <div class="lf">
+        <label>Password * </label>
+        <input type="password" id="s_pass" placeholder="Enter your password">
+      </div>
+      <button class="btn-login" onclick="studentLogin()">Login &amp; View Result</button>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT PORTAL -->
+<div id="studentPortal">
+  <div class="s-topbar">
+    <img src="admin_fileaprove_photo/logo_4.png" width="20px" height="20px" alt="image">
+    <div class="s-brand">
+      <div class="t1">OUTR-Examination Result </div>
+      <div class="t2">Odisha University of Technology and Research, Bhubaneswar</div>
+    </div>
+    <button class="btn-lo" onclick="studentLogout()">Logout</button>
+  </div>
+
+  <div class="s-body">
+
+    <div class="profile-card">
+      <div class="avatar" id="s_avatar">?</div>
+      <div class="pi">
+        <h2 id="s_nameDisp">—</h2>
+        <div class="pi-row">
+          <span>Regd. No: <strong id="s_regdDisp">—</strong></span>
+          <span>Branch: <strong id="s_classDisp">—</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sel-card">
+      <h4>Select Semester &amp; Exam Type</h4>
+      <div class="sel-row">
+        <div class="sf">
+          <label>Semester</label>
+          <select id="s_sem">
+            <option value="">Select Semester</option>
+            <option>1st Semester</option><option>2nd Semester</option>
+            <option>3rd Semester</option><option>4th Semester</option>
+            <option>5th Semester</option><option>6th Semester</option>
+            <option>7th Semester</option><option>8th Semester</option>
+          </select>
+        </div>
+        <div class="sf">
+          <label>Semester Type</label>
+          <select id="s_semType">
+            <option value="">Select Type</option>
+            <option value="Regular">Regular</option>
+            <option value="Back">Back</option>
+          </select>
+        </div>
+        <button class="btn-view" onclick="viewResult()">View Result</button>
+      </div>
+    </div>
+
+    <div id="gradeSheet">
+      <div class="sheet-acts">
+        <button class="btn-pa" onclick="window.print()">&#128424; Print</button>
+        <button class="btn-dl" onclick="window.print()">&#8595; Download PDF</button>
+      </div>
+      <div class="gsheet" id="sheetContent"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let currentRegd = null;
+function getResults() { return JSON.parse(localStorage.getItem('exam_results') || '[]'); }
+
+function studentLogin() {
+  const regd = document.getElementById('s_regd').value.trim().toUpperCase();
+  const pass = document.getElementById('s_pass').value.trim();
+  const err  = document.getElementById('sErr');
+  const all  = getResults();
+  const match = all.find(r => r.regd.toUpperCase() === regd && r.pass === pass);
+  if (match) {
+    err.style.display = 'none';
+    currentRegd = match.regd;
+    document.getElementById('loginPage').style.display  = 'none';
+    document.getElementById('studentPortal').style.display = 'block';
+    document.getElementById('gradeSheet').style.display = 'none';
+    document.getElementById('s_nameDisp').textContent   = match.name;
+    document.getElementById('s_regdDisp').textContent   = match.regd;
+    document.getElementById('s_classDisp').textContent  = match.cls;
+    document.getElementById('s_avatar').textContent     = match.name.charAt(0).toUpperCase();
+  } else {
+    err.style.display = 'block';
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') studentLogin();
+});
+
+function studentLogout() {
+  currentRegd = null;
+  document.getElementById('studentPortal').style.display = 'none';
+  document.getElementById('loginPage').style.display     = 'flex';
+  ['s_regd','s_pass'].forEach(id => document.getElementById(id).value = '');
+  ['s_sem','s_semType'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('gradeSheet').style.display = 'none';
+}
+
+function viewResult() {
+  const sem     = document.getElementById('s_sem').value;
+  const semType = document.getElementById('s_semType').value;
+  if (!sem || !semType) { alert('Please select both Semester and Semester Type.'); return; }
+  const all    = getResults();
+  const record = all.find(r =>
+    r.regd.toUpperCase() === currentRegd.toUpperCase() &&
+    r.sem === sem && r.semType === semType);
+  const gs = document.getElementById('gradeSheet');
+  gs.style.display = 'block';
+  gs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!record) {
+    document.getElementById('sheetContent').innerHTML = `
+      <div class="no-res"><div class="ic">📭</div>
+      <p>No result found for <strong>${sem} — ${semType}</strong>.<br>
+      Please contact the Examination Department.</p></div>`;
+    return;
+  }
+  renderSheet(record);
+}
+
+/* ── GRADE LOGIC (OUTR scale) ── */
+function getGrade(secured, total) {
+  if (!total || total <= 0) return 'SA';
+  const pct = (secured / total) * 100;
+  if (pct >= 90) return 'O';
+  if (pct >= 75) return 'A';
+  if (pct >= 60) return 'B';
+  if (pct >= 45) return 'C';
+  return 'F';
+}
+function gradePoint(grade) {
+  return { O: 10, A: 8, B: 6, C: 4, SA: 0, F: 0 }[grade] ?? 0;
+}
+
+/*
+  SGPA = Σ(grade_i × credit_i) / Σ(credit_i)
+  — weighted mean of all course grade points by their credit weights
+*/
+function calcSGPA(subjects) {
+  let sumGC = 0, sumC = 0;
+  subjects.forEach(s => {
+    const c  = parseFloat(s.credits) || 0;
+    const g  = gradePoint(getGrade(parseFloat(s.secured)||0, parseFloat(s.total)||0));
+    sumGC   += g * c;
+    sumC    += c;
+  });
+  return sumC > 0 ? (sumGC / sumC).toFixed(2) : '0.00';
+}
+
+/*  RENDER OUTR-STYLE SHEET */
+function renderSheet(r) {
+  const today  = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'2-digit', year:'numeric' });
+  const sgpa   = calcSGPA(r.subjects);
+  const yr     = new Date().getFullYear();
+  const barTxt = `${r.sem} ${r.cls} ${r.semType} odd ${yr} ${yr+1}`;
+
+  let totalCr = 0;
+  const rows = r.subjects.map((s, i) => {
+    const cr    = parseFloat(s.credits) || 0;
+    const sec   = parseFloat(s.secured) || 0;
+    const tot   = parseFloat(s.total)   || 0;
+    const grade = getGrade(sec, tot);
+    totalCr += cr;
+    return `<tr>
+      <td class="c">${i+1}</td>
+      <td style="font-weight:700">${s.subCode}</td>
+      <td>${s.subName.toUpperCase()}</td>
+      <td class="c">${cr}</td>
+      <td class="c g-${grade}">${grade}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('sheetContent').innerHTML = `
+    <div class="gsh-top">
+      <div class="gsh-u1">ODISHA UNIVERSITY OF TECHNOLOGY AND RESEARCH</div>
+      <div class="gsh-u2">(Formerly College of Engineering &amp; Technology)</div>
+      <div class="gsh-u3">Bhubaneswar</div>
+    </div>
+    <div class="gsh-bar">${barTxt}</div>
+    <div class="gsh-info">
+      <div class="gsh-info-row"><span class="gsh-lbl">Registration No:</span><span class="gsh-val">${r.regd}</span></div>
+      <div class="gsh-info-row"><span class="gsh-lbl">Student name:</span><span class="gsh-val">${r.name.toUpperCase()}</span></div>
+      <div class="gsh-info-row"><span class="gsh-lbl">Branch:</span><span class="gsh-branch">${r.cls.toUpperCase()}</span></div>
+    </div>
+    <div class="gsh-table-wrap">
+      <table class="gsh-table">
+        <thead><tr>
+          <th class="c" style="width:52px">SL. No.</th>
+          <th style="width:110px">Subject Code</th>
+          <th>Subject</th>
+          <th class="c" style="width:68px">Credit</th>
+          <th class="c" style="width:68px">Grade</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr>
+          <td colspan="3" style="text-align:right;padding-right:12px">Total Credits:</td>
+          <td class="c">${totalCr}</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <div class="gsh-foot">
+      <div class="gsh-pub">Published On: ${today}</div>
+      <div class="gsh-sgpa">SGPA: ${sgpa}</div>
+    </div>
+  `;
+}
+</script>
+<!-- FOOTER -->
+
+</body>
+</html>

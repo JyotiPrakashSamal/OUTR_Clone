@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC - PG Courses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../courses.css">
+    <link rel="stylesheet" href="../PGcourses.css">
+    
+</head>
+
+<body>
+    <header class="hero">
+        <img src="https://outr.ac.in/public/uploads/b1_5.jpg" alt="OUTR Campus">
+        <div class="overlay">
+            <div class="hero-content">
+                <span class="badge">Academics</span>
+                <h1>Postgraduate Courses</h1>
+                <p class="subtitle">School of Mechanical Sciences</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h2>Academic Programs</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="main-container">
+        <!-- PG COURSES -->
+        <div class="glass-card">
+            <div class="course-header">
+                <h3>Postgraduate (PG)</h3>
+                <span class="course-badge">Master's</span>
+            </div>
+
+            <div class="desc">
+                <ul class="course-list">
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech IEM</h4>
+                            <p>Master of Technology in Industrial Engineering and Management</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-it">View details</button>
+                    </li>
+                    
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech MSD</h4>
+                            <p>Master of Technology in Mechanical System Design</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-csc">View details</button>
+                    </li>
+                    
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech MML</h4>
+                            <p>Part-time Master of Technology in Mechatronics and Machine Learning</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-it-pt">View details</button>
+                    </li>
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech TE</h4>
+                            <p>Part-time Master of Technology in Thermal Engineering</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-it-pt">View details</button>
+                    </li>
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MBA</h4>
+                            <p>Master of Business Administration</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mca">View details</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay hidden"></div>
+
+<div class="modal hidden" id="modal-mtech-it">
+    <button class="close-modal">&times;</button>
+    <h3>MTech IEM</h3>
+    <div class="modal-subtitle">Master of Technology in Industrial Engineering and Management</div>
+    <p>The M.Tech IEM program focuses on industrial systems, production management, quality control, operations research, and optimization techniques for efficient industrial processes.</p>
+    <ul class="modal-features">
+        <li>Duration: 2 Years (4 Semesters)</li>
+        <li>Focus on industrial operations and management systems</li>
+        <li>Research and industry-oriented practical learning</li>
+        <li>Training in production and quality management</li>
+    </ul>
+</div>
+
+<div class="modal hidden" id="modal-mtech-csc">
+    <button class="close-modal">&times;</button>
+    <h3>MTech MSD</h3>
+    <div class="modal-subtitle">Master of Technology in Mechanical System Design</div>
+    <p>This program provides advanced knowledge in machine design, CAD/CAM, product development, manufacturing systems, and modern mechanical engineering technologies.</p>
+    <ul class="modal-features">
+        <li>Duration: 2 Years (4 Semesters)</li>
+        <li>Advanced concepts in mechanical system design</li>
+        <li>Hands-on experience with modern design tools</li>
+        <li>Research and innovation-focused curriculum</li>
+    </ul>
+</div>
+
+<div class="modal hidden" id="modal-mtech-it-pt">
+    <button class="close-modal">&times;</button>
+    <h3>MTech TE</h3>
+    <div class="modal-subtitle">Part-time Master of Technology in Thermal Engineering</div>
+    <p>The part-time M.Tech TE program focuses on thermodynamics, heat transfer, energy systems, fluid mechanics, and modern thermal engineering applications for working professionals.</p>
+    <ul class="modal-features">
+        <li>Duration: 3 Years (6 Semesters)</li>
+        <li>Flexible schedule for working professionals</li>
+        <li>Focus on thermal and energy engineering systems</li>
+        <li>Industry-oriented practical and research learning</li>
+    </ul>
+</div>
+
+<div class="modal hidden" id="modal-mca">
+    <button class="close-modal">&times;</button>
+    <h3>MBA</h3>
+    <div class="modal-subtitle">Master of Business Administration</div>
+    <p>The MBA program develops leadership, management, communication, finance, and strategic decision-making skills for successful careers in business and corporate sectors.</p>
+    <ul class="modal-features">
+        <li>Duration: 2 Years (4 Semesters)</li>
+        <li>Focus on business management and leadership</li>
+        <li>Industry exposure through projects and internships</li>
+        <li>Career opportunities in corporate and entrepreneurial sectors</li>
+    </ul>
+</div>
+    <script>
+        'use strict';
+
+        const modals = document.querySelectorAll('.modal');
+        const overlay = document.querySelector('.modal-overlay');
+        const btnsOpenModal = document.querySelectorAll('.show-modal');
+        const btnsCloseModal = document.querySelectorAll('.close-modal');
+
+        const openModal = function (e) {
+            const modalId = e.currentTarget.getAttribute('data-modal');
+            const targetModal = document.getElementById(modalId);
+            
+            if (targetModal) {
+                targetModal.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        };
+
+        const closeModal = function () {
+            modals.forEach(modal => modal.classList.add('hidden'));
+            overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+        };
+
+        btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+        btnsCloseModal.forEach(btn => btn.addEventListener('click', closeModal));
+        overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

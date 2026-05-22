@@ -1,0 +1,46 @@
+{
+  "identity": {
+    "logo": "https://outr.ac.in/public/uploads/logo_4.png",
+    "line1": "Odisha University of",
+    "line2": "Technology and Research",
+    "address": ["Techno Campus, Ghatikia", "Bhubaneswar, Odisha - 751 003", "India"],
+    "phone": "0674-2725223",
+    "email": "registrar@outr.ac.in",
+    "social": [
+      { "href": "https://www.facebook.com/OUTRuniversity/", "icon": "facebook" },
+      { "href": "https://www.instagram.com/outruniversity/", "icon": "instagram" },
+      { "href": "https://www.linkedin.com/school/rani-nilima-kumari-mahila-mahavidyalaya-dharupur-pratapgarh/", "icon": "linkedin" },
+      { "href": "https://www.youtube.com/@outrlive", "icon": "youtube" }
+    ]
+  },
+  "columns": {
+    "quickLinks": [
+      { "label": "Home", "href": "#hero" },
+      { "label": "About OUTR", "href": "#about" },
+      { "label": "Admissions", "href": "#" },
+      { "label": "RTI", "href": "#" },
+      { "label": "Careers", "href": "#" },
+      { "label": "Tenders", "href": "#" },
+      { "label": "NIRF Data", "href": "#" }
+    ],
+    "academics": [
+      { "label": "Programs Offered", "href": "#" },
+      { "label": "UG Syllabus", "href": "#" },
+      { "label": "PG Syllabus", "href": "#" },
+      { "label": "Academic Calendar", "href": "#" },
+      { "label": "COE - AI & ICT", "href": "#" },
+      { "label": "Examination Cell", "href": "#" }
+    ],
+    "contact": [
+      { "label": "Address & Map", "href": "#footer" },
+      { "label": "Phone Directory", "href": "#" },
+      { "label": "Email Directory", "href": "#" },
+      { "label": "Grievance Cell", "href": "#" },
+      { "label": "Social Media Hub", "href": "social.html" },
+      { "label": "Feedback", "href": "#" }
+    ]
+  },
+  "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },
+  "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
+  "copyright": "© 2025 Odisha University of Technology and Research. All Rights Reserved."
+}

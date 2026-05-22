@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examination Cell-Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1f5f9;
+  --surface:#ffffff;
+  --surface2:#f8fafc;
+
+  --border:#dbe4ee;
+
+  --accent:#365ecc;
+  --accent2:#2563eb;
+
+  --danger:#dc2626;
+  --success:#16a34a;
+
+  --text:#0f172a;
+  --muted:#64748b;
+
+  --primary-gradient:linear-gradient(135deg,#1d4ed8,#2563eb);
+}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  /* LOGIN PAGE */
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:linear-gradient(
+        135deg,
+        #e2e8f0,
+        #f8fafc,
+        #dbeafe
+    );
+
+    padding:20px;
+}
+
+/* LOGIN CARD */
+.login-card{
+    width:420px;
+
+    background:#ffffff;
+
+    border:1px solid #dbe4ee;
+    border-radius:12px;
+
+    padding:40px;
+
+    box-shadow:0 12px 35px rgba(15,23,42,.08);
+
+    position:relative;
+}
+
+/* TOP BLUE LINE */
+.login-card::before{
+    content:'';
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:4px;
+
+    background:linear-gradient(
+        135deg,
+        #1e40af,
+        #2563eb
+    );
+
+    border-radius:12px 12px 0 0;
+}
+
+/* UNIVERSITY NAME */
+.login-head{
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+
+    line-height:1.4;
+
+    color:#0f172a;
+
+    font-family:'Poppins',sans-serif;
+
+    margin-bottom:8px;
+}
+
+.login-head span{
+    display:block;
+
+    font-size:14px;
+    font-weight:500;
+
+    color:#64748b;
+
+    margin-top:2px;
+}
+#head-partition{
+  height: fit-content;
+  width: fit-content;
+}
+/* BADGE */
+.portal-badge{
+    text-align:center;
+
+    font-size:11px;
+    letter-spacing:2px;
+
+    color:#2563eb;
+
+    text-transform:uppercase;
+
+    font-weight:600;
+
+    margin-bottom:24px;
+
+    font-family:'JetBrains Mono',monospace;
+}
+
+/* LOGIN TITLE */
+.login-title{
+    text-align:center;
+
+    font-size:30px;
+    font-weight:700;
+
+    color:#0f172a;
+
+    margin-bottom:8px;
+
+    font-family:'Poppins',sans-serif;
+}
+
+/* SUBTITLE */
+.login-subtitle{
+    text-align:center;
+
+    font-size:13px;
+    line-height:1.6;
+
+    color:#64748b;
+
+    margin-bottom:28px;
+
+    font-family:'Inter',sans-serif;
+}
+
+/* FORM FIELD */
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:11px;
+    font-weight:600;
+
+    letter-spacing:1px;
+
+    color:#475569;
+
+    text-transform:uppercase;
+
+    font-family:'JetBrains Mono',monospace;
+}
+
+/* INPUT */
+.field input{
+    width:100%;
+
+    padding:13px 15px;
+
+    border:1px solid #dbe4ee;
+    border-radius:8px;
+
+    background:#f8fafc;
+
+    font-size:14px;
+
+    color:#0f172a;
+
+    outline:none;
+
+    transition:.2s;
+
+    font-family:'Inter',sans-serif;
+}
+
+.field input:focus{
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.10);
+}
+
+/* BUTTON */
+.btn-primary{
+    width:100%;
+
+    margin-top:10px;
+
+    padding:14px;
+
+    border:none;
+    border-radius:8px;
+
+    background:linear-gradient(
+        135deg,
+        #1e40af,
+        #2563eb
+    );
+
+    color:#ffffff;
+
+    font-size:13px;
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-family:'Poppins',sans-serif;
+}
+
+.btn-primary:hover{
+    transform:translateY(-1px);
+
+    opacity:.95;
+}
+
+/* ERROR */
+.error-msg{
+    background:#fef2f2;
+
+    border:1px solid #fecaca;
+
+    color:#dc2626;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    margin-bottom:18px;
+
+    display:none;
+}
+  /* DASHBOARD */
+  #dashboard { display: none; }
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 12px; }
+  .topbar-brand span { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+  .topbar-brand .mono { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 2px; }
+  .topbar-actions { display: flex; align-items: center; gap: 16px; }
+  .btn-logout { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 18px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; letter-spacing: 1px; cursor: pointer; border-radius: 3px; transition: all .2s; }
+  .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+  .sidebar {
+    position: fixed; left: 0; top: 60px; bottom: 0; width: 220px;
+    background: var(--surface); border-right: 1px solid var(--border);
+    padding: 24px 0; overflow-y: auto;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 24px;
+    font-size: 13px; font-family: 'IBM Plex Sans', sans-serif; cursor: pointer;
+    color: var(--muted); transition: all .2s; border-left: 3px solid transparent;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,.03); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(232,197,71,.05); }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .nav-section { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--muted); padding: 16px 24px 6px; opacity: .5; }
+
+  .main-content { margin-left: 220px; padding: 32px; min-height: calc(100vh - 60px); }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-header { margin-bottom: 28px; }
+  .panel-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .panel-subtitle { font-size: 13px; color: var(--muted); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 28px; margin-bottom: 24px; }
+  .card-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+  .form-field input, .form-field select {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 14px; font-size: 13px; font-family: 'IBM Plex Sans', sans-serif;
+    border-radius: 3px; outline: none; transition: border-color .2s;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(74,158,255,.08); }
+  .form-field select option { background: var(--surface2); }
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+  .subject-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr 1fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 10px; }
+  .btn-add-subject { background: transparent; border: 1px dashed var(--border); color: var(--muted); padding: 10px 20px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; border-radius: 3px; width: 100%; margin-top: 8px; transition: all .2s; }
+  .btn-add-subject:hover { border-color: var(--accent2); color: var(--accent2); }
+  .btn-remove { background: transparent; border: 1px solid rgba(255,71,87,.3); color: var(--danger); padding: 9px 12px; border-radius: 3px; cursor: pointer; font-size: 14px; transition: all .2s; flex-shrink: 0; }
+  .btn-remove:hover { background: rgba(255,71,87,.1); }
+  .btn-save { background: var(--accent2); border: none; color: #0a0c10; padding: 12px 32px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; cursor: pointer; border-radius: 3px; transition: opacity .2s; }
+  .btn-save:hover { opacity: .88; }
+  .success-toast {
+    position: fixed; bottom: 32px; right: 32px; background: var(--surface);
+    border: 1px solid var(--success); color: var(--success); padding: 14px 24px;
+    font-size: 13px; font-family: 'IBM Plex Mono', monospace; border-radius: 3px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4); transform: translateY(80px); opacity: 0;
+    transition: all .3s; z-index: 999;
+  }
+  .success-toast.show { transform: translateY(0); opacity: 1; }
+
+  /* RECORDS TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  td { padding: 12px 16px; border-bottom: 1px solid rgba(37,42,56,.5); color: var(--text); }
+  tr:hover td { background: rgba(255,255,255,.02); }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; letter-spacing: 1px; }
+  .badge-reg { background: rgba(74,158,255,.15); color: var(--accent2); }
+  .badge-back { background: rgba(255,71,87,.15); color: var(--danger); }
+  .btn-del { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 13px; opacity: .6; transition: opacity .2s; }
+  .btn-del:hover { opacity: 1; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 20px 22px; }
+  .stat-val { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--accent); }
+  .stat-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--muted); margin-top: 4px; }
+  .search-bar { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 3px; outline: none; font-size: 13px; width: 280px; margin-bottom: 16px; }
+  .search-bar:focus { border-color: var(--accent2); }
+  .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  .empty-state .icon { font-size: 36px; margin-bottom: 12px; }
+  /* Change student password */
+  .btn-sm { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; border-radius: 3px; transition: all .2s; }
+  .btn-sm:hover { border-color: var(--accent2); color: var(--accent2); }
+  /*footer */
+  
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+
+  <div class="login-card">
+ <div id="head-partiton">
+    <div class="login-head">
+      Odisha University Of Technology & Research
+      <span>Bhubaneswar</span>
+    </div>
+ </div>
+    <div class="portal-badge">
+      Controller of Examinations
+    </div>
+<hr>
+    <div class="login-title">
+      Admin Login
+    </div>
+
+    <div class="error-msg" id="loginError">
+      Invalid Login ID or Password.
+    </div>
+
+    <div class="field">
+      <label>Login ID</label>
+      <input type="text" id="adminId" placeholder="Enter Login ID" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="adminPass" placeholder="Enter Password">
+    </div>
+
+    <button class="btn-primary" onclick="doLogin()">
+      SIGN IN
+    </button>
+
+  </div>
+
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div>
+        <div class="mono">CONTROLLER OF EXAMINATIONS</div>
+        <span>Admin Dashboard</span>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">ADMIN</span>
+      <button class="btn-logout" onclick="doLogout()">LOGOUT</button>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="nav-section">MAIN</div>
+    <div class="nav-item active" onclick="showPanel('overview')"><span class="nav-icon">◈</span> Overview</div>
+    <div class="nav-item" onclick="showPanel('addResult')"><span class="nav-icon">＋</span> Add Result</div>
+    <div class="nav-section">RECORDS</div>
+    <div class="nav-item" onclick="showPanel('allResults')"><span class="nav-icon">≡</span> All Results</div>
+    <div class="nav-section">SETTINGS</div>
+    <div class="nav-item" onclick="showPanel('managePasswords')"><span class="nav-icon">🔑</span> Student Passwords</div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="panel-overview">
+      <div class="panel-header">
+        <div class="panel-title">Overview</div>
+        <div class="panel-subtitle">Examination records summary</div>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="card">
+        <div class="card-title">Recent Entries</div>
+        <div id="recentTable"></div>
+      </div>
+    </div>
+
+    <!-- ADD RESULT -->
+    <div class="panel" id="panel-addResult">
+      <div class="panel-header">
+        <div class="panel-title">Add Student Result</div>
+        <div class="panel-subtitle">Enter student details and subject marks manually</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Student Information</div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Student Name</label>
+            <input type="text" id="f_name" placeholder="Full Name">
+          </div>
+          <div class="form-field">
+            <label>Registration Number</label>
+            <input type="text" id="f_regd" placeholder="Enter Regd. No.">
+          </div>
+          <div class="form-field">
+            <label>Class/Branch</label>
+            <input type="text" id="f_class" placeholder="Enter Branch">
+          </div>
+          <div class="form-field">
+            <label>Semester</label>
+            <select id="f_sem">
+              <option value="">Select Semester</option>
+              <option>1st Semester</option>
+              <option>2nd Semester</option>
+              <option>3rd Semester</option>
+              <option>4th Semester</option>
+              <option>5th Semester</option>
+              <option>6th Semester</option>
+              <option>7th Semester</option>
+              <option>8th Semester</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Semester Type</label>
+            <select id="f_semType">
+              <option value="">Select Type</option>
+              <option value="Regular">Regular</option>
+              <option value="Back">Back</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Student Password</label>
+            <input type="text" id="f_pass" placeholder="Set login password for student">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Subject Marks</div>
+        <div style="display:grid;grid-template-columns:2fr 1.2fr 0.8fr 1fr 1fr 40px;gap:10px;margin-bottom:8px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Subject Name</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Subject Code</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Credits</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Secured</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Total/CGPA</span>
+          <span></span>
+        </div>
+        <div id="subjectRows"></div>
+        <button class="btn-add-subject" onclick="addSubjectRow()">+ Add Subject</button>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;">
+        <button class="btn-save" onclick="saveResult()">SAVE RESULT</button>
+        <button onclick="clearForm()" style="background:transparent;border:none;color:var(--accent2);cursor:pointer;font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:1px;">CLEAR</button>
+      </div>
+    </div>
+
+    <!-- ALL RESULTS -->
+    <div class="panel" id="panel-allResults">
+      <div class="panel-header">
+        <div class="panel-title">All Results</div>
+        <div class="panel-subtitle">Browse and manage all entered examination results</div>
+      </div>
+      <input class="search-bar" type="text" id="searchInput" placeholder="Search by name or regd. no..." oninput="renderAllResults()">
+      <div class="card">
+        <div class="table-wrap" id="allResultsTable"></div>
+      </div>
+    </div>
+
+    <!-- MANAGE PASSWORDS -->
+    <div class="panel" id="panel-managePasswords">
+      <div class="panel-header">
+        <div class="panel-title">Student Passwords</div>
+        <div class="panel-subtitle">View and reset student login credentials</div>
+      </div>
+      <div class="card">
+        <div class="table-wrap" id="passwordTable"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="success-toast" id="toast"></div>
+
+<script>
+// Authentication
+const ADMIN_ID = 'admin';
+const ADMIN_PASS = 'admin123';
+
+function doLogin() {
+  const id = document.getElementById('adminId').value.trim();
+  const pw = document.getElementById('adminPass').value.trim();
+  const err = document.getElementById('loginError');
+  if (id === ADMIN_ID && pw === ADMIN_PASS) {
+    err.style.display = 'none';
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    renderOverview();
+  } else {
+    err.style.display = 'block';
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin(); });
+
+function doLogout() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('adminId').value = '';
+  document.getElementById('adminPass').value = '';
+}
+
+// Navigation
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'overview') renderOverview();
+  if (id === 'allResults') renderAllResults();
+  if (id === 'addResult') { clearForm(); addSubjectRow(); }
+  if (id === 'managePasswords') renderPasswords();
+}
+
+// data
+function getResults() { return JSON.parse(localStorage.getItem('exam_results') || '[]'); }
+function saveResults(data) { localStorage.setItem('exam_results', JSON.stringify(data)); }
+
+// Subject Rows
+let rowCount = 0;
+function addSubjectRow(data = {}) {
+  rowCount++;
+  const id = rowCount;
+  const div = document.createElement('div');
+  div.className = 'subject-row';
+  div.id = 'row_' + id;
+  div.innerHTML = `
+    <div class="form-field"><input type="text" placeholder="Subject Name" value="${data.subName||''}"></div>
+    <div class="form-field"><input type="text" placeholder="Code" value="${data.subCode||''}"></div>
+    <div class="form-field"><input type="number" placeholder="Credits" min="1" max="6" value="${data.credits||''}"></div>
+    <div class="form-field"><input type="number" placeholder="Secured" min="0" value="${data.secured||''}"></div>
+    <div class="form-field"><input type="number" placeholder="Total/CGPA" min="0" value="${data.total||''}"></div>
+    <button class="btn-remove" onclick="removeRow(${id})">✕</button>
+  `;
+  document.getElementById('subjectRows').appendChild(div);
+}
+function removeRow(id) {
+  const el = document.getElementById('row_' + id);
+  if (el) el.remove();
+}
+function getSubjects() {
+  const rows = document.querySelectorAll('.subject-row');
+  const subs = [];
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    if (inputs[0].value.trim()) {
+      subs.push({ subName: inputs[0].value.trim(), subCode: inputs[1].value.trim(), credits: inputs[2].value, secured: inputs[3].value, total: inputs[4].value });
+    }
+  });
+  return subs;
+}
+function clearForm() {
+  ['f_name','f_regd','f_class','f_pass'].forEach(id => document.getElementById(id).value = '');
+  ['f_sem','f_semType'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('subjectRows').innerHTML = '';
+  rowCount = 0;
+}
+
+// save result
+function saveResult() {
+  const name = document.getElementById('f_name').value.trim();
+  const regd = document.getElementById('f_regd').value.trim();
+  const cls = document.getElementById('f_class').value.trim();
+  const sem = document.getElementById('f_sem').value;
+  const semType = document.getElementById('f_semType').value;
+  const pass = document.getElementById('f_pass').value.trim();
+  const subjects = getSubjects();
+
+  if (!name || !regd || !cls || !sem || !semType || !pass || subjects.length === 0) {
+    showToast('⚠ Please fill all required fields and add at least one subject.', true); return;
+  }
+  const results = getResults();
+  const existing = results.findIndex(r => r.regd === regd && r.sem === sem && r.semType === semType);
+  const record = { name, regd, cls, sem, semType, pass, subjects, addedAt: new Date().toISOString() };
+  if (existing >= 0) { results[existing] = record; }
+  else { results.push(record); }
+  saveResults(results);
+  showToast('✓ Result saved successfully!');
+  clearForm();
+  addSubjectRow();
+}
+
+// result overview
+function renderOverview() {
+  const data = getResults();
+  const students = [...new Set(data.map(r => r.regd))].length;
+  const regular = data.filter(r => r.semType === 'Regular').length;
+  const back = data.filter(r => r.semType === 'Back').length;
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-box"><div class="stat-val">${data.length}</div><div class="stat-lbl">TOTAL RECORDS</div></div>
+    <div class="stat-box"><div class="stat-val">${students}</div><div class="stat-lbl">UNIQUE STUDENTS</div></div>
+    <div class="stat-box"><div class="stat-val">${regular}</div><div class="stat-lbl">REGULAR EXAMS</div></div>
+    <div class="stat-box"><div class="stat-val">${back}</div><div class="stat-lbl">BACK EXAMS</div></div>
+  `;
+  const recent = data.slice(-5).reverse();
+  if (recent.length === 0) {
+    document.getElementById('recentTable').innerHTML = '<div class="empty-state"><div class="icon">📋</div>No records yet. Add results to get started.</div>';
+    return;
+  }
+  document.getElementById('recentTable').innerHTML = `<div class="table-wrap"><table>
+    <tr><th>Name</th><th>Regd. No</th><th>Class</th><th>Semester</th><th>Type</th><th>Subjects</th></tr>
+    ${recent.map(r => `<tr>
+      <td>${r.name}</td><td style="font-family:'IBM Plex Mono',monospace">${r.regd}</td><td>${r.cls}</td><td>${r.sem}</td>
+      <td><span class="badge ${r.semType==='Regular'?'badge-reg':'badge-back'}">${r.semType}</span></td>
+      <td>${r.subjects.length}</td>
+    </tr>`).join('')}
+  </table></div>`;
+}
+
+// All Result history
+function renderAllResults() {
+  const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  let data = getResults();
+  if (q) data = data.filter(r => r.name.toLowerCase().includes(q) || r.regd.toLowerCase().includes(q));
+  if (data.length === 0) {
+    document.getElementById('allResultsTable').innerHTML = '<div class="empty-state"><div class="icon">🔍</div>No records found.</div>';
+    return;
+  }
+  document.getElementById('allResultsTable').innerHTML = `<table>
+    <tr><th>Name</th><th>Regd. No</th><th>Class</th><th>Semester</th><th>Type</th><th>Subjects</th><th>Added</th><th></th></tr>
+    ${data.map((r, i) => `<tr>
+      <td>${r.name}</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">${r.regd}</td>
+      <td>${r.cls}</td><td>${r.sem}</td>
+      <td><span class="badge ${r.semType==='Regular'?'badge-reg':'badge-back'}">${r.semType}</span></td>
+      <td style="color:var(--muted)">${r.subjects.length} subjects</td>
+      <td style="color:var(--muted);font-size:11px">${new Date(r.addedAt).toLocaleDateString()}</td>
+      <td><button class="btn-del" onclick="deleteResult('${r.regd}','${r.sem}','${r.semType}')">🗑</button></td>
+    </tr>`).join('')}
+  </table>`;
+}
+
+function deleteResult(regd, sem, semType) {
+  if (!confirm(`Delete result for ${regd} — ${sem} (${semType})?`)) return;
+  const data = getResults().filter(r => !(r.regd === regd && r.sem === sem && r.semType === semType));
+  saveResults(data);
+  renderAllResults();
+  showToast('✓ Record deleted.');
+}
+
+// Student Password Details
+function renderPasswords() {
+  const data = getResults();
+  const map = {};
+  data.forEach(r => { if (!map[r.regd]) map[r.regd] = { name: r.name, regd: r.regd, pass: r.pass }; });
+  const students = Object.values(map);
+  if (students.length === 0) {
+    document.getElementById('passwordTable').innerHTML = '<div class="empty-state"><div class="icon">👤</div>No student records.</div>';
+    return;
+  }
+  document.getElementById('passwordTable').innerHTML = `<table>
+    <tr><th>Name</th><th>Regd. No</th><th>Password</th><th></th></tr>
+    ${students.map(s => `<tr>
+      <td>${s.name}</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">${s.regd}</td>
+      <td style="font-family:'IBM Plex Mono',monospace">${s.pass}</td>
+      <td><button class="btn-sm" onclick="resetPassword('${s.regd}')">Reset</button></td>
+    </tr>`).join('')}
+  </table>`;
+}
+
+function resetPassword(regd) {
+  const newPass = prompt(`Enter new password for ${regd}:`);
+  if (!newPass) return;
+  const data = getResults();
+  data.forEach(r => { if (r.regd === regd) r.pass = newPass; });
+  saveResults(data);
+  renderPasswords();
+  showToast('✓ Password updated.');
+}
+
+// Toast
+function showToast(msg, err = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderColor = err ? 'var(--danger)' : 'var(--success)';
+  t.style.color = err ? 'var(--danger)' : 'var(--success)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Init
+clearForm(); addSubjectRow();
+</script>
+
+</body>
+</html>

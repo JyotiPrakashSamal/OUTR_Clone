@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC - UG Courses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../courses.css">
+    <link rel="stylesheet" href="../PGcourses.css">
+    
+</head>
+
+<body>
+    <header class="hero">
+        <img src="https://outr.ac.in/public/uploads/b1_5.jpg" alt="OUTR Campus">
+        <div class="overlay">
+            <div class="hero-content">
+                <span class="badge">Academics</span>
+                <h1>Undergraduate Courses</h1>
+                <p class="subtitle">School of Computer Sciences</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h2>Academic Programs</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="main-container">
+        <!-- UG COURSES -->
+        <div class="glass-card">
+            <div class="course-header">
+                <h3>Undergraduate (UG)</h3>
+                <span class="course-badge">Bachelor's</span>
+            </div>
+
+            <div class="desc">
+                <ul class="course-list">
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>BTech IT</h4>
+                            <p>Bachelor of Technology in Information Technology</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-btech-it">View details</button>
+                    </li>
+                    
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>BTech CSC</h4>
+                            <p>Bachelor of Technology in Computer Science & Engineering</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-btech-csc">View details</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay hidden"></div>
+
+    <div class="modal hidden" id="modal-btech-it">
+        <button class="close-modal">&times;</button>
+        <h3>BTech IT</h3>
+        <div class="modal-subtitle">Bachelor of Technology in Information Technology</div>
+        <p>The B.Tech program in Information Technology builds a strong foundation in modern computing, software development, database systems, and networking.</p>
+        <ul class="modal-features">
+            <li>Duration: 4 Years (8 Semesters)</li>
+            <li>Core programming and systems design</li>
+            <li>Hands-on projects and industry internships</li>
+            <li>Preparation for top IT industry roles</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-btech-csc">
+        <button class="close-modal">&times;</button>
+        <h3>BTech CSC</h3>
+        <div class="modal-subtitle">Bachelor of Technology in Computer Science & Engineering</div>
+        <p>This program focuses on the core principles of computer science, covering algorithms, artificial intelligence, operating systems, and computer architecture.</p>
+        <ul class="modal-features">
+            <li>Duration: 4 Years (8 Semesters)</li>
+            <li>In-depth study of computer science theories</li>
+            <li>Focus on emerging tech like AI/ML</li>
+            <li>Excellent placement opportunities</li>
+        </ul>
+    </div>
+
+    <script>
+        'use strict';
+
+        const modals = document.querySelectorAll('.modal');
+        const overlay = document.querySelector('.modal-overlay');
+        const btnsOpenModal = document.querySelectorAll('.show-modal');
+        const btnsCloseModal = document.querySelectorAll('.close-modal');
+
+        const openModal = function (e) {
+            const modalId = e.currentTarget.getAttribute('data-modal');
+            const targetModal = document.getElementById(modalId);
+            
+            if (targetModal) {
+                targetModal.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        };
+
+        const closeModal = function () {
+            modals.forEach(modal => modal.classList.add('hidden'));
+            overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+        };
+
+        btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+        btnsCloseModal.forEach(btn => btn.addEventListener('click', closeModal));
+        overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

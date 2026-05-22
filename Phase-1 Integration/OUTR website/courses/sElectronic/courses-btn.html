@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Courses - OUTR</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- External CSS for unified professional styling -->
+    <link rel="stylesheet" href="../scs.css">
+    
+    <style>
+        .page-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .divider {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            margin: 0 auto;
+        }
+
+        /* Specialized overrides for the course selector cards */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ql-card {
+            padding: 3.5rem 2rem;
+        }
+
+        .ql-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            text-align: center;
+            line-height: 1.6;
+            margin-top: -0.5rem;
+            margin-bottom: 0;
+        }
+        
+        .ql-icon svg {
+            transition: transform var(--transition-smooth);
+        }
+
+        .ql-card:hover .ql-icon svg {
+            transform: scale(1.1);
+        }
+
+        /* Prevent overlap with hero section since we removed the card wrapper */
+        .main-container {
+            margin-top: 4rem !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <img src="https://outr.ac.in/public/uploads/b1_5.jpg" alt="OUTR Campus">
+        <div class="overlay">
+            <div class="hero-content">
+                <span class="badge">Academics</span>
+                <h1>Courses</h1>
+                <p class="subtitle">School of Electronic Sciences</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h2>Our Programs</h2>
+            <div class="divider"></div>
+        </div>
+
+        <div class="programs-grid">
+            <!-- UG Courses Card -->
+            <a href="UGcourses.html" class="ql-card">
+                <div class="ql-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                </div>
+                <h3>Undergraduate (UG)</h3>
+                <!-- <p>Build a strong technical foundation with our comprehensive B.Tech and Integrated programs.</p> -->
+                <div class="primary-btn" style="margin-top: 1rem;">View UG Programs</div>
+            </a>
+
+            <!-- PG Courses Card -->
+            <a href="PGcourses.html" class="ql-card">
+                <div class="ql-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                </div>
+                <h3>Postgraduate (PG)</h3>
+                <!-- <p>Advance your expertise and research capabilities through our M.Tech and MCA programs.</p> -->
+                <div class="primary-btn" style="margin-top: 1rem;">View PG Programs</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

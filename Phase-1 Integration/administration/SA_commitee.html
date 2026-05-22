@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUTR-Student Activity Committee</title>
+
+  <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+/* root base style*/
+    :root {
+      --primary: #0b3c5d;
+      --secondary: #1f5a8a;
+      --accent: #d4af37;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+h1, h2, h3 { font-family: "Playfair Display", serif; }
+a {
+      text-decoration: none;
+    }
+/* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+/* sa page style */
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 4rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+.page-header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 4px;
+      background: var(--accent);
+    }
+.header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 12px;
+      margin-top: 40px;
+    }
+.header-title em { color: var(--accent); font-style: italic; }
+.header-subtitle {
+      color: rgba(255,255,255,0.85);
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+main {
+      max-width: 1350px;
+      margin: auto;
+      padding: 4rem 2rem 5rem;
+    }
+.section-intro { text-align: center; margin-bottom: 3rem; }
+.section-intro h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); }
+.section-intro span { color: var(--secondary); }
+/* board grid */
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+/* member card */
+    .member-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+.member-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(11,60,93,0.15);
+    }
+.card-top-bar { height: 4px; background: var(--primary); }
+.card-chairman .card-top-bar { background: var(--accent); }
+/* Photo */
+    .card-photo-wrap {
+      background: #f8fafc;
+      padding: 0;
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+    }
+.photo-ring { width: 100%; height: 100%; border-radius: 0; padding: 0; background: none; }
+.photo-inner { width: 100%; height: 100%; border-radius: 0; overflow: hidden; border: none; background: #fff; }
+.photo-inner img {
+      width: 100%; height: 100%; object-fit:fill; display: block;
+      transition: transform 0.4s ease;
+    }
+.member-card:hover .photo-inner img { transform: scale(1.05); }
+/* Card Body */
+    .card-body {
+      padding: 1.4rem 1rem 1.6rem;
+      text-align: center;
+      display: flex; flex-direction: column; flex: 1;
+    }
+.member-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: var(--primary);
+      line-height: 1.4; margin-bottom: 8px;
+    }
+.member-role {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted);
+      line-height: 1.6; margin-bottom: 12px;
+    }
+.role-accent {
+      width: 42px; height: 2px; background: var(--accent);
+      margin: 0 auto 14px; border-radius: 2px;
+    }
+/* Responsive */
+    @media (max-width: 768px) {
+      main { padding: 3rem 1rem; }
+      .board-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+    }
+@media (max-width: 480px) {
+.board-grid { grid-template-columns: 1fr 1fr; }
+.member-name { font-size: 0.88rem; }
+.member-role { font-size: 0.62rem; }
+
+    
+}
+/* Tailwind-like utility shims */
+    .max-w-7xl { max-width: 80rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+.w-full { width: 100%; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-5 { gap: 1.25rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-7 { gap: 1.75rem; }
+.gap-1 { gap: 0.25rem; }
+.gap-4 { gap: 1rem; }
+.hidden { display: none; }
+.no-underline { text-decoration: none; }
+.text-blue-200 { color: #bfdbfe; }
+.hover\:text-white:hover { color: white; }
+.transition-colors { transition: color 0.2s; }
+.flex-shrink-0 { flex-shrink: 0; }
+.flex-1 { flex: 1; }
+.outline-none { outline: none; }
+.bg-transparent { background: transparent; }
+.border-none { border: none; }
+.cursor-pointer { cursor: pointer; }
+.p-2 { padding: 0.5rem; }
+.rounded-full { border-radius: 9999px; }
+.p-6 { padding: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+.pl-4 { padding-left: 1rem; }
+.border-l-2 { border-left-width: 2px; }
+.flex-col { flex-direction: column; }
+.group { position: relative; }
+.list-none { list-style: none; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.text-sm { font-size: 0.875rem; }
+.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.rounded-lg { border-radius: 0.5rem; }
+.inline-flex { display: inline-flex; }
+.justify-center { justify-content: center; }
+.h-px { height: 1px; }
+.bg-slate-200 { background-color: #e2e8f0; }
+.overflow-y-auto { overflow-y: auto; }
+@media (min-width: 1024px) {
+.lg\:flex { display: flex !important; }
+.lg\:block { display: block !important; }
+.lg\:hidden { display: none !important; }
+
+    
+}
+@media (max-width: 1023px) {
+.hidden.lg\:flex, .lg\:flex { display: none; }
+.lg\:block { display: none; }
+
+    
+}
+</style>
+</head>
+
+<body>
+<!-- top utility bar -->
+<!-- MAIN NAVBAR -->
+<!-- MOBILE MENU OVERLAY -->
+<!-- page header -->
+<header class="page-header">
+  <h1 class="header-title">
+    <em>Student Activity Committee</em>
+  </h1>
+  <p class="header-subtitle">
+    The Student Activity Committee for the Academic Session 2023-24 is hereby constituted as follows to organize various extracurricular activities of the University.
+  </p>
+
+  <!-- Committee Navigation Menu -->
+  <div class="max-w-7xl mx-auto px-4 mt-8 flex flex-wrap justify-center gap-3 relative z-10">
+    <a href="SA_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-[#d4af37] text-[#0b3c5d] shadow-[0_4px_12px_rgba(212,175,55,0.35)]">Student Activity</a>
+    <a href="AR_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">A & R</a>
+    <a href="CB_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Campus Business</a>
+    <a href="F_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Furniture</a>
+    <a href="PME_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Project Monitoring</a>
+    <a href="Sm_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Social Media</a>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="section-intro">
+    <h2>Committee <span>Member</span></h2>
+  </div>
+
+  <div class="board-grid">
+
+    <!-- 1 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Prof. Prasanta Kumar Satapathy" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Prasanta Kumar Satapathy</div>
+        <div class="member-role">Professor, School of Mechanical Sciences</div>
+        <div class="member-role">Dean of the Students Welfare</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Mr. Dipak Kumar Swain" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mr. Dipak Kumar Swain</div>
+        <div class="member-role">Assistant Professor, School of Electrical Sciences</div>
+        <div class="member-role">Vice President, Cultural</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Mr. Jagannath Sethi" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mr. Jagannath Sethi</div>
+        <div class="member-role">Assistant Professor, School of Electronic Sciences</div>
+        <div class="member-role">Vice President, Games &amp; Sports</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Mr. Jitendra Naik" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mr. Jitendra Naik</div>
+        <div class="member-role">Assistant Professor, School of Mechanical Sciences</div>
+        <div class="member-role">Vice President, Games &amp; Sports</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 5 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Mr. Santanu Sen" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mr. Santanu Sen</div>
+        <div class="member-role">Assistant Professor, School of Electrical Sciences</div>
+        <div class="member-role">Vice President, Technical</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 6 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Mrs. Ananya Dastidar" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mrs. Ananya Dastidar</div>
+        <div class="member-role">Assistant Professor, School of Electronic Sciences</div>
+        <div class="member-role">Vice President, Cultural</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 7 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Mrs. Rosalin Dalai" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mrs. Rosalin Dalai</div>
+        <div class="member-role">Assistant Professor, School of Infrastructure &amp; Planning</div>
+        <div class="member-role">Vice President, NSS</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 8 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Prof. Jibitesh Mishra" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Jibitesh Mishra</div>
+        <div class="member-role">Professor, Computer Sciences</div>
+        <div class="member-role">President, Students' Activity</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 9 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Binaya Nanda" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Binaya Nanda</div>
+        <div class="member-role">2nd Year, Information Technology</div>
+        <div class="member-role">Deputy Secretary, Cultural</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 10 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Dibyajyoti Swain" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dibyajyoti Swain</div>
+        <div class="member-role">2nd Year, Mechanical Engineering</div>
+        <div class="member-role">Deputy Secretary, Technical</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 11 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Oorvi Nath" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Oorvi Nath</div>
+        <div class="member-role">2nd Year, Civil Engineering</div>
+        <div class="member-role">Deputy Secretary, Sports &amp; Games</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 12 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Priyanka Pradhan" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Priyanka Pradhan</div>
+        <div class="member-role">3rd Year, Mechanical Engineering</div>
+        <div class="member-role">Deputy Secretary, NSS</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 13 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Pradyumna Kumar Pradhan" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Pradyumna Kumar Pradhan</div>
+        <div class="member-role">3rd Year, Electrical Engineering</div>
+        <div class="member-role">Secretary, Technical</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 14 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Pratik Kumar Sa" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Pratik Kumar Sa</div>
+        <div class="member-role">3rd Year, Instrumentation and Electronic</div>
+        <div class="member-role">Secretary, Cultural</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 15 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Sangram Keshari Bhanja" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Sangram Keshari Bhanja</div>
+        <div class="member-role">3rd Year, Mechanical Engineering</div>
+        <div class="member-role">Secretary, NSS</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 16 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring"><div class="photo-inner">
+          <img src="admin_cb/image copy 2.png" alt="Sourav Sekhar Samal" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0b3c5d,#1f5a8a)';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.4)\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M4 20c0-4 3.6-7 8-7s8 3 8 7\'/></svg></div>'">
+        </div></div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Sourav Sekhar Samal</div>
+        <div class="member-role">3rd Year, Electrical Engineering</div>
+        <div class="member-role">Secretary, Sports &amp; Games</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<!--footer -->
+<!-- Back to top -->
+</body>
+</html>

@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "lastUpdated": {
+      "notices": "2026-05-12",
+      "events": "2026-05-12",
+      "footer": "2026-05-12",
+      "social": "2026-05-12"
+    }
+  },
+  "notices": [
+    { "title": "Admission Notice for B.Tech / B.Arch / B.Plan 2025-26", "date": "12 Mar 2025", "tag": "NEW" },
+    { "title": "Ph.D. Entrance Test - Schedule & Admit Card Download", "date": "10 Mar 2025", "tag": "NEW" },
+    { "title": "End Semester Examination Form Fillup - 6th Semester", "date": "05 Mar 2025" },
+    { "title": "Annual Sports Meet 2025 - Registration Open", "date": "28 Feb 2025" },
+    { "title": "Guest Lecture on AI & Machine Learning - School of CSE", "date": "25 Feb 2025" },
+    { "title": "Tender Notice: Supply of Laboratory Equipment 2025", "date": "20 Feb 2025" },
+    { "title": "Mid Semester Examination Results - Even Semester 2024-25", "date": "18 Feb 2025" }
+  ],
+  "events": [
+    { "day": "22", "month": "MAR", "title": "XTASY 2025 - Annual Technical Fest", "location": "Main Auditorium, OUTR Campus", "color": "var(--primary)" },
+    { "day": "28", "month": "MAR", "title": "National Seminar on Sustainable Engineering", "location": "Conference Hall, Block A", "color": "var(--secondary)" },
+    { "day": "05", "month": "APR", "title": "Campus Placement Drive - TCS, Infosys, Wipro", "location": "Placement Cell, Block C", "color": "#1e293b" },
+    { "day": "10", "month": "APR", "title": "Annual Convocation Ceremony 2025", "location": "University Open Ground, OUTR", "color": "var(--accent)" }
+  ],
+  "departments": [
+    { "icon": "icon-8", "title": "School of Computer Sciences", "subtitle": "CSE - IT - MCA - AI&ML" },
+    { "icon": "icon-9", "title": "School of Mechanical Sciences", "subtitle": "ME - R&AI - IEM - D&D" },
+    { "icon": "icon-2", "title": "School of Infrastructure & Planning", "subtitle": "Civil - B.Arch - B.Plan - WRE" },
+    { "icon": "icon-11", "title": "School of Electronic Sciences", "subtitle": "ECE - EIE - VLSI - ICE" }
+  ],
+  "quickLinks": [
+    { "label": "Apply Now", "href": "https://ojee.nic.in/" },
+    { "label": "Notices & Circulars", "href": "#notices" },
+    { "label": "Exam Results", "href": "administration/studentresult.html" },
+    { "label": "Academic Calendar", "href": "#" },
+    { "label": "Admissions 2025", "href": "administration/Admin_fileTrack_management.html" },
+    { "label": "Student E-Portal", "href": "administration/admitcard.html" }
+  ],
+  "gallery": [
+    {
+      "group": "Campus",
+      "cover": "OUTR website/images/gallery/clg.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg.jpg", "label": "Main Building — Aerial View" },
+        { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "Campus Grounds" }
+      ]
+    },
+    {
+      "group": "Events",
+      "cover": "OUTR website/images/gallery/event.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/event.jpg", "label": "Inauguration Ceremony" },
+        { "image": "OUTR website/images/gallery/event 2.jpg", "label": "Cultural Celebration" },
+        { "image": "OUTR website/images/gallery/event 3.jpg", "label": "Tech Fest Event" },
+        { "image": "OUTR website/images/gallery/function.jpg", "label": "Annual Convocation Ceremony" },
+        { "image": "OUTR website/images/gallery/function 2.jpg", "label": "Official Inaugural Function" }
+      ]
+    },
+    {
+      "group": "Campus Life",
+      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway — Evening View" },
+        { "image": "OUTR website/images/gallery/dance.jpg", "label": "Traditional Dance Performance" },
+        { "image": "OUTR website/images/gallery/dj.jpg", "label": "DJ Night & Cultural Celebration" }
+      ]
+    },
+    {
+      "group": "Night Life",
+      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway — Night View" },
+        { "image": "OUTR website/images/gallery/dj.jpg", "label": "DJ Night & Celebration" },
+        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "Annual Fest — XTASY Night Concert" },
+        { "image": "OUTR website/images/gallery/dance.jpg", "label": "Cultural Night Performance" }
+      ]
+    },
+    {
+      "group": "Sports",
+      "cover": "OUTR website/images/gallery/sports.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/sports.jpg", "label": "Annual Sports Meet" },
+        { "image": "OUTR website/images/gallery/sports 2.jpg", "label": "Athletics Event" }
+      ]
+    }
+  ],
+  "footer": {
+    "identity": {
+      "logo": "https://outr.ac.in/public/uploads/logo_4.png",
+      "line1": "Odisha University of",
+      "line2": "Technology and Research",
+      "address": ["Techno Campus, Ghatikia", "Bhubaneswar, Odisha - 751 003", "India"],
+      "phone": "0674-2725223",
+      "email": "registrar@outr.ac.in",
+      "social": [
+        { "href": "https://www.facebook.com/OUTRuniversity/", "icon": "facebook" },
+        { "href": "https://www.instagram.com/outruniversity/", "icon": "instagram" },
+        { "href": "https://www.linkedin.com/school/rani-nilima-kumari-mahila-mahavidyalaya-dharupur-pratapgarh/", "icon": "linkedin" },
+        { "href": "https://www.youtube.com/@outrlive", "icon": "youtube" }
+      ]
+    },
+    "columns": {
+      "quickLinks": [
+        { "label": "Home", "href": "#hero" },
+        { "label": "About OUTR", "href": "OUTR website/about.html" },
+        { "label": "Admissions", "href": "administration/Admin_fileTrack_management.html" },
+        { "label": "RTI", "href": "https://rti.gov.in/" },
+        { "label": "Careers", "href": "#" },
+        { "label": "Tenders", "href": "#" },
+        { "label": "NIRF Data", "href": "https://www.nirfindia.org/" }
+      ],
+      "academics": [
+        { "label": "Programs Offered", "href": "OUTR website/schools.html" },
+        { "label": "UG Syllabus", "href": "OUTR website/courses/scs/UGcourses.html" },
+        { "label": "PG Syllabus", "href": "OUTR website/courses/scs/PGcourses.html" },
+        { "label": "Academic Calendar", "href": "#" },
+        { "label": "COE - AI & ICT", "href": "administration/COE.html" },
+        { "label": "Examination Cell", "href": "administration/Admin_result_Management.html" }
+      ],
+      "contact": [
+        { "label": "Address & Map", "href": "OUTR website/location.html" },
+        { "label": "Phone Directory", "href": "OUTR website/location.html" },
+        { "label": "Email Directory", "href": "OUTR website/location.html" },
+        { "label": "Grievance Cell", "href": "administration/L_commitee.html" },
+        { "label": "Social Media Hub", "href": "social.html" },
+        { "label": "Feedback", "href": "#" }
+      ]
+    },
+    "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },
+    "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
+    "copyright": "© 2025 Odisha University of Technology and Research. All Rights Reserved."
+  }
+}

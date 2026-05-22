@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUTR - Legal Committee</title>
+    <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+/* base style */
+    :root {
+      --primary: #0b3c5d;
+      --secondary: #1f5a8a;
+      --accent: #d4af37;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+h1, h2, h3 { font-family: "Playfair Display", serif; }
+/* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+/* page header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 4rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      margin-top: 0;
+    }
+.page-header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 4px;
+      background: var(--accent);
+    }
+.header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+.header-title em { color: var(--accent); font-style: italic; }
+.header-subtitle {
+      color: rgba(255,255,255,0.85);
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+/* main */
+    main {
+      max-width: 1350px;
+      margin: auto;
+      padding: 4rem 2rem 5rem;
+    }
+.section-intro {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+.section-intro h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+.section-intro span { color: var(--secondary); }
+/* board grid */
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+/* member car */
+    .member-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+.member-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(11,60,93,0.15);
+    }
+.card-top-bar { height: 4px; background: var(--primary); }
+.card-chairman .card-top-bar { background: var(--accent); }
+.card-photo-wrap {
+      background: #f8fafc;
+      padding: 0;
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+    }
+.photo-ring { width: 100%; height: 100%; border-radius: 0; padding: 0; background: none; }
+.photo-inner { width: 100%; height: 100%; border-radius: 0; overflow: hidden; border: none; background: #fff; }
+.photo-inner img {
+      width: 100%; height: 100%;
+      object-fit: fill; display: block;
+      transition: transform 0.4s ease;
+    }
+.member-card:hover .photo-inner img { transform: scale(1.05); }
+/* Placeholder avatar when no image */
+    .avatar-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #e8f0f8, #d4e4f0);
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -2px;
+      transition: transform 0.4s ease;
+    }
+.member-card:hover .avatar-placeholder { transform: scale(1.05); }
+.chairman-badge {
+      position: absolute; top: 12px; right: 12px;
+      background: var(--accent); color: var(--primary);
+      font-size: 0.62rem; font-weight: 800; letter-spacing: 1px;
+      padding: 5px 10px; border-radius: 4px; text-transform: uppercase; z-index: 2;
+    }
+/* Card Body */
+    .card-body {
+      padding: 1.4rem 1rem 1.6rem;
+      text-align: center;
+      display: flex; flex-direction: column; flex: 1;
+    }
+.member-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--primary); line-height: 1.4; margin-bottom: 8px;
+    }
+.member-role {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--muted); line-height: 1.6; margin-bottom: 4px;
+    }
+.member-role-highlight {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--secondary); line-height: 1.6; margin-bottom: 12px;
+    }
+.role-accent { width: 42px; height: 2px; background: var(--accent); margin: 8px auto 0; border-radius: 2px; }
+@media (max-width: 768px) {
+main { padding: 3rem 1rem; }
+.board-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+}
+@media (max-width: 480px) {
+.board-grid { grid-template-columns: 1fr 1fr; }
+.member-name { font-size: 0.88rem; }
+.member-role { font-size: 0.62rem; }
+}
+</style>
+</head>
+<body>
+<!-- top utility bar -->
+<!-- MAIN NAVBAR -->
+<!-- MOBILE MENU OVERLAY -->
+<!-- page header -->
+<header class="page-header">
+  <h1 class="header-title"><em>Legal Committee</em></h1>
+  <p class="header-subtitle">
+    The Legal Committee is hereby formed comprising with the following members for smooth management of legal cases and to advice on the legal cases of the University.
+  </p>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="section-intro reveal">
+    <h2>Committee <span>Members</span></h2>
+  </div>
+
+  <div class="board-grid">
+    <!-- Card 5 -Registrar (Chairman) -->
+    <article class="member-card card-chairman reveal">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <div class="avatar-placeholder" >
+              <img src="admin_Lcommitee_photo/image copy 2.png">
+            </div>
+          </div>
+        </div>
+        <span class="chairman-badge">Chairman</span>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Registrar</div>
+        <div class="member-role">&nbsp;</div>
+        <div class="member-role-highlight" style="color:var(--accent);">Chairman</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+
+    <!-- Card 1 — Dr. Pramod Kumar Parida -->
+    <article class="member-card reveal">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <div class="avatar-placeholder">
+              <img src="admin_Lcommitee_photo/image.png">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. Pramod Kumar Parida</div>
+        <div class="member-role">Professor, ME</div>
+        <div class="member-role-highlight">Member</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- Card 2 — Dr. Ranjan Kumar Jana -->
+    <article class="member-card reveal">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <div class="avatar-placeholder">
+              <img src="admin_Lcommitee_photo/image copy 2.png">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. Ranjan Kumar Jana</div>
+        <div class="member-role">Professor, EE</div>
+        <div class="member-role-highlight">Member</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- Card 3 - Dr. Tapas Kumar Patra -->
+    <article class="member-card reveal">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <div class="avatar-placeholder">
+              <img src="admin_Lcommitee_photo/image copy 2.png">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. Tapas Kumar Patra</div>
+        <div class="member-role">Professor, I &amp; E</div>
+        <div class="member-role-highlight">Member</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- Card 4 - Mr. Neelakantha Guru -->
+    <article class="member-card reveal">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <div class="avatar-placeholder">
+              <img src="admin_Lcommitee_photo/image copy 2.png">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Mr. Neelakantha Guru</div>
+        <div class="member-role">Asst. Professor, EE</div>
+        <div class="member-role-highlight">Coordinator</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<!-- Back to Top -->
+<style>
+  /* Mobile responsive for nav */
+  @media (max-width: 1024px) {
+    .nav-links-desktop { display: none !important; }
+    #mobile-btn { display: flex !important; }
+    #lang-switcher { display: none !important; }
+  }
+</style>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  });
+</script>
+</body>
+</html>

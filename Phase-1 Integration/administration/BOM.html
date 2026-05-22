@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUTR-Board of Management</title>
+  <meta name="description" content="Board Of Management Committee - Odisha University of Technology and Research, Bhubaneswar." />
+  <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+/* root variables */
+    :root {
+      --primary: #0b3c5d;
+      --secondary: #1f5a8a;
+      --accent: #d4af37;
+      --muted: #64748b;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --soft-white: #F8FAFC;
+      --gold: #D4AF37;
+    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+h1, h2, h3 { font-family: "Playfair Display", serif; }
+/* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+/* page  header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 4rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+.page-header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 4px;
+      background: var(--gold);
+    }
+.header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 12px;
+      margin-top: 40px;
+    }
+.header-title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+.header-subtitle {
+      color: rgba(255,255,255,0.85);
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+/* main */
+    main {
+      max-width: 1350px;
+      margin: auto;
+      padding: 4rem 2rem 5rem;
+    }
+.section-intro {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+.section-intro h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+.section-intro span { color: var(--secondary); }
+/* board grid*/
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+/* member card */
+    .member-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+.member-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(11,60,93,0.15);
+    }
+.card-top-bar {
+      height: 4px;
+      background: var(--primary);
+    }
+.card-chairman .card-top-bar { background: var(--gold); }
+/* Photo */
+    .card-photo-wrap {
+      background: #f8fafc;
+      padding: 0;
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+    }
+.photo-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      padding: 0;
+      background: none;
+    }
+.photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      border: none;
+      background: #fff;
+    }
+.photo-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+.member-card:hover .photo-inner img { transform: scale(1.05); }
+.chairman-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--gold);
+      color: var(--primary);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+/* Card Body */
+    .card-body {
+      padding: 1.4rem 1rem 1.6rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+.member-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+.member-role {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+.role-accent {
+      width: 42px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0 auto 14px;
+      border-radius: 2px;
+    }
+</style>
+</head>
+
+<body>
+<!-- TOP UTILITY BAR -->
+<!-- MAIN NAVBAR -->
+<!-- MOBILE MENU OVERLAY -->
+<!--page body header -->
+<header class="page-header">
+  <h1 class="header-title">
+   <em> Board of Management</em>
+  </h1>
+  <p class="header-subtitle">
+    Guiding our institution with vision, integrity, and an unwavering commitment to academic excellence.
+  </p>
+</header>
+
+<!-- main content -->
+<main>
+  <div class="section-intro">
+    <h2>Board <span>Of Member</span></h2>
+  </div>
+
+  <div class="board-grid">
+
+    <!-- 1. Chairman -->
+    <article class="member-card card-chairman">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="chairman-badge">Chairman</div>
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image.png" alt="Prof Bibhuti Bhusan Biswal">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof Bibhuti Bhusan Biswal</div>
+        <div class="member-role">Vice Chancellor</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy.png" alt="Shri Bhupendra Singh Poonia">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Shri Bhupendra Singh Poonia</div>
+        <div class="member-role">The Commissioner-Cum-Secretary to Govt, SD&amp;TE Department, Odisha, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 2.png" alt="Sri Sanjeeb Kumar Mishra">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Sri Sanjeeb Kumar Mishra</div>
+        <div class="member-role">The Principal Secretary to Govt., Finance Deptt., Odisha, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 3.png" alt="Shri Chakravarti Singh Rathore">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Shri Chakravarti Singh Rathore</div>
+        <div class="member-role">The Director of Technical Education and Training, Odisha, Cuttack</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 5 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 4.png" alt="Amiya Kumar Rath">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Amiya Kumar Rath</div>
+        <div class="member-role">The Vice-Chancellor, BPUT, Odisha, Rourkela</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 6 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 5.png" alt="Prof. Meera Viswavandya">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Meera Viswavandya</div>
+        <div class="member-role">Registrar, OUTR</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 7 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 6.png" alt="Prof. Aruna Tripathy">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Aruna Tripathy</div>
+        <div class="member-role">Professor, Electronics &amp; Instrumentation Engineering, OUTR, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 8 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 7.png" alt="Prof. Jibitesh Mishra">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Jibitesh Mishra</div>
+        <div class="member-role">Professor, CSA, OUTR, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 9 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 8.png" alt="Prof. Bhibhu Prasad Dash">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Bhibhu Prasad Dash</div>
+        <div class="member-role">Professor, Textile Engineering, OUTR, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 10 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 9.png" alt="Dr. Prakash Kumar Ray">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. Prakash Kumar Ray</div>
+        <div class="member-role">Associate Professor, EE, OUTR, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 11 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 10.png" alt="Dr. Subhendu Pattnaik">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. (Er.) Subhendu Pattnaik</div>
+        <div class="member-role">Former Dy. Director (Tech.), Pathani Samanta Planetarium, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 12 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 11.png" alt="Dr. M. K. Pradhan">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. M. K. Pradhan</div>
+        <div class="member-role">GM (F&amp;B), OSDMA, Odisha, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 13 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 12.png" alt="Prof. Bijaya Ketan Panigrahi">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Prof. Bijaya Ketan Panigrahi</div>
+        <div class="member-role">Professor, IIT, Delhi</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 14 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 13.png" alt="Dr. Mahendra Prasad">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Dr. Mahendra Prasad</div>
+        <div class="member-role">Director, SOA, Bhubaneswar</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 15 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 14.png" alt="Shri Babu Singh">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Shri Babu Singh</div>
+        <div class="member-role">Hon'ble M.L.A, Odisha Legislative Assembly</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+    <!-- 16 -->
+    <article class="member-card">
+      <div class="card-top-bar"></div>
+      <div class="card-photo-wrap">
+        <div class="photo-ring">
+          <div class="photo-inner">
+            <img src="admin_bom_photo/image copy 15.png" alt="Shri Sanat Kumar Gartia">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="member-name">Shri Sanat Kumar Gartia</div>
+        <div class="member-role">Hon'ble M.L.A, Odisha Legislative Assembly</div>
+        <div class="role-accent"></div>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<!--footer -->
+<!-- Back to top -->
+</body>
+</html>
