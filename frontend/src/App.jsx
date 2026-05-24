@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Layout from './components/Layout'
 import AuthPortal from './pages/AuthPortal'
 
 function App() {
@@ -26,18 +27,9 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-text flex flex-col justify-between">
-      {/* Top Premium bar */}
-      <div className="bg-primary text-[11px] text-white/80 py-2.5 px-6 flex justify-between items-center border-b border-white/10">
-        <div>Odisha University of Technology and Research (OUTR) — Academic Portal Setup</div>
-        <div className="flex gap-4">
-          <span>Live AQI: Good</span>
-          <span>Bhubaneswar, Odisha</span>
-        </div>
-      </div>
-
+    <Layout>
       {/* Main Content Area */}
-      <main className="flex-grow flex flex-col items-center justify-center px-6 py-12 max-w-4xl mx-auto text-center">
+      <div className="flex flex-col items-center justify-center px-6 py-20 max-w-4xl mx-auto text-center animate-fade-in select-none">
         {/* Logo Shield Placeholder */}
         <div className="w-24 h-24 mb-6 rounded-full bg-primary/5 flex items-center justify-center border-2 border-accent/30 shadow-lg shadow-primary/5">
           <img 
@@ -53,7 +45,7 @@ function App() {
           <span className="text-secondary">Technology and Research</span>
         </h1>
         
-        <p className="text-muted max-w-xl mx-auto text-lg mb-8 leading-relaxed">
+        <p className="text-muted max-w-xl mx-auto text-lg mb-8 leading-relaxed font-medium">
           Welcome to the new component-driven secure React portal. Our setup branch is fully scaffolded and running on Tailwind CSS v4.
         </p>
 
@@ -111,16 +103,10 @@ function App() {
         {/* Phase Checklist Badge */}
         <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          Phase 2 Complete: Supabase client set up & Dedicated Auth Portal active
+          Phase 2 Complete: Reusable Layout frames & Dedicated Supabase Auth Portal active
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="py-6 px-6 border-t border-slate-200/60 bg-white/50 text-center text-xs text-muted">
-        <div>&copy; {new Date().getFullYear()} Odisha University of Technology and Research. All Rights Reserved.</div>
-        <div className="mt-1 text-slate-400">Secure Client-Side Transition Branch: feat/supabase-auth</div>
-      </footer>
-    </div>
+      </div>
+    </Layout>
   )
 }
 
