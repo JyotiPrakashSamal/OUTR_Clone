@@ -168,7 +168,7 @@ function App() {
         {/* Phase Checklist Badge */}
         <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          Phase 2 Complete: Reusable Layout frames & Dedicated Supabase Auth Portal active
+          Phase 3 Complete: Hostel Warden secure portal, dynamic CRUD & role-based filtering active
         </div>
       </div>
     </Layout>
