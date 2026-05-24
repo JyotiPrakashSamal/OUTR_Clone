@@ -1,20 +1,85 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 import Layout from './components/Layout'
 import AuthPortal from './pages/AuthPortal'
+import WardenDashboard from './pages/WardenDashboard'
 
 function App() {
-  const [currentView, setCurrentView] = useState('home') // 'home' or 'auth'
+  const [currentView, setCurrentView] = useState('home') // 'home', 'auth', or 'warden-dashboard'
   const [selectedRoleForPortal, setSelectedRoleForPortal] = useState(null)
+
+  // Listen to auth state changes to auto-authenticate in local developer preview or active sessions
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        checkSessionRole(session.user.id)
+      }
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        checkSessionRole(session.user.id)
+      } else {
+        setCurrentView('home')
+        setSelectedRoleForPortal(null)
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  const checkSessionRole = async (userId) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single()
+      
+      if (error) throw error
+      if (profile.role === 'warden' || profile.role === 'admin') {
+        setCurrentView('warden-dashboard')
+      }
+    } catch (err) {
+      console.warn('Session profile lookup failed:', err.message)
+      // Check user metadata as fallback
+      const user = (await supabase.auth.getUser()).data.user
+      const metaRole = user?.user_metadata?.role
+      if (metaRole === 'warden' || metaRole === 'admin') {
+        setCurrentView('warden-dashboard')
+      }
+    }
+  }
+
+  const handleLoginSuccess = (role, user) => {
+    if (role === 'warden' || role === 'admin') {
+      setCurrentView('warden-dashboard')
+    } else {
+      alert(`Authenticated successfully as ${role}! Redirecting to ${role} dashboard (Phase 4 integration in progress).`)
+      setCurrentView('home')
+    }
+  }
 
   const openPortalForRole = (role) => {
     setSelectedRoleForPortal(role)
     setCurrentView('auth')
   }
 
+  if (currentView === 'warden-dashboard') {
+    return (
+      <WardenDashboard onSignOut={() => setCurrentView('home')} />
+    )
+  }
+
   if (currentView === 'auth') {
     return (
       <div className="relative">
-        <AuthPortal />
+        <AuthPortal 
+          initialRole={selectedRoleForPortal} 
+          onLoginSuccess={handleLoginSuccess}
+        />
         {/* Universal Back to Home overlay helper for testing convenience */}
         <button
           onClick={() => setCurrentView('home')}

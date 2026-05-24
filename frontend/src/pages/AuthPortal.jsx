@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 
-export default function AuthPortal() {
-  const [selectedRole, setSelectedRole] = useState(null)
+export default function AuthPortal({ onLoginSuccess, initialRole }) {
+  const [selectedRole, setSelectedRole] = useState(initialRole || null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -65,8 +65,10 @@ export default function AuthPortal() {
       
       // Simulate dashboard redirection delay
       setTimeout(() => {
-        alert(`Successfully logged in as ${selectedRole}! Redirecting...`)
-      }, 1500)
+        if (onLoginSuccess) {
+          onLoginSuccess(selectedRole, profile || { role: selectedRole })
+        }
+      }, 1000)
 
     } catch (err) {
       setErrorMsg(err.message || 'Authentication failed. Please verify your credentials.')
