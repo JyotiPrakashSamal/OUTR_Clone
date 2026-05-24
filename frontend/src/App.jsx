@@ -3,9 +3,10 @@ import { supabase } from './supabaseClient'
 import Layout from './components/Layout'
 import AuthPortal from './pages/AuthPortal'
 import WardenDashboard from './pages/WardenDashboard'
+import FileTrackingDashboard from './pages/FileTrackingDashboard'
 
 function App() {
-  const [currentView, setCurrentView] = useState('home') // 'home', 'auth', or 'warden-dashboard'
+  const [currentView, setCurrentView] = useState('home') // 'home', 'auth', 'warden-dashboard', 'adviser-dashboard', 'hos-dashboard', 'controller-dashboard', 'file-tracking-student'
   const [selectedRoleForPortal, setSelectedRoleForPortal] = useState(null)
 
   // Listen to auth state changes to auto-authenticate in local developer preview or active sessions
@@ -39,25 +40,41 @@ function App() {
         .single()
       
       if (error) throw error
-      if (profile.role === 'warden' || profile.role === 'admin') {
-        setCurrentView('warden-dashboard')
-      }
+      redirectBasedOnRole(profile.role)
     } catch (err) {
       console.warn('Session profile lookup failed:', err.message)
       // Check user metadata as fallback
       const user = (await supabase.auth.getUser()).data.user
       const metaRole = user?.user_metadata?.role
-      if (metaRole === 'warden' || metaRole === 'admin') {
-        setCurrentView('warden-dashboard')
+      if (metaRole) {
+        redirectBasedOnRole(metaRole)
       }
+    }
+  }
+
+  const redirectBasedOnRole = (role) => {
+    if (role === 'warden' || role === 'admin') {
+      setCurrentView('warden-dashboard')
+    } else if (role === 'adviser') {
+      setCurrentView('adviser-dashboard')
+    } else if (role === 'hos') {
+      setCurrentView('hos-dashboard')
+    } else if (role === 'controller') {
+      setCurrentView('controller-dashboard')
     }
   }
 
   const handleLoginSuccess = (role, user) => {
     if (role === 'warden' || role === 'admin') {
       setCurrentView('warden-dashboard')
+    } else if (role === 'adviser') {
+      setCurrentView('adviser-dashboard')
+    } else if (role === 'hos') {
+      setCurrentView('hos-dashboard')
+    } else if (role === 'controller') {
+      setCurrentView('controller-dashboard')
     } else {
-      alert(`Authenticated successfully as ${role}! Redirecting to ${role} dashboard (Phase 4 integration in progress).`)
+      alert(`Authenticated successfully as ${role}!`)
       setCurrentView('home')
     }
   }
@@ -70,6 +87,30 @@ function App() {
   if (currentView === 'warden-dashboard') {
     return (
       <WardenDashboard onSignOut={() => setCurrentView('home')} />
+    )
+  }
+
+  if (currentView === 'adviser-dashboard') {
+    return (
+      <FileTrackingDashboard role="adviser" onSignOut={() => setCurrentView('home')} />
+    )
+  }
+
+  if (currentView === 'hos-dashboard') {
+    return (
+      <FileTrackingDashboard role="hos" onSignOut={() => setCurrentView('home')} />
+    )
+  }
+
+  if (currentView === 'controller-dashboard') {
+    return (
+      <FileTrackingDashboard role="controller" onSignOut={() => setCurrentView('home')} />
+    )
+  }
+
+  if (currentView === 'file-tracking-student') {
+    return (
+      <FileTrackingDashboard role="student" onSignOut={() => setCurrentView('home')} />
     )
   }
 
@@ -135,22 +176,22 @@ function App() {
             </div>
           </div>
 
-          {/* Card 2: Faculty Adviser Panel */}
+          {/* Card 2: Academic Applications Desk */}
           <div 
-            onClick={() => openPortalForRole('adviser')}
+            onClick={() => setCurrentView('file-tracking-student')}
             className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200/60 shadow-md shadow-slate-100 flex flex-col justify-between text-left group hover:border-accent/40 hover:shadow-lg transition-all duration-300"
           >
             <div>
               <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
                 📄
               </div>
-              <h3 className="font-serif text-xl font-bold text-primary mb-2">Faculty Adviser Panel</h3>
+              <h3 className="font-serif text-xl font-bold text-primary mb-2">Academic Applications</h3>
               <p className="text-muted text-sm leading-relaxed mb-4">
-                Multi-level academic file tracking pipeline for student document approval and secure storage integration.
+                Submit academic applications, request fee concessions or certificates, and track live review timelines.
               </p>
             </div>
             <div className="text-accent text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-              Access Portal <span>→</span>
+              Open Applications Center <span>→</span>
             </div>
           </div>
         </div>
