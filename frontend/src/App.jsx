@@ -21,7 +21,11 @@ function App() {
       if (session) {
         checkSessionRole(session.user.id)
       } else {
-        setCurrentView('home')
+        // Only reset to home if the user was on an active dashboard view
+        setCurrentView((prev) => {
+          if (prev.endsWith('-dashboard')) return 'home'
+          return prev
+        })
         setSelectedRoleForPortal(null)
       }
     })
@@ -133,7 +137,7 @@ function App() {
   }
 
   return (
-    <Layout>
+    <Layout onNavigate={setCurrentView}>
       {/* Main Content Area */}
       <div className="flex flex-col items-center justify-center px-6 py-20 max-w-4xl mx-auto text-center animate-fade-in select-none">
         {/* Logo Shield Placeholder */}

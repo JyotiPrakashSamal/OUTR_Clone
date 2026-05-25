@@ -32,6 +32,23 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
     setErrorMsg('')
     setSuccessMsg('')
 
+    // Developer Preview Login Bypass for Offline Testing
+    const isDemoWarden = selectedRole === 'warden' && email === 'warden@outr.ac.in' && password === 'warden@123'
+    const isDemoAdviser = selectedRole === 'adviser' && email === 'adviser@outr.ac.in' && password === 'adv@123'
+    const isDemoHos = selectedRole === 'hos' && email === 'hos@outr.ac.in' && password === 'hos@123'
+    const isDemoController = selectedRole === 'controller' && email === 'controller@outr.ac.in' && password === 'ctrl@123'
+
+    if (isDemoWarden || isDemoAdviser || isDemoHos || isDemoController) {
+      setSuccessMsg(`Welcome back, Demo ${selectedRole.toUpperCase()}! Redirecting...`)
+      setTimeout(() => {
+        if (onLoginSuccess) {
+          onLoginSuccess(selectedRole, { role: selectedRole, name: `Demo ${selectedRole.toUpperCase()}`, school_id: 'SCS' })
+        }
+        setLoading(false)
+      }, 1000)
+      return
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -53,11 +70,9 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
         // Fallback or custom metadata check if profile wasn't found immediately
         const userMetadataRole = data.user.user_metadata?.role
         if (userMetadataRole !== selectedRole) {
-          await supabase.auth.signOut()
           throw new Error('Access denied. Your account does not have authorization for this role.')
         }
       } else if (profile.role !== selectedRole) {
-        await supabase.auth.signOut()
         throw new Error(`Access denied. Your account is registered as a ${profile.role}, not a ${selectedRole}.`)
       }
 
@@ -72,7 +87,13 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
 
     } catch (err) {
       setErrorMsg(err.message || 'Authentication failed. Please verify your credentials.')
-      supabase.auth.signOut() // Guarantee session is cleared on mismatched role
+      // Sign out only if we succeeded in generating a user session but role failed validation
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          await supabase.auth.signOut()
+        }
+      } catch (e) {}
     } finally {
       setLoading(false)
     }

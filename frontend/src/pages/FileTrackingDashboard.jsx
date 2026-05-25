@@ -703,7 +703,7 @@ export default function FileTrackingDashboard({ role, onSignOut }) {
   }).length
 
   return (
-    <Layout>
+    <Layout onNavigate={onSignOut}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* LANDING DESK view */}
@@ -844,8 +844,8 @@ export default function FileTrackingDashboard({ role, onSignOut }) {
                     className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary text-sm bg-white"
                   >
                     <option value="">Select semester</option>
-                    {Array(8).fill(0).map((_, i) => (
-                      <option key={i} value={`${i+1}st Semester`}>{i+1}th Semester</option>
+                    {['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'].map((sem, i) => (
+                      <option key={i} value={`${sem} Semester`}>{sem} Semester</option>
                     ))}
                   </select>
                 </div>
