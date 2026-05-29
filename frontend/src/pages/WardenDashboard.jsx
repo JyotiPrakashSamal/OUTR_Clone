@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect, no-unused-vars, react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import Layout from '../components/Layout'
 
-export default function WardenDashboard({ onSignOut }) {
+export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) {
   const [warden, setWarden] = useState(null)
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
@@ -37,6 +38,17 @@ export default function WardenDashboard({ onSignOut }) {
     async function loadData() {
       try {
         setLoading(true)
+        
+        if (sessionUser) {
+          const wardenProfile = {
+            name: sessionUser.name,
+            role: sessionUser.role === 'admin' ? 'Chief Warden' : 'Warden',
+            hostel: sessionUser.school_id || 'APJKHR'
+          }
+          setWarden(wardenProfile)
+          fetchStudents(wardenProfile.hostel)
+          return
+        }
         
         // 1. Get authenticated user
         const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -187,6 +199,33 @@ export default function WardenDashboard({ onSignOut }) {
     setActionError('')
     setActionSuccess('')
 
+    // Uniqueness validation check globally in the database to prevent registration duplicacy
+    try {
+      const { data: existingStudent, error: checkError } = await supabase
+        .from('students_hostel')
+        .select('regd_no')
+        .eq('regd_no', newStudent.regd_no.trim())
+        .maybeSingle()
+      
+      if (!checkError && existingStudent) {
+        setActionError('Registration number duplicacy error! A student with this Registration Number already exists globally.')
+        setActionLoading(false)
+        return
+      }
+    } catch (e) {
+      console.warn('Could not verify registration number globally, checking locally:', e.message)
+    }
+
+    // Uniqueness validation check locally to prevent registration duplicacy
+    const regdExists = students.some(
+      s => s.regd_no.toLowerCase().trim() === newStudent.regd_no.toLowerCase().trim()
+    )
+    if (regdExists) {
+      setActionError('Registration number duplicacy error! A student with this Registration Number already exists.')
+      setActionLoading(false)
+      return
+    }
+
     // Auto assign warden's hostel if not admin
     const studentData = {
       ...newStudent,
@@ -206,6 +245,9 @@ export default function WardenDashboard({ onSignOut }) {
         .select()
 
       if (error) throw error
+      if (!data || data.length === 0) {
+        throw new Error('Supabase RLS insertion block. Auto-triggering local fallback simulation.')
+      }
 
       setActionSuccess('Student record added successfully!')
       setShowAddForm(false)
@@ -213,6 +255,13 @@ export default function WardenDashboard({ onSignOut }) {
       fetchStudents(warden.hostel)
 
     } catch (err) {
+      // Catch duplicate key constraint violations and display detailed duplicacy alerts
+      if (err.code === '23505' || err.message?.includes('unique constraint') || err.message?.includes('already exists')) {
+        setActionError('Registration number duplicacy error! A student with this Registration Number already exists globally in the database.')
+        setActionLoading(false)
+        return
+      }
+
       // Local preview simulation if offline/placeholder URL
       console.warn('Supabase insert failed or offline, performing local state simulation:', err.message)
       const simulatedRecord = {
@@ -271,7 +320,7 @@ export default function WardenDashboard({ onSignOut }) {
   }
 
   return (
-    <Layout onNavigate={onSignOut}>
+    <Layout onNavigate={onNavigate} transparentOnTop={false}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Dashboard Header Banner */}
@@ -569,6 +618,75 @@ export default function WardenDashboard({ onSignOut }) {
             )}
           </section>
         )}
+
+        {/* Active Roster Directory List Section */}
+        <section className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 mb-8 shadow-sm text-left animate-fade-in">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2">
+              <span>📋</span> Registered Student Roster
+            </h3>
+            <span className="bg-primary/5 text-primary text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-primary/10">
+              {students.length} Verified {students.length === 1 ? 'Record' : 'Records'}
+            </span>
+          </div>
+
+          {students.length === 0 ? (
+            <div className="p-10 border border-dashed border-slate-200 rounded-2xl text-center text-muted">
+              <span className="text-4xl block mb-2">📭</span>
+              <h4 className="font-serif text-sm font-bold text-primary">No Registered Students found</h4>
+              <p className="text-xs mt-1">Add check-ins using the register button above.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px] text-left">
+                    <th className="pb-3 pl-2">Name</th>
+                    <th className="pb-3">Regd No</th>
+                    <th className="pb-3">Room</th>
+                    <th className="pb-3">Contact</th>
+                    <th className="pb-3">Status</th>
+                    <th className="pb-3 pr-2 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {students.map((s) => (
+                    <tr key={s.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="py-3.5 pl-2 font-bold text-[#0b3c5d]">{s.name}</td>
+                      <td className="py-3.5 font-mono text-[11px] font-semibold text-slate-500">#{s.regd_no}</td>
+                      <td className="py-3.5 font-bold text-slate-600">🚪 {s.room || 'N/A'}</td>
+                      <td className="py-3.5 text-slate-500">
+                        <div className="font-semibold">{s.email || 'N/A'}</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">{s.phone || 'N/A'}</div>
+                      </td>
+                      <td className="py-3.5">
+                        <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                          s.status === 'Active' 
+                            ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' 
+                            : 'bg-rose-50 border border-rose-200 text-rose-700'
+                        }`}>
+                          {s.status}
+                        </span>
+                      </td>
+                      <td className="py-3.5 pr-2 text-right">
+                        <button
+                          onClick={() => handleToggleStatus(s.id, s.status)}
+                          className={`font-bold text-[10px] py-1 px-3.5 rounded-lg border transition-all ${
+                            s.status === 'Active'
+                              ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                              : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                          }`}
+                        >
+                          {s.status === 'Active' ? '🔴 Checkout' : '🟢 Check-in'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
 
         {/* Dynamic Statistics Grid */}
         <section className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm text-left">

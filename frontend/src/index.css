@@ -41,3 +41,221 @@
 .animate-marquee {
   animation: marquee 25s linear infinite;
 }
+
+/* Print-Only Layout Rules */
+@media print {
+  /* Hide everything on the page */
+  body * {
+    visibility: hidden;
+  }
+  /* Show only the designated print area and all its descendants */
+  #print-area, #print-area * {
+    visibility: visible;
+  }
+  /* Position the print area perfectly at the top-left */
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: black;
+    box-shadow: none;
+    border: none;
+  }
+  /* Standard page size */
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+}
+
+/* ── Unified brand styles for isolated React Header Navigation ── */
+
+#top-bar {
+  background: #0b3c5d;
+  font-size: 11.5px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1002;
+  transition: height 0.35s ease, opacity 0.35s ease;
+}
+#top-bar.hide {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#navbar {
+  position: fixed;
+  top: 34px;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background: transparent;
+  transition: top 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+}
+#navbar.scrolled {
+  top: 0;
+  background: white !important;
+  box-shadow: 0 2px 24px rgba(11, 60, 93, 0.13);
+}
+#navbar.scrolled .nav-link {
+  color: #0b3c5d !important;
+}
+#navbar.scrolled .logo-text {
+  color: #0b3c5d !important;
+}
+#navbar.scrolled .logo-sub {
+  color: #64748b !important;
+}
+.nav-bar-inner {
+  background: transparent;
+  padding: 14px 0;
+  transition: background 0.35s;
+}
+
+#navbar .nav-link {
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.25s;
+}
+#navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #d4af37;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+#navbar .nav-link:hover::after,
+#navbar .nav-link.active::after {
+  transform: scaleX(1);
+}
+#navbar .nav-link.active {
+  color: #d4af37 !important;
+}
+
+.nav-item {
+  position: relative;
+  padding-bottom: 14px;
+  margin-bottom: -14px;
+}
+.dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(11, 60, 93, 0.18);
+  padding: 14px;
+  min-width: 300px;
+  border-top: 3px solid #d4af37;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  transform: translateX(-50%) translateY(6px);
+}
+.dropdown::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+.dropdown.wide {
+  min-width: 480px;
+}
+.nav-item:hover .dropdown,
+.nav-item:focus-within .dropdown,
+.nav-item.open .dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.dd-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 11px;
+  border-radius: 9px;
+  border: 1px solid #e8eef4;
+  transition: all 0.2s;
+  text-decoration: none;
+  cursor: pointer;
+}
+.dd-card:hover {
+  background: #eff6ff;
+  border-color: #bdd4eb;
+  transform: translateY(-2px);
+}
+.dd-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dd-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+.dd-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.lang-capsule {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 50px;
+  background: #0b3c5d;
+  color: white;
+  border: 1px solid #0b3c5d;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.lang-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lang-current-label {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.lang-caret {
+  margin-top: 1px;
+  transition: transform 0.2s;
+}
+
+

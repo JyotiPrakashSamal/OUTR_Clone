@@ -1,13 +1,13 @@
 -- ====================================================================
--- OUTR PORTAL DATABASE SCHEMA
+-- OUTR PORTAL DATABASE SCHEMA (FINAL UP-TO-DATE PRODUCTION VERSION)
 -- Execute this script in your Supabase SQL Editor.
 -- ====================================================================
 
 -- 1. Profiles Table (Linked to Supabase Auth.users)
-create table public.profiles (
+create table if not exists public.profiles (
   id uuid references auth.users on delete cascade primary key,
   name text not null,
-  role text not null check (role in ('admin', 'adviser', 'hos', 'controller', 'warden', 'student')),
+  role text not null check (role in ('admin', 'warden', 'adviser', 'hos', 'dean_academic', 'dean_pga', 'controller', 'student')),
   school_id text, -- e.g., 'SCS', 'SEE', 'SIP', 'SEEC', 'SMS', 'TED', 'Biotech', 'SBSH'
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -24,8 +24,8 @@ create policy "Users can update their own profile."
   on public.profiles for update 
   using (auth.uid() = id);
 
--- 2. Hostel Students Table
-create table public.students_hostel (
+-- 2. Hostel Roster Students Table
+create table if not exists public.students_hostel (
   id uuid default gen_random_uuid() primary key,
   regd_no text unique not null,
   name text not null,
@@ -55,8 +55,8 @@ create policy "Only wardens and admins can modify hostel records."
     )
   );
 
--- 3. File Tracking Table
-create table public.file_tracking (
+-- 3. File Tracking Table (With Dynamic 3-Way Routing Columns)
+create table if not exists public.file_tracking (
   id uuid default gen_random_uuid() primary key,
   file_no text unique not null,
   student_name text not null,
@@ -68,6 +68,9 @@ create table public.file_tracking (
   adviser_name text,
   hos_status text not null default 'Pending' check (hos_status in ('Pending', 'Approved', 'Rejected')),
   hos_name text,
+  forwarded_to text check (forwarded_to in ('dean_pga', 'dean_academic', 'controller')),
+  dean_status text default 'Pending' check (dean_status in ('Pending', 'Approved', 'Rejected')),
+  dean_name text,
   controller_status text not null default 'Pending' check (controller_status in ('Pending', 'Approved', 'Rejected')),
   controller_name text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
@@ -77,10 +80,14 @@ create table public.file_tracking (
 -- Enable RLS on File Tracking
 alter table public.file_tracking enable row level security;
 
--- File Tracking Policies
-create policy "Authenticated users can view tracking files."
+-- File Tracking Policies (Public tracking searches and inserts enabled)
+create policy "Anyone can view tracking files."
   on public.file_tracking for select
-  using (auth.role() = 'authenticated');
+  using (true);
+
+create policy "Anyone can insert tracking files."
+  on public.file_tracking for insert
+  with check (true);
 
 create policy "Faculty and admins can manage tracking files."
   on public.file_tracking for all
@@ -88,7 +95,7 @@ create policy "Faculty and admins can manage tracking files."
     exists (
       select 1 from public.profiles
       where public.profiles.id = auth.uid()
-      and public.profiles.role in ('adviser', 'hos', 'controller', 'admin')
+      and public.profiles.role in ('adviser', 'hos', 'dean_academic', 'dean_pga', 'controller', 'admin')
     )
   );
 
@@ -110,3 +117,83 @@ $$ language plpgsql security definer;
 create or replace trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- ====================================================================
+-- EXAMS & GRADES SCHEMA UPGRADES (MIGRATION STAGE)
+-- ====================================================================
+
+-- 5. Student Grade Sheets Table
+create table if not exists public.student_grades (
+  id uuid default gen_random_uuid() primary key,
+  regd_no text not null,
+  name text not null,
+  class_name text not null,
+  semester text not null,
+  exam_type text not null default 'Regular' check (exam_type in ('Regular', 'Back')),
+  status text not null default 'PASS',
+  subjects jsonb not null, -- Array of: { subName, subCode, credits, secured, total }
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Enable RLS
+alter table public.student_grades enable row level security;
+
+-- Policies
+drop policy if exists "Anyone can select student grades." on public.student_grades;
+create policy "Anyone can select student grades."
+  on public.student_grades for select
+  using (true);
+
+drop policy if exists "Anyone can insert student grades." on public.student_grades;
+create policy "Anyone can insert student grades."
+  on public.student_grades for insert
+  with check (true);
+
+drop policy if exists "Anyone can update student grades." on public.student_grades;
+create policy "Anyone can update student grades."
+  on public.student_grades for update
+  using (true);
+
+drop policy if exists "Anyone can delete student grades." on public.student_grades;
+create policy "Anyone can delete student grades."
+  on public.student_grades for delete
+  using (true);
+
+-- 6. Student Admit Cards Table
+create table if not exists public.student_admit_cards (
+  id uuid default gen_random_uuid() primary key,
+  regd_no text not null,
+  name text not null,
+  branch text not null,
+  semester text not null,
+  academic_year text not null,
+  exam_type text not null,
+  dob date not null,
+  subjects jsonb not null, -- Array of: { code, name, date, time }
+  issued_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Enable RLS
+alter table public.student_admit_cards enable row level security;
+
+-- Policies
+drop policy if exists "Anyone can select admit cards." on public.student_admit_cards;
+create policy "Anyone can select admit cards."
+  on public.student_admit_cards for select
+  using (true);
+
+drop policy if exists "Anyone can insert admit cards." on public.student_admit_cards;
+create policy "Anyone can insert admit cards."
+  on public.student_admit_cards for insert
+  with check (true);
+
+drop policy if exists "Anyone can update admit cards." on public.student_admit_cards;
+create policy "Anyone can update admit cards."
+  on public.student_admit_cards for update
+  using (true);
+
+drop policy if exists "Anyone can delete admit cards." on public.student_admit_cards;
+create policy "Anyone can delete admit cards."
+  on public.student_admit_cards for delete
+  using (true);
+

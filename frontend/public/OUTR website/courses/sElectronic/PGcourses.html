@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC - PG Courses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../courses.css">
+    <link rel="stylesheet" href="../PGcourses.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="hero">
+        <img src="https://outr.ac.in/public/uploads/b1_5.jpg" alt="OUTR Campus">
+        <div class="overlay">
+            <div class="hero-content">
+                <span class="badge">Academics</span>
+                <h1>Postgraduate Courses</h1>
+                <p class="subtitle">School of Electronic Sciences</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h2>Academic Programs</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="main-container">
+        <!-- PG COURSES -->
+        <div class="glass-card">
+            <div class="course-header">
+                <h3>Postgraduate (PG)</h3>
+                <span class="course-badge">Master's</span>
+            </div>
+
+            <div class="desc">
+                <ul class="course-list">
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech</h4>
+                            <p>M.Tech in VLSI Design and Embedded System</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-vlsi">View details</button>
+                    </li>
+
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech ECE</h4>
+                            <p>M.Tech in Electronics and Communication Engineering</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-ece">View details</button>
+                    </li>
+
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech ICE</h4>
+                            <p>M.Tech In Instrumentation and Control Engineering</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-ice">View details</button>
+                    </li>
+
+                    <li class="course-item">
+                        <div class="course-info">
+                            <h4>MTech ICE(Part-time)</h4>
+                            <p>M.Tech In Instrumentation and Control Engineering(Part-time)</p>
+                        </div>
+                        <button class="btn-details show-modal" data-modal="modal-mtech-ice-pt">View details</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay hidden"></div>
+
+    <div class="modal hidden" id="modal-mtech-vlsi">
+        <button class="close-modal">&times;</button>
+        <h3>MTech</h3>
+        <div class="modal-subtitle">M.Tech in VLSI Design and Embedded System</div>
+        <p>The M.Tech program in VLSI Design and Embedded System provides advanced knowledge in chip design, embedded
+            systems, microprocessors, digital electronics, and modern hardware technologies.</p>
+        <ul class="modal-features">
+            <li>Duration: 2 Years (4 Semesters)</li>
+            <li>Focus on VLSI and Embedded System technologies</li>
+            <li>Hands-on laboratory and project work</li>
+            <li>Research and industry-oriented curriculum</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-mtech-ece">
+        <button class="close-modal">&times;</button>
+        <h3>MTech ECE</h3>
+        <div class="modal-subtitle">M.Tech in Electronics and Communication Engineering</div>
+        <p>This program offers advanced learning in communication systems, signal processing, wireless technology,
+            electronic circuits, and modern communication engineering applications.</p>
+        <ul class="modal-features">
+            <li>Duration: 2 Years (4 Semesters)</li>
+            <li>Advanced Electronics and Communication concepts</li>
+            <li>Modern labs and research opportunities</li>
+            <li>Industry-focused technical training</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-mtech-ice">
+        <button class="close-modal">&times;</button>
+        <h3>MTech ICE</h3>
+        <div class="modal-subtitle">M.Tech in Instrumentation and Control Engineering</div>
+        <p>The M.Tech ICE program focuses on industrial automation, process control, instrumentation systems, sensors,
+            robotics, and advanced control engineering techniques.</p>
+        <ul class="modal-features">
+            <li>Duration: 2 Years (4 Semesters)</li>
+            <li>Specialization in Instrumentation and Control systems</li>
+            <li>Practical training with modern equipment</li>
+            <li>Research and industrial application focus</li>
+        </ul>
+    </div>
+
+    <div class="modal hidden" id="modal-mtech-ice-pt">
+        <button class="close-modal">&times;</button>
+        <h3>MTech ICE (Part-time)</h3>
+        <div class="modal-subtitle">Part-Time M.Tech in Instrumentation and Control Engineering</div>
+        <p>This part-time program is designed for working professionals who want to enhance their expertise in
+            instrumentation, automation, and control engineering while continuing their professional careers.</p>
+        <ul class="modal-features">
+            <li>Duration: 3 Years (6 Semesters)</li>
+            <li>Flexible schedule for working professionals</li>
+            <li>Industry-oriented practical learning</li>
+            <li>Career enhancement opportunities</li>
+        </ul>
+    </div>
+
+    <script>
+        'use strict';
+
+        const modals = document.querySelectorAll('.modal');
+        const overlay = document.querySelector('.modal-overlay');
+        const btnsOpenModal = document.querySelectorAll('.show-modal');
+        const btnsCloseModal = document.querySelectorAll('.close-modal');
+
+        const openModal = function (e) {
+            const modalId = e.currentTarget.getAttribute('data-modal');
+            const targetModal = document.getElementById(modalId);
+
+            if (targetModal) {
+                targetModal.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        };
+
+        const closeModal = function () {
+            modals.forEach(modal => modal.classList.add('hidden'));
+            overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+        };
+
+        btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+        btnsCloseModal.forEach(btn => btn.addEventListener('click', closeModal));
+        overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+  
+  <script src="/navbar-footer-loader.js"></script>
+</body>
+
+</html>

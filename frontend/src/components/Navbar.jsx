@@ -1,301 +1,453 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react'
 
-export default function Navbar({ onNavigate, transparentOnTop }) {
+export default function Navbar({ onNavigate }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState(null)
   const [scrolled, setScrolled] = useState(false)
 
-  // Listen to window scroll to trigger original transparency transition
+  // Listen to window scroll to trigger top-bar display identically to static sub-pages
   useEffect(() => {
-    if (!transparentOnTop) {
-      setScrolled(true)
-      return
-    }
-
     const handleScroll = () => {
-      if (window.scrollY > 20) {
+      if (window.scrollY > 40) {
         setScrolled(true)
       } else {
         setScrolled(false)
       }
     }
 
-    // Run once on mount
     handleScroll()
-
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [transparentOnTop])
-
-  const toggleDropdown = (name) => {
-    if (activeDropdown === name) {
-      setActiveDropdown(null)
-    } else {
-      setActiveDropdown(name)
-    }
-  }
+  }, [])
 
   const handleNavigation = (view) => {
     if (onNavigate) {
       onNavigate(view)
     }
     setMobileMenuOpen(false)
-    setActiveDropdown(null)
   }
 
-  // Determine dynamic classes based on scroll state
-  const isSolid = !transparentOnTop || scrolled
-  const headerBg = isSolid 
-    ? 'bg-white shadow-[0_2px_24px_rgba(11,60,93,0.13)] border-b border-slate-200/60' 
-    : 'bg-transparent border-transparent'
-  const textColor = isSolid ? 'text-[#0b3c5d]' : 'text-white'
-  const logoSubColor = isSolid ? 'text-slate-500' : 'text-white/65'
-  const logoBorderColor = isSolid ? 'border-[#d4af37]/30' : 'border-white/20'
-
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-[900] w-full font-sans transition-all duration-350 select-none ${headerBg}`}
-    >
-      
-      {/* Original Dark Top Bar */}
-      <div className="bg-[#0b3c5d] text-[11px] text-blue-200 py-2 px-6 flex justify-between items-center border-b border-white/10">
-        <div className="flex gap-4">
-          <span>📞 0674-2725223</span>
-          <span className="hidden md:inline">✉️ registrar@outr.ac.in</span>
-        </div>
-        <div className="flex gap-5">
-          <a href="https://outr.ac.in" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Tenders / RFQ</a>
-          <a href="http://placement.cet.edu.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Placement</a>
-          <a href="https://www.cet.edu.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors hidden sm:inline">Old Website</a>
+    <>
+      {/* TOP UTILITY BAR */}
+      <div id="top-bar" className={scrolled ? 'hide' : ''}>
+        <div className="max-w-7xl mx-auto px-5 w-full flex justify-between items-center select-none font-sans">
+          <div className="flex gap-5">
+            <a href="#" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Careers</a>
+            <a href="#" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
+            <a href="/administration/pic_officers.html" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">PIC Officers</a>
+            <a href="http://placement.cet.edu.in/" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Placement</a>
+          </div>
+          <div className="flex gap-5">
+            <a href="https://www.cet.edu.in/" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Old Website</a>
+            <span className="text-blue-200 text-[11px]">✉️ registrar@outr.ac.in</span>
+          </div>
         </div>
       </div>
 
-      {/* Original Red Alert Ticker Marquee Bar */}
-      <div className="w-full bg-[#ef4444] text-white text-[11.5px] font-semibold overflow-hidden flex items-center h-[30px] border-b border-rose-500/20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-5 w-full flex items-center">
-          <span className="flex-shrink-0 bg-black/20 px-2 py-0.5 rounded text-[9px] font-black tracking-wider mr-4 uppercase animate-pulse">
-            Alert
-          </span>
-          <div className="relative w-full overflow-hidden whitespace-nowrap">
-            <div className="inline-block pl-[100%] animate-marquee hover:[animation-play-state:paused] cursor-pointer text-xs tracking-wide">
-              🔥 Secure React unified Academic Portal is active &bull; Warden Check-in controls and dynamic approvals tracking are online &bull; Supabase authentication integrated.
+      {/* MAIN NAVBAR */}
+      <nav id="navbar" className="flex flex-col font-sans select-none scrolled" style={{ top: scrolled ? '0px' : '34px' }}>
+        {/* Ticker */}
+        <div id="ticker-bar" className="w-full bg-[#ef4444] text-white text-[11.5px] font-semibold overflow-hidden relative flex items-center h-[30px] shadow-sm">
+          <div className="max-w-7xl mx-auto px-5 w-full flex items-center">
+            <span className="flex-shrink-0 bg-black/20 px-2 py-0.5 rounded text-[9px] font-black tracking-wider mr-4 uppercase animate-pulse">Alert</span>
+            <div className="relative w-full overflow-hidden whitespace-nowrap">
+              <div className="inline-block pl-[100%] animate-marquee hover:[animation-play-state:paused] cursor-pointer text-xs tracking-wide">
+                🔥 Secure React unified Academic Portal is active &bull; Use your Supabase email &amp; password or the Developer Desks to log in instantly &bull; Warden check-ins and applications tracking are online.
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Navbar Bar */}
-      <nav className="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
-        
-        {/* Brand Logo & Identity */}
-        <button 
-          onClick={() => handleNavigation('home')}
-          className="flex items-center gap-3.5 group text-left focus:outline-none cursor-pointer"
-        >
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center border transition-colors ${logoBorderColor} ${isSolid ? 'bg-[#0b3c5d]/5' : 'bg-white/10'}`}>
-            <img 
-              src="https://outr.ac.in/public/uploads/logo_4.png" 
-              alt="OUTR Logo" 
-              className="w-8 h-8 object-contain"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className={`font-serif font-bold text-base md:text-lg tracking-wide leading-none transition-colors group-hover:text-accent ${textColor}`}>
-              OUTR
-            </span>
-            <span className={`text-[9px] font-bold tracking-widest uppercase mt-1 transition-colors ${logoSubColor}`}>
-              Techno Campus Portal
-            </span>
-          </div>
-        </button>
-
-        {/* Desktop Nav Items */}
-        <div className="hidden lg:flex items-center gap-8">
-          <button 
-            onClick={() => handleNavigation('home')}
-            className={`text-sm font-bold cursor-pointer transition-colors focus:outline-none hover:text-accent ${textColor}`}
-          >
-            Home
-          </button>
-
-          {/* About Dropdown */}
-          <div className="relative">
+        <div className="nav-bar-inner">
+          <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
+            {/* Brand Logo + Identity */}
             <button 
-              onClick={() => toggleDropdown('about')}
-              className={`text-sm font-bold flex items-center gap-1.5 focus:outline-none cursor-pointer transition-colors hover:text-accent ${textColor}`}
+              onClick={() => handleNavigation('home')}
+              className="flex items-center gap-3 group text-left focus:outline-none cursor-pointer no-underline bg-transparent border-none p-0"
             >
-              About <span className="text-[9px]">▼</span>
-            </button>
-            {activeDropdown === 'about' && (
-              <div className="absolute top-full left-50 -translate-x-50 mt-3 w-72 rounded-2xl bg-white border-t-[3px] border-t-[#d4af37] border-x border-b border-slate-200/80 shadow-[0_24px_64px_rgba(11,60,93,0.18)] p-3.5 space-y-1.5 animate-fade-in text-left">
-                <a href="#about" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">🏢</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">About OUTR</div>
-                    <div className="text-[10px] text-slate-400 font-medium">History &amp; overview</div>
-                  </div>
-                </a>
-                <a href="#vision" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">🎯</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">Vision &amp; Mission</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Core values &amp; goals</div>
-                  </div>
-                </a>
-                <a href="#accreditation" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">📜</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">Accreditation</div>
-                    <div className="text-[10px] text-slate-400 font-medium">NAAC, NBA, UGC recognition</div>
-                  </div>
-                </a>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center border border-[#d4af37]/30 bg-[#0b3c5d]/5 transition-colors">
+                <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Logo" className="w-8 h-8 object-contain" />
               </div>
-            )}
-          </div>
-
-          {/* Academics Dropdown */}
-          <div className="relative">
-            <button 
-              onClick={() => toggleDropdown('academics')}
-              className={`text-sm font-bold flex items-center gap-1.5 focus:outline-none cursor-pointer transition-colors hover:text-accent ${textColor}`}
-            >
-              Academics <span className="text-[9px]">▼</span>
-            </button>
-            {activeDropdown === 'academics' && (
-              <div className="absolute top-full left-50 -translate-x-50 mt-3 w-72 rounded-2xl bg-white border-t-[3px] border-t-[#d4af37] border-x border-b border-slate-200/80 shadow-[0_24px_64px_rgba(11,60,93,0.18)] p-3.5 space-y-1.5 animate-fade-in text-left">
-                <a href="#schools" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">💻</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">Schools &amp; Departments</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Undergraduate &amp; Postgrad</div>
-                  </div>
-                </a>
-                <a href="#courses" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">📋</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">Course Syllabus</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Download academic syllabus</div>
-                  </div>
-                </a>
+              <div className="flex flex-col">
+                <span className="font-serif font-bold text-sm md:text-base tracking-wide leading-none text-[#0b3c5d] group-hover:text-[#d4af37] transition-colors logo-text" style={{ color: scrolled ? '#0b3c5d' : undefined }}>Odisha University of Technology and Research</span>
+                <span className="text-[8.5px] font-bold tracking-widest uppercase mt-1 logo-sub" style={{ color: scrolled ? '#64748b' : undefined }}>Bhubaneswar, Odisha</span>
               </div>
-            )}
-          </div>
-
-          {/* Student Hub Dropdown */}
-          <div className="relative">
-            <button 
-              onClick={() => toggleDropdown('student')}
-              className={`text-sm font-bold flex items-center gap-1.5 focus:outline-none cursor-pointer transition-colors hover:text-accent ${textColor}`}
-            >
-              Student Hub <span className="text-[9px]">▼</span>
             </button>
-            {activeDropdown === 'student' && (
-              <div className="absolute top-full left-50 -translate-x-50 mt-3 w-72 rounded-2xl bg-white border-t-[3px] border-t-[#d4af37] border-x border-b border-slate-200/80 shadow-[0_24px_64px_rgba(11,60,93,0.18)] p-3.5 space-y-1.5 animate-fade-in text-left">
-                <a href="#hostels" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">🏢</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">Hostels Accommodation</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Room allocation desk</div>
-                  </div>
-                </a>
-                <a href="#social" onClick={() => setActiveDropdown(null)} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-[#0b3c5d]/5 hover:border-[#0b3c5d]/20 transition-all text-xs font-bold text-[#0b3c5d] group">
-                  <span className="text-lg">📣</span>
-                  <div>
-                    <div className="group-hover:text-[#1f5a8a] transition-colors">Social Media Hub</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Campus announcements</div>
-                  </div>
-                </a>
-              </div>
-            )}
-          </div>
 
-          {/* Direct File Tracking Link */}
-          <button 
-            onClick={() => handleNavigation('file-tracking-student')}
-            className={`text-sm font-bold cursor-pointer transition-colors focus:outline-none hover:text-accent ${textColor}`}
-          >
-            Applications
-          </button>
+            {/* Desktop nav links */}
+            <div className="hidden lg:flex items-center gap-8" id="nav-links">
+              <button onClick={() => handleNavigation('home')} className="nav-link font-sans bg-transparent border-none p-0 cursor-pointer">Home</button>
+
+              {/* About Dropdown */}
+              <div className="nav-item relative">
+                <button className="nav-link font-sans bg-transparent border-none p-0 cursor-pointer flex items-center gap-1 focus:outline-none">
+                  About <span className="text-[7px]">▼</span>
+                </button>
+                <div className="dropdown">
+                  <div className="flex flex-col gap-2">
+                    <a href="/OUTR website/about.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
+                      <div>
+                        <div className="dd-title">About OUTR</div>
+                        <div className="dd-sub">History &amp; overview</div>
+                      </div>
+                    </a>
+                    <a href="/OUTR website/mission&vission.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-3"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Vision and Mission</div>
+                        <div className="dd-sub">Core values &amp; goals</div>
+                      </div>
+                    </a>
+                    <a href="/OUTR website/schools.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-4"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Accreditation</div>
+                        <div className="dd-sub">NAAC, NBA, UGC recognition</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Academic Dropdown */}
+              <div className="nav-item relative">
+                <button className="nav-link font-sans bg-transparent border-none p-0 cursor-pointer flex items-center gap-1 focus:outline-none">
+                  Academic <span className="text-[7px]">▼</span>
+                </button>
+                <div className="dropdown wide">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <p className="text-[10.5px] font-semibold text-[#94a3b8] tracking-widest uppercase mb-2.5 px-1">Schools &amp; Departments</p>
+                      <div className="grid grid-cols-1 gap-1 max-h-[280px] overflow-y-auto pr-1">
+                        <a href="/OUTR website/schools/scs.html" className="dd-card">
+                          <div className="dd-icon bg-[#eff6ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
+                          <div className="dd-title text-[12px]">School of Computer Sciences</div>
+                        </a>
+                        <a href="/OUTR website/schools/sms.html" className="dd-card">
+                          <div className="dd-icon bg-[#fff7ed]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-9"></use></svg></div>
+                          <div className="dd-title text-[12px]">School of Mechanical Sciences</div>
+                        </a>
+                        <a href="/OUTR website/schools/sIp.html" className="dd-card">
+                          <div className="dd-icon bg-[#f0fdf4]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-10"></use></svg></div>
+                          <div className="dd-title text-[12px]">School of Infrastructure &amp; Planning</div>
+                        </a>
+                        <a href="/OUTR website/schools/sElectronics.html" className="dd-card">
+                          <div className="dd-icon bg-[#fff1f2]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-11"></use></svg></div>
+                          <div className="dd-title text-[12px]">School of Electronic Sciences</div>
+                        </a>
+                        <a href="/OUTR website/schools/sElectricals.html" className="dd-card">
+                          <div className="dd-icon bg-[#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-12"></use></svg></div>
+                          <div className="dd-title text-[12px]">School of Electrical Sciences</div>
+                        </a>
+                        <a href="/OUTR website/schools/sbsh.html" className="dd-card">
+                          <div className="dd-icon bg-[#f5f3ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-13"></use></svg></div>
+                          <div className="dd-title text-[12px]">School of Basic Sciences &amp; Humanities</div>
+                        </a>
+                        <a href="/OUTR website/schools/btd.html" className="dd-card">
+                          <div className="dd-icon bg-[#ecfdf5]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-14"></use></svg></div>
+                          <div className="dd-title text-[12px]">Biotechnology Department</div>
+                        </a>
+                        <a href="/OUTR website/schools/ted.html" className="dd-card">
+                          <div className="dd-icon bg-[#fff0f6]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-15"></use></svg></div>
+                          <div className="dd-title text-[12px]">Textile Engineering Department</div>
+                        </a>
+                      </div>
+                    </div>
+                    <div className="border-l border-slate-100 pl-4 text-left">
+                      <p className="text-[10.5px] font-semibold text-[#94a3b8] tracking-widest uppercase mb-2.5 px-1">Other Academic Boards</p>
+                      <div className="flex flex-col gap-2">
+                        <a href="/administration/SA_commitee.html" className="dd-card">
+                          <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-6"></use></svg></div>
+                          <div>
+                            <div className="dd-title">Committees</div>
+                            <div className="dd-sub">Academic boards &amp; groups</div>
+                          </div>
+                        </a>
+                        <a href="/OUTR website/courses/scs/UGcourses.html" className="dd-card">
+                          <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-7"></use></svg></div>
+                          <div>
+                            <div className="dd-title">Syllabus</div>
+                            <div className="dd-sub">UG and PG course syllabi</div>
+                          </div>
+                        </a>
+                        <a href="#" className="dd-card">
+                          <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
+                          <div>
+                            <div className="dd-title">Academic Calendar</div>
+                            <div className="dd-sub">Schedule &amp; important dates</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Administration Dropdown */}
+              <div className="nav-item relative">
+                <button className="nav-link font-sans bg-transparent border-none p-0 cursor-pointer flex items-center gap-1 focus:outline-none">
+                  Administration <span className="text-[7px]">▼</span>
+                </button>
+                <div className="dropdown wide">
+                  <p className="text-[10.5px] font-semibold text-[#94a3b8] tracking-widest uppercase mb-2.5 px-1">Administration &amp; Governance</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => handleNavigation('vc-desk')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans">
+                      <div className="dd-icon bg-[#eff6ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">VC Desk</div>
+                    </button>
+                    <button onClick={() => handleNavigation('bom')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans">
+                      <div className="dd-icon bg-[#fff7ed]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-13"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">Board of Management</div>
+                    </button>
+                    <a href="/administration/Dean.html" className="dd-card">
+                      <div className="dd-icon bg-[#f0fdf4]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-4"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">Dean</div>
+                    </a>
+                    <a href="/administration/HOD.html" className="dd-card">
+                      <div className="dd-icon bg-[#fff1f2]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-5"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">HODs</div>
+                    </a>
+                    <button onClick={() => handleNavigation('antiragging')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans">
+                      <div className="dd-icon bg-[#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-6"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">Anti-Ragging</div>
+                    </button>
+                    <a href="/administration/AR_commitee.html" className="dd-card">
+                      <div className="dd-icon bg-[#f5f3ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-7"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">Academic Council</div>
+                    </a>
+                    <a href="/administration/L_commitee.html" className="dd-card">
+                      <div className="dd-icon bg-[#ecfdf5]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-16"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">Students Grievance</div>
+                    </a>
+                    <button onClick={() => handleNavigation('coe-desk')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans">
+                      <div className="dd-icon bg-[#fff0f6]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-17"></use></svg></div>
+                      <div className="dd-title text-[12.5px]">Controller of Exam</div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Student Dropdown */}
+              <div className="nav-item relative">
+                <button className="nav-link font-sans bg-transparent border-none p-0 cursor-pointer flex items-center gap-1 focus:outline-none">
+                  Student <span className="text-[7px]">▼</span>
+                </button>
+                <div className="dropdown">
+                  <div className="flex flex-col gap-2">
+                    <a href="#notices" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Event</div>
+                        <div className="dd-sub">Fests &amp; campus activities</div>
+                      </div>
+                    </a>
+                    <a href="/administration/SA_commitee.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-1"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Society / Clubs</div>
+                        <div className="dd-sub">Join student organizations</div>
+                      </div>
+                    </a>
+                    <a href="/Student and Event/Hostel/hostel.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Hostels</div>
+                        <div className="dd-sub">Accommodation details</div>
+                      </div>
+                    </a>
+                    <a href="/Student and Event/Campus_Facilities/CampusLife.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-3"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Campus Life</div>
+                        <div className="dd-sub">Experience life at OUTR</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Dropdown */}
+              <div className="nav-item relative">
+                <button className="nav-link font-sans bg-transparent border-none p-0 cursor-pointer flex items-center gap-1 focus:outline-none">
+                  Contact <span className="text-[7px]">▼</span>
+                </button>
+                <div className="dropdown">
+                  <div className="flex flex-col gap-2">
+                    <a href="/OUTR website/location.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-16"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Address &amp; Map</div>
+                        <div className="dd-sub">Techno Campus, Ghatikia, BBSR</div>
+                      </div>
+                    </a>
+                    <a href="#footer" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-17"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Phone &amp; Email</div>
+                        <div className="dd-sub">Get in touch with us</div>
+                      </div>
+                    </a>
+                    <a href="/social.html" className="dd-card">
+                      <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-18"></use></svg></div>
+                      <div>
+                        <div className="dd-title">Social Media Hub</div>
+                        <div className="dd-sub">Follow us on all platforms</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+            {/* Header Right: Access Desks & Mobile Toggle */}
+            <div className="flex items-center gap-4 relative">
+              <div className="hidden lg:block ml-2">
+                <button 
+                  onClick={() => handleNavigation('auth')}
+                  className="font-bold text-xs py-2 px-5 rounded-full shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 border bg-[#0b3c5d] hover:bg-[#1f5a8a] text-white border-transparent"
+                >
+                  Access Desks
+                </button>
+              </div>
+
+              {/* Hamburger Button (Mobile) */}
+              <button 
+                id="mobile-btn" 
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden p-2 text-[#0b3c5d] bg-transparent border-none cursor-pointer"
+                aria-label="Open mobile menu"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <use href="#icon-21"></use>
+                </svg>
+              </button>
+            </div>
+
+          </div>
         </div>
-
-        {/* Action Access Desks Button */}
-        <div className="hidden lg:flex items-center">
-          <button 
-            onClick={() => handleNavigation('auth')}
-            className={`font-bold text-xs py-2.5 px-6 rounded-full shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 border ${
-              isSolid 
-                ? 'bg-[#0b3c5d] hover:bg-secondary text-white border-transparent' 
-                : 'bg-white/10 hover:bg-white text-white hover:text-[#0b3c5d] border-white/30'
-            }`}
-          >
-            Access Desks
-          </button>
-        </div>
-
-        {/* Hamburger Menu (Mobile) */}
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`lg:hidden focus:outline-none cursor-pointer transition-colors ${textColor}`}
-        >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
       </nav>
 
-      {/* Mobile Menu Panel */}
+      {/* MOBILE DRAWER OVERLAY & PANEL */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-slate-100 py-4 px-6 space-y-4 shadow-inner text-left animate-fade-in text-[#0b3c5d]">
-          <button 
-            onClick={() => handleNavigation('home')}
-            className="block text-sm font-bold text-left w-full"
+        <>
+          <div 
+            id="mobile-overlay" 
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(11,60,93,0.6)', backdropFilter: 'blur(4px)', zIndex: 950 }}
+          />
+          <div 
+            id="mobile-menu" 
+            style={{ position: 'fixed', top: 0, right: 0, width: '100%', maxWidth: '320px', height: '100vh', background: 'white', zIndex: 960, boxShadow: '-10px 0 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', fontFamily: '"DM Sans",sans-serif' }}
           >
-            Home
-          </button>
-          
-          <div className="border-t border-slate-50 pt-2">
-            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">About</span>
-            <div className="pl-4 space-y-2.5">
-              <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold">About OUTR</a>
-              <a href="#vision" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold">Vision &amp; Mission</a>
+            <div id="mob-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: '#0B3C5D', flexShrink: 0, minHeight: '60px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Logo" style={{ height: '32px', width: 'auto' }} />
+                <div style={{ color: 'white', fontWeight: 600, fontSize: '14px', lineHeight: 1.3 }}>OUTR<br />Bhubaneswar</div>
+              </div>
+              <button 
+                id="mob-close" 
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px', background: '#D4AF37', border: 'none', borderRadius: '8px', cursor: 'pointer', color: 'white' }}
+                aria-label="Close mobile menu"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-5 text-left">
+              <button onClick={() => { handleNavigation('home'); setMobileMenuOpen(false); }} className="text-[17px] font-medium text-[#1E293B] bg-transparent border-none text-left w-full cursor-pointer">Home</button>
+              <div className="h-px w-full bg-slate-200"></div>
+
+              <details className="group">
+                <summary className="flex justify-between items-center text-[17px] font-medium text-[#1E293B] cursor-pointer list-none">
+                  <span>About OUTR</span>
+                  <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
+                </summary>
+                <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
+                  <a href="/OUTR website/about.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">About OUTR</a>
+                  <a href="/OUTR website/mission&vission.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Vision and Mission</a>
+                  <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Accreditation</a>
+                </div>
+              </details>
+              <div className="h-px w-full bg-slate-200"></div>
+
+              <details className="group">
+                <summary className="flex justify-between items-center text-[17px] font-medium text-[#1E293B] cursor-pointer list-none">
+                  <span>Academic</span>
+                  <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
+                </summary>
+                <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
+                  <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
+                  <a href="/administration/SA_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Committees</a>
+                  <a href="/OUTR website/courses/scs/UGcourses.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Syllabus</a>
+                </div>
+              </details>
+              <div className="h-px w-full bg-slate-200"></div>
+
+              <details className="group">
+                <summary className="flex justify-between items-center text-[17px] font-medium text-[#1E293B] cursor-pointer list-none">
+                  <span>Administration</span>
+                  <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
+                </summary>
+                <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
+                  <button onClick={() => { handleNavigation('vc-desk'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">VC Desk</button>
+                  <button onClick={() => { handleNavigation('bom'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Board of Management</button>
+                  <a href="/administration/Dean.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Dean</a>
+                  <a href="/administration/HOD.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">HODs</a>
+                  <button onClick={() => { handleNavigation('antiragging'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Anti-Ragging</button>
+                  <a href="/administration/AR_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Academic Council</a>
+                  <a href="/administration/L_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Students Grievance</a>
+                  <button onClick={() => { handleNavigation('coe-desk'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Controller of Exam</button>
+                </div>
+              </details>
+              <div className="h-px w-full bg-slate-200"></div>
+
+              <details className="group">
+                <summary className="flex justify-between items-center text-[17px] font-medium text-[#1E293B] cursor-pointer list-none">
+                  <span>Student</span>
+                  <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
+                </summary>
+                <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
+                  <a href="#notices" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Event</a>
+                  <a href="/administration/SA_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Society / Clubs</a>
+                  <a href="/Student and Event/Hostel/hostel.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Hostels</a>
+                  <a href="/Student and Event/Campus_Facilities/CampusLife.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Campus Life</a>
+                </div>
+              </details>
+              <div className="h-px w-full bg-slate-200"></div>
+
+              <details className="group">
+                <summary className="flex justify-between items-center text-[17px] font-medium text-[#1E293B] cursor-pointer list-none">
+                  <span>Contact &amp; Map</span>
+                  <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
+                </summary>
+                <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
+                  <a href="/OUTR website/location.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Address &amp; Map</a>
+                  <a href="#footer" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Phone &amp; Email</a>
+                  <a href="/social.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Social Media Hub</a>
+                </div>
+              </details>
+              <div className="h-px w-full bg-slate-200"></div>
+
+
+
+              <button 
+                onClick={() => { handleNavigation('auth'); setMobileMenuOpen(false); }}
+                className="w-full text-center block bg-[#0B3C5D] hover:bg-[#1f5a8a] text-white font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer border-none font-sans"
+              >
+                Access Desks
+              </button>
             </div>
           </div>
-
-          <div className="border-t border-slate-50 pt-2">
-            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Academics</span>
-            <div className="pl-4 space-y-2.5">
-              <a href="#schools" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold">Schools &amp; Departments</a>
-              <a href="#courses" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold">Syllabus</a>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-50 pt-2">
-            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Student Hub</span>
-            <div className="pl-4 space-y-2.5">
-              <a href="#hostels" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold">Hostels</a>
-              <a href="#social" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold">Social Media Hub</a>
-            </div>
-          </div>
-
-          <button 
-            onClick={() => handleNavigation('file-tracking-student')}
-            className="block text-sm font-bold text-left w-full border-t border-slate-50 pt-2"
-          >
-            Academic Applications
-          </button>
-
-          <button 
-            onClick={() => handleNavigation('auth')}
-            className="w-full text-center block bg-primary hover:bg-[#1f5a8a] text-white font-semibold py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
-          >
-            Access Desks
-          </button>
-        </div>
+        </>
       )}
-    </header>
+    </>
   )
 }

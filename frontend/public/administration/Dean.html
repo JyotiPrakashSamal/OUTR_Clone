@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUTR-Deans</title>
+  <meta name="description" content="Odisha University of Technology and Research (OUTR) - Deans of Faculties & Schools." />
+  <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+
+
+  <style>
+/* base style */
+    :root {
+      --primary: #0b3c5d;
+      --secondary: #1f5a8a;
+      --accent: #d4af37;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+h1, h2, h3 { font-family: "Playfair Display", serif; }
+/* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+/* page header */
+    .page-wrapper {
+      padding-top: 34px; /* top-bar height */
+    }
+/* Page hero band */
+    .page-banner {
+      background: linear-gradient(135deg, #0b3c5d 0%, #1f5a8a 60%, #0b3c5d 100%);
+      padding: 40px 20px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+.page-banner::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+.page-banner h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: white; position: relative;
+    }
+.page-banner p {
+      color: rgba(255,255,255,.7);
+      font-size: 15px; margin-top: 8px; position: relative;
+    }
+.gold-bar {
+      width: 60px; height: 4px; background: var(--accent);
+      border-radius: 2px; margin: 14px auto 0;
+    }
+/* Dean grid */
+    .deans-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px 80px;
+    }
+.deans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 32px;
+    }
+.dean-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 12px rgba(11,60,93,.06);
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+.dean-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(11,60,93,.14);
+    }
+.dean-img-wrap {
+      height: 280px;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+.dean-img-wrap img {
+      width: 100%; height: 100%; object-fit: fill;
+      object-position: top center;
+      transition: transform .5s ease;
+    }
+.dean-card:hover .dean-img-wrap img { transform: scale(1.04); }
+/* photo frame */
+    .dean-avatar-fallback {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; color: white; font-family: "Playfair Display", serif;
+    }
+.dean-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+.dean-badge {
+      display: inline-block;
+      background: rgba(11,60,93,.07);
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border-left: 3px solid var(--accent);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+.dean-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+.dean-dept {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+.dean-email {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--secondary);
+      text-decoration: none;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+      width: fit-content;
+      transition: color .2s;
+    }
+.dean-email:hover { color: var(--primary); }
+.dean-email svg { flex-shrink: 0; }
+/* breadcrumb */
+    .breadcrumb {
+      padding: 14px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      font-size: 12.5px;
+      color: var(--muted);
+      display: flex; gap: 6px; align-items: center;
+    }
+.breadcrumb a { color: var(--secondary); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+@media (max-width: 768px) {
+.deans-grid { grid-template-columns: 1fr; gap: 24px; }
+
+    
+}
+</style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<!-- TOP UTILITY BAR -->
+<!-- MAIN NAVBAR -->
+<!-- MOBILE MENU OVERLAY -->
+<!-- page wrapper -->
+<div class="page-wrapper" style="padding-top:122px;">
+
+  <!-- Page Banner -->
+  <div class="page-banner">
+    <h1>Deans of Faculties &amp; Schools</h1>
+    <p>Academic leadership driving excellence at OUTR</p>
+    <div class="gold-bar"></div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a href="javascript:void(0)">Home</a>
+    <span>></span>
+    <a href="javascript:void(0)">Administration</a>
+    <span>></span>
+    <span style="color:var(--text);font-weight:500;">Deans</span>
+  </nav>
+
+  <!-- Dean Cards Grid -->
+  <section class="deans-section">
+    <div class="deans-grid">
+
+      <!-- Dean 1 -->
+      <div class="dean-card">
+        <div class="dean-img-wrap">
+          <img src="admin_module_photo/PKP-removebg-preview.jpg" alt="Dr. Pramod Kumar Parida"
+            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'dean-avatar-fallback\'>P</div>';" />
+        </div>
+        <div class="dean-body">
+          <span class="dean-badge">Dean, Faculty and Planning</span>
+          <h3 class="dean-name">Dr. Pramod K. Parida</h3>
+          <p class="dean-dept">Professor, Mechanical Engineering</p>
+          <a href="mailto:pkparida@outr.ac.in" class="dean-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            pkparida@outr.ac.in
+          </a>
+        </div>
+      </div>
+
+      <!-- Dean 2 -->
+      <div class="dean-card">
+        <div class="dean-img-wrap">
+          <img src="admin_module_photo/AKB.jpg" alt="Prof. Ajit Kumar Barisal"
+            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'dean-avatar-fallback\'>A</div>';" />
+        </div>
+        <div class="dean-body">
+          <span class="dean-badge">Dean, Sponsored Research &amp; Industrial Consultancy</span>
+          <h3 class="dean-name">Prof. Ajit Kumar Barisal</h3>
+          <p class="dean-dept">Professor, Electrical Engineering</p>
+          <a href="mailto:akbarisal@outr.ac.in" class="dean-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email Address
+          </a>
+        </div>
+      </div>
+
+      <!-- Dean 3 -->
+      <div class="dean-card">
+        <div class="dean-img-wrap">
+          <img src="admin_module_photo/AT-removebg-preview.png" alt="Prof. Aruna Tripathy"
+            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'dean-avatar-fallback\'>A</div>';" />
+        </div>
+        <div class="dean-body">
+          <span class="dean-badge">Dean, Post Graduate Studies &amp; Research</span>
+          <h3 class="dean-name">Prof. Aruna Tripathy</h3>
+          <p class="dean-dept">Professor, Electronics &amp; Instrumentation Engineering</p>
+          <a href="mailto:atripathy@outr.ac.in" class="dean-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            atripathy@outr.ac.in
+          </a>
+        </div>
+      </div>
+
+      <!-- Dean 4 -->
+      <div class="dean-card">
+        <div class="dean-img-wrap">
+          <img src="admin_module_photo/J_Mishra-removebg-preview_2.png" alt="Prof. Jibitesh Mishra"
+            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'dean-avatar-fallback\'>J</div>';" />
+        </div>
+        <div class="dean-body">
+          <span class="dean-badge">Dean, Students Welfare</span>
+          <h3 class="dean-name">Prof. Jibitesh Mishra</h3>
+          <p class="dean-dept">Professor, Computer Science &amp; Application</p>
+          <a href="mailto:jmishra@outr.ac.in" class="dean-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            jmishra@outr.ac.in
+          </a>
+        </div>
+      </div>
+
+      <!-- Dean 5 -->
+      <div class="dean-card">
+        <div class="dean-img-wrap">
+          <img src="admin_module_photo/TKP-removebg-preview.jpg" alt="Prof. Tapas Kumar Patra"
+            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'dean-avatar-fallback\'>T</div>';" />
+        </div>
+        <div class="dean-body">
+          <span class="dean-badge">Dean, Centre for Distance &amp; Continuing Education</span>
+          <h3 class="dean-name">Prof. Tapas Kumar Patra</h3>
+          <p class="dean-dept">Professor, Electronics &amp; Instrumentation Engineering</p>
+          <a href="mailto:tkpatra@outr.ac.in" class="dean-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            tkpatra@outr.ac.in
+          </a>
+        </div>
+      </div>
+
+      <!-- Dean 6 -->
+      <div class="dean-card">
+        <div class="dean-img-wrap">
+          <img src="admin_module_photo/Ranjan Kumar Jena_1.jpg" alt="Prof. Ranjan Kumar Jena"
+            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'dean-avatar-fallback\'>R</div>';" />
+        </div>
+        <div class="dean-body">
+          <span class="dean-badge">Dean, Academic Affairs</span>
+          <h3 class="dean-name">Prof. Ranjan Kumar Jena</h3>
+          <p class="dean-dept">Professor, Electrical Engineering</p>
+          <a href="mailto:rkjena@outr.ac.in" class="dean-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            rkjena@outr.ac.in
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- footer -->
+<!-- Back to top -->
+  
+  <script src="/navbar-footer-loader.js"></script>
+</body>
+</html>

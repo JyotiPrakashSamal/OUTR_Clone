@@ -16,6 +16,9 @@ export default function Layout({ children, onNavigate, transparentOnTop }) {
 
       {/* Universal Footer */}
       <Footer />
+
+      {/* Hidden print container for high-fidelity A4 document prints */}
+      <div id="print-area"></div>
     </div>
   )
 }

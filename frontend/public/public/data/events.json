@@ -1,0 +1,6 @@
+[
+  { "day": "22", "month": "MAR", "title": "XTASY 2025 - Annual Technical Fest", "location": "Main Auditorium, OUTR Campus", "color": "var(--primary)" },
+  { "day": "28", "month": "MAR", "title": "National Seminar on Sustainable Engineering", "location": "Conference Hall, Block A", "color": "var(--secondary)" },
+  { "day": "05", "month": "APR", "title": "Campus Placement Drive - TCS, Infosys, Wipro", "location": "Placement Cell, Block C", "color": "#1e293b" },
+  { "day": "10", "month": "APR", "title": "Annual Convocation Ceremony 2025", "location": "University Open Ground, OUTR", "color": "var(--accent)" }
+]

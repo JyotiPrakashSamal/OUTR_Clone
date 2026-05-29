@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Ranjan Kumar Dash - Profile | OUTR</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Using scs.css for base design tokens and profile.css for profile specifics -->
+    <link rel="stylesheet" href="../css/schools/scs.css">
+    <link rel="stylesheet" href="./profile.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <!-- Hero Banner Section -->
+    <section class="hero" style="height: 35vh; min-height: 280px;">
+        <img src="https://outr.ac.in/public/uploads/b1_5.jpg" alt="OUTR Campus">
+        <div class="overlay">
+            <div class="hero-content" style="opacity: 0.9;">
+                <span class="badge">Faculty Profile</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Profile Content -->
+    <main class="main-container profile-container">
+        <div class="glass-card profile-grid" style="padding: 0; overflow: hidden;">
+            
+            <!-- Left Sidebar: Photo & Contact -->
+            <div style="background: rgba(15, 76, 129, 0.03); padding: 3rem; border-right: 1px solid var(--border-color);">
+                <div class="profile-photo">
+                    <img src="https://outr.ac.in/public/uploads/IMG_7050.jpeg" alt="Dr. Ranjan Kumar Dash">
+                </div>
+                
+                <div class="sidebar-contact">
+                    <h4>Contact Info</h4>
+                    
+                    <div class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        <span>+91-9437360517</span>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <span>rkdash@outr.ac.in</span>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                        </svg>
+                        <span>Joined: 30-Jan-2009</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Main Content: Details -->
+            <div style="padding: 3rem 3rem 3rem 0;">
+                <div class="profile-header-text">
+                    <h1 class="profile-name">Dr. Ranjan Kumar Dash</h1>
+                    <div class="profile-title">Professor, Computer Sciences</div>
+                </div>
+
+                <div class="profile-section">
+                    <h3 class="section-title">Research Interest</h3>
+                    <div class="tags-container">
+                        <span class="tag">Distributed Computing</span>
+                        <span class="tag">Optimization Algorithms</span>
+                        <span class="tag">Parallel & Distributed Systems</span>
+                        <span class="tag">Wireless Networks</span>
+                        <span class="tag">Fault Tolerance and Reliability</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3 class="section-title">Experience</h3>
+                    <div class="info-card">
+                        <h4>Teaching Experience</h4>
+                        <p>Twenty-three (23) years of teaching experience out of which fifteen (15) years of teaching experience at CET/OUTR.</p>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3 class="section-title">Research Guidance</h3>
+                    <div class="info-card">
+                        <h4>Ph.D. Guidance</h4>
+                        <p>3 students (awarded) and 1 student (ongoing)</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>M.Tech. Guidance</h4>
+                        <p>10 students (awarded) and 1 student (ongoing)</p>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3 class="section-title">Selected Publications</h3>
+                    <p style="margin-bottom: 1rem; color: var(--text-muted);">For a complete list of publications and citations, please refer to the following profiles:</p>
+                    <div class="links-container">
+                        <a href="https://www.sciencedirect.com/science/article/abs/pii/S1568494612001020?via%3Dihub" target="_blank" class="outline-btn">
+                            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            Paper 1
+                        </a>
+                        <a href="https://www.sciencedirect.com/science/article/pii/S2215098615000233?via%3Dihub" target="_blank" class="outline-btn">
+                            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            Paper 2
+                        </a>
+                        <a href="https://ijpe-online.com/" target="_blank" class="outline-btn">
+                            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            Paper 3
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </main>
+
+  
+  <script src="/navbar-footer-loader.js"></script>
+</body>
+
+</html>

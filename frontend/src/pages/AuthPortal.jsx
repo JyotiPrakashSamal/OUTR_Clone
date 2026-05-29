@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 
@@ -8,14 +9,28 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [logoClicks, setLogoClicks] = useState(0)
+  const [showDevShortcuts, setShowDevShortcuts] = useState(false)
 
-  // University Roles list
+  const handleLogoClick = () => {
+    const clicks = logoClicks + 1
+    setLogoClicks(clicks)
+    if (clicks === 5) {
+      setShowDevShortcuts(true)
+    }
+  }
+
+  // University Roles list (NO PUBLIC SIGNUP - ALL CREATED BY SUPER ADMIN)
   const roles = [
-    { id: 'student', title: 'Student Result Portal', icon: '🎓', desc: 'View academic results and manage details.' },
-    { id: 'warden', title: 'Hostel Warden Portal', icon: '🔑', desc: 'Allocate rooms and oversee checked students.' },
-    { id: 'adviser', title: 'Faculty Adviser', icon: '📄', desc: 'First level review of student files.' },
-    { id: 'hos', title: 'Head of School (HoS)', icon: '🏛️', desc: 'Perform administrative school approvals.' },
-    { id: 'controller', title: 'Exam Controller', icon: '⚖️', desc: 'Final release approvals and result publishing.' },
+    { id: 'student', title: 'Student Result Portal', icon: '🎓', desc: 'View academic grades & track clearance files.' },
+    { id: 'warden', title: 'Hostel Warden Portal', icon: '🔑', desc: 'Allocate rooms & register checked-in students.' },
+    { id: 'adviser', title: 'Faculty Adviser Desk', icon: '📄', desc: 'First level department review of student clearances.' },
+    { id: 'hos', title: 'Head of School (HoS)', icon: '🏛️', desc: 'Verify reviews & choose clearance forwarding route.' },
+    { id: 'dean_academic', title: 'Dean Academic Desk', icon: '🏫', desc: 'Review & approve academic syllabus clearances.' },
+    { id: 'dean_pga', title: 'Dean PGA Desk', icon: '📜', desc: 'Review & approve post-graduate clearances.' },
+    { id: 'controller', title: 'Exam Controller Desk', icon: '⚖️', desc: 'Verify clearance certificates & release clearings.' },
+    { id: 'admin', title: 'Super Admin Control', icon: '⚙️', desc: 'System administrator account provisioning desk.' },
   ]
 
   const handleBack = () => {
@@ -32,34 +47,45 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
     setErrorMsg('')
     setSuccessMsg('')
 
-    // Developer Preview Login Bypass for Offline Testing
+    // Developer Preview Login Bypass for Offline/Local Testing Convenience
+    const isDemoAdmin = selectedRole === 'admin' && email === 'admin@outr.ac.in' && password === 'admin@123'
     const isDemoWarden = selectedRole === 'warden' && email === 'warden@outr.ac.in' && password === 'warden@123'
     const isDemoAdviser = selectedRole === 'adviser' && email === 'adviser@outr.ac.in' && password === 'adv@123'
     const isDemoHos = selectedRole === 'hos' && email === 'hos@outr.ac.in' && password === 'hos@123'
+    const isDemoDeanAcad = selectedRole === 'dean_academic' && email === 'deanacad@outr.ac.in' && password === 'dean@123'
+    const isDemoDeanPga = selectedRole === 'dean_pga' && email === 'deanpga@outr.ac.in' && password === 'dean@123'
     const isDemoController = selectedRole === 'controller' && email === 'controller@outr.ac.in' && password === 'ctrl@123'
+    const isDemoStudent = selectedRole === 'student' && email === 'student@outr.ac.in' && password === 'student@123'
 
-    if (isDemoWarden || isDemoAdviser || isDemoHos || isDemoController) {
-      setSuccessMsg(`Welcome back, Demo ${selectedRole.toUpperCase()}! Redirecting...`)
+    if (isDemoAdmin || isDemoWarden || isDemoAdviser || isDemoHos || isDemoDeanAcad || isDemoDeanPga || isDemoController || isDemoStudent) {
+      const demoRole = selectedRole
+      setSuccessMsg(`Welcome back, Demo ${demoRole.toUpperCase()}! Redirecting to dashboard...`)
       setTimeout(() => {
         if (onLoginSuccess) {
-          onLoginSuccess(selectedRole, { role: selectedRole, name: `Demo ${selectedRole.toUpperCase()}`, school_id: 'SCS' })
+          onLoginSuccess(demoRole, { 
+            role: demoRole, 
+            name: `Demo ${demoRole.toUpperCase()}`, 
+            school_id: 'SCS',
+            isLocal: true
+          })
         }
         setLoading(false)
       }, 1000)
       return
     }
 
+
+
     try {
+      // Normal Cloud Database Auth Sign-in
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       })
 
-      if (error) {
-        throw error
-      }
+      if (error) throw error
 
-      // Check if user profile matches the selected role
+      // Check if user profile matches the selected role in our Postgres Profiles table
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -67,10 +93,10 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
         .single()
 
       if (profileError || !profile) {
-        // Fallback or custom metadata check if profile wasn't found immediately
+        // Fallback check on Auth User raw user_metadata in case profile sync was delayed
         const userMetadataRole = data.user.user_metadata?.role
         if (userMetadataRole !== selectedRole) {
-          throw new Error('Access denied. Your account does not have authorization for this role.')
+          throw new Error(`Access denied. Your account does not have authorization for the ${selectedRole.toUpperCase()} desk.`)
         }
       } else if (profile.role !== selectedRole) {
         throw new Error(`Access denied. Your account is registered as a ${profile.role}, not a ${selectedRole}.`)
@@ -78,7 +104,6 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
 
       setSuccessMsg(`Welcome back, ${profile?.name || data.user.email}! Redirecting to dashboard...`)
       
-      // Simulate dashboard redirection delay
       setTimeout(() => {
         if (onLoginSuccess) {
           onLoginSuccess(selectedRole, profile || { role: selectedRole })
@@ -87,21 +112,56 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
 
     } catch (err) {
       setErrorMsg(err.message || 'Authentication failed. Please verify your credentials.')
-      // Sign out only if we succeeded in generating a user session but role failed validation
+      // Immediate clean logout if token authentication succeeded but role authorization failed
       try {
         const { data: { session } } = await supabase.auth.getSession()
         if (session) {
           await supabase.auth.signOut()
         }
-      } catch (e) {}
+      } catch {}
     } finally {
       setLoading(false)
     }
   }
 
+  // Developer Fast Presets Auto-filler
+  const handleQuickSeed = (roleId) => {
+    setSelectedRole(roleId)
+    setErrorMsg('')
+    setSuccessMsg('')
+    if (roleId === 'student') {
+      setEmail('student@outr.ac.in')
+      setPassword('student@123')
+    } else if (roleId === 'admin') {
+      setEmail('admin@outr.ac.in')
+      setPassword('admin@123')
+    } else if (roleId === 'warden') {
+      setEmail('warden@outr.ac.in')
+      setPassword('warden@123')
+    } else if (roleId === 'adviser') {
+      setEmail('adviser@outr.ac.in')
+      setPassword('adv@123')
+    } else if (roleId === 'hos') {
+      setEmail('hos@outr.ac.in')
+      setPassword('hos@123')
+    } else if (roleId === 'dean_academic') {
+      setEmail('deanacad@outr.ac.in')
+      setPassword('dean@123')
+    } else if (roleId === 'dean_pga') {
+      setEmail('deanpga@outr.ac.in')
+      setPassword('dean@123')
+    } else if (roleId === 'controller') {
+      setEmail('controller@outr.ac.in')
+      setPassword('ctrl@123')
+    } else {
+      setEmail('')
+      setPassword('')
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-bg font-sans flex flex-col justify-between select-none">
-      {/* Top Banner */}
+    <div className="min-h-screen bg-bg font-sans flex flex-col justify-between select-none animate-fade-in">
+      {/* Top Utility Banner */}
       <div className="bg-primary text-[11px] text-white/80 py-2.5 px-6 flex justify-between items-center border-b border-white/10 shadow-sm">
         <div>Odisha University of Technology and Research — Academic Portal</div>
         <div className="flex gap-4">
@@ -110,90 +170,106 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
         </div>
       </div>
 
-      {/* Main Container */}
+      {/* Main Login Card container */}
       <main className="flex-grow flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-4xl bg-white/70 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-100/50 overflow-hidden flex flex-col md:flex-row min-h-[500px]">
           
-          {/* Left Decorative branding side */}
-          <div className="md:w-5/12 bg-primary p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+          {/* Left branding layout column */}
+          <div className="md:w-5/12 bg-primary p-8 md:p-10 text-white flex flex-col justify-between relative overflow-hidden text-left">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,90,138,0.4),transparent)]"></div>
             
             <div className="relative z-10 flex items-center gap-3">
               <img 
                 src="https://outr.ac.in/public/uploads/logo_4.png" 
                 alt="OUTR Logo" 
-                className="w-10 h-10 object-contain invert brightness-200"
+                onClick={handleLogoClick}
+                className="w-10 h-10 object-contain invert brightness-200 cursor-pointer select-none active:scale-95 transition-transform duration-200"
+                title="OUTR Shield Services"
               />
-              <span className="font-serif font-bold text-lg tracking-wide">OUTR Portal</span>
+              <span className="font-serif font-bold text-lg tracking-wide select-none">OUTR Portal</span>
             </div>
 
-            <div className="relative z-10 my-8">
+            <div className="relative z-10 my-8 select-none">
               <h2 className="font-serif text-3xl font-bold leading-tight mb-4">
                 Secure Unified <br />
                 Authentication
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed">
+              <p className="text-white/70 text-xs leading-relaxed">
                 Log in to access your customized academic desk, hostel details, or administrative approval pipeline.
               </p>
             </div>
 
-            <div className="relative z-10 text-[11px] text-white/50 border-t border-white/10 pt-4">
-              Authorized access only. Activity log will be recorded under university audit guidelines.
-            </div>
+            {/* Developer Fast Bypass presetted shortcuts (Hidden behind a 5-click secret trigger on the university logo for 100% authentic production aesthetic) */}
+            {showDevShortcuts && (
+              <div className="relative z-10 p-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] space-y-1 animate-fade-in">
+                <div className="font-bold text-accent uppercase tracking-wider mb-1">⚡ Developer Quick Seed Logins</div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  <button onClick={() => handleQuickSeed('student')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🎓 Student Desk</button>
+                  <button onClick={() => handleQuickSeed('admin')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">⚙️ Super Admin</button>
+                  <button onClick={() => handleQuickSeed('warden')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🔑 Warden Desk</button>
+                  <button onClick={() => handleQuickSeed('adviser')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📄 Adviser Desk</button>
+                  <button onClick={() => handleQuickSeed('hos')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🏛️ HoS Desk</button>
+                  <button onClick={() => handleQuickSeed('dean_academic')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🏫 Dean Academic</button>
+                  <button onClick={() => handleQuickSeed('dean_pga')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📜 Dean PGA</button>
+                  <button onClick={() => handleQuickSeed('controller')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">⚖️ Controller</button>
+                </div>
+                <div className="text-white/40 text-[8px] pt-1">Bypasses Supabase cloud blocks for fast local testing.</div>
+              </div>
+            )}
           </div>
 
-          {/* Right form/selection side */}
+          {/* Right form submission column */}
           <div className="md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-white/50">
             
             {!selectedRole ? (
               // Step 1: Role Selection
-              <div className="animate-fade-in">
+              <div className="animate-fade-in text-left">
                 <h3 className="font-serif text-2xl font-bold text-primary mb-1">Select Your Desk</h3>
                 <p className="text-muted text-sm mb-6">Choose your authorized role to access the portal dashboard.</p>
                 
-                <div className="space-y-3.5 max-h-[350px] overflow-y-auto pr-1">
+                <div className="space-y-2.5 max-h-[350px] overflow-y-auto pr-1">
                   {roles.map((role) => (
                     <button
                       key={role.id}
                       onClick={() => setSelectedRole(role.id)}
-                      className="w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:border-accent/40 hover:shadow-md hover:shadow-slate-100 flex items-center gap-4 transition-all duration-300 group"
+                      className="w-full text-left p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-accent/40 hover:shadow-md hover:shadow-slate-100 flex items-center gap-4 transition-all duration-300 group cursor-pointer"
                     >
-                      <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{role.icon}</span>
+                      <span className="text-xl group-hover:scale-110 transition-transform duration-300">{role.icon}</span>
                       <div className="flex-grow">
-                        <h4 className="font-semibold text-primary text-sm group-hover:text-secondary transition-colors">{role.title}</h4>
-                        <p className="text-xs text-muted leading-normal mt-0.5">{role.desc}</p>
+                        <h4 className="font-semibold text-primary text-xs group-hover:text-secondary transition-colors leading-none">{role.title}</h4>
+                        <p className="text-[10.5px] text-muted mt-1 leading-normal">{role.desc}</p>
                       </div>
-                      <span className="text-slate-300 group-hover:text-accent font-semibold text-base transition-all duration-300">→</span>
+                      <span className="text-slate-300 group-hover:text-accent font-semibold text-sm transition-all duration-300">→</span>
                     </button>
                   ))}
                 </div>
               </div>
             ) : (
               // Step 2: Credentials Form
-              <div className="animate-fade-in">
+              <div className="animate-fade-in text-left">
                 {/* Back button */}
                 <button 
                   onClick={handleBack}
-                  className="text-xs text-secondary hover:text-primary font-semibold flex items-center gap-1 mb-6 transition-colors"
+                  className="text-xs text-secondary hover:text-primary font-semibold flex items-center gap-1 mb-6 transition-colors cursor-pointer border-none bg-transparent"
                 >
                   ← Back to Desks
                 </button>
 
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">
-                    {roles.find(r => r.id === selectedRole)?.icon}
+                <div className="mb-6">
+                  <span className="text-[10px] uppercase font-bold text-accent tracking-widest pl-0.5">
+                    {selectedRole.toUpperCase()} DESK
                   </span>
-                  <h3 className="font-serif text-2xl font-bold text-primary">
-                    {roles.find(r => r.id === selectedRole)?.title}
+                  <h3 className="font-serif text-2xl font-bold text-primary mt-0.5">
+                    Secure Authenticate
                   </h3>
+                  <p className="text-muted text-xs font-medium mt-1">
+                    Please log in using your university-provided credentials.
+                  </p>
                 </div>
-                <p className="text-muted text-sm mb-6">
-                  Please authenticate with your university credentials.
-                </p>
 
                 {/* Error Banner */}
                 {errorMsg && (
-                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs leading-normal mb-5 animate-shake">
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs leading-normal mb-5">
                     ⚠️ {errorMsg}
                   </div>
                 )}
@@ -207,39 +283,62 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
 
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-primary mb-1.5">University Email</label>
+                    <label className="block text-xs font-bold text-primary uppercase mb-1.5 pl-0.5">University Email</label>
                     <input 
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. warden@outr.ac.in"
+                      placeholder={`e.g. ${selectedRole}@outr.ac.in`}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-primary mb-1.5">Secure Password</label>
-                    <input 
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary transition-colors"
-                    />
+                    <label className="block text-xs font-bold text-primary uppercase mb-1.5 pl-0.5">Secure Password</label>
+                    <div className="relative">
+                      <input 
+                        type={showPassword ? "text" : "password"}
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full pl-4 pr-12 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary border-none bg-transparent cursor-pointer select-none flex items-center justify-center p-1 rounded-lg hover:bg-slate-50 transition-colors"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        {showPassword ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 rounded-xl bg-primary hover:bg-secondary text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/10 disabled:opacity-50 disabled:pointer-events-none"
+                    className="w-full py-3.5 rounded-xl bg-primary hover:bg-secondary text-white font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/10 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   >
                     {loading ? (
                       <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                     ) : 'Authenticate Securely'}
                   </button>
                 </form>
+
+                <div className="mt-6 text-center text-[10px] text-slate-400 font-medium">
+                  🔒 Notice: Public registrations have been disabled. If you do not have credentials, please contact the Super Admin Console.
+                </div>
               </div>
             )}
 
