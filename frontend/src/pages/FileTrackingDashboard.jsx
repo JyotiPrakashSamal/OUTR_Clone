@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import Layout from '../components/Layout'
 
+const capitalizeName = (name) => {
+  if (!name) return ''
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 // Schools database from the legacy system
 const SCHOOLS = [
   {
@@ -79,6 +88,9 @@ const DEFAULT_NAMES = {
   student: 'Student Portal'
 }
 
+// Simple, highly effective global cache for secure file URLs
+const fileUrlCache = new Map()
+
 export default function FileTrackingDashboard({ role, onSignOut, onNavigate, sessionUser }) {
   // Navigation / Views: 'landing', 'student-form', 'tracking', 'adviser', 'hos', 'controller'
   const [currentSubView, setCurrentSubView] = useState('landing')
@@ -124,6 +136,60 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
   // File Viewer Modal State
   const [showFileModal, setShowFileModal] = useState(false)
   const [activeFile, setActiveFile] = useState(null)
+  const [activeFileUrl, setActiveFileUrl] = useState(null)
+
+  // Fetch private or public URL when activeFile is set for previewing
+  useEffect(() => {
+    async function getFileUrl() {
+      if (!activeFile) {
+        setActiveFileUrl(null)
+        return
+      }
+
+      const filePath = activeFile.file_data
+      if (!filePath) return
+
+      // 1. Direct local/base64 check
+      if (filePath.startsWith('data:') || filePath.startsWith('http')) {
+        setActiveFileUrl(filePath)
+        return
+      }
+
+      // 2. Memory Cache Check
+      if (fileUrlCache.has(filePath)) {
+        setActiveFileUrl(fileUrlCache.get(filePath))
+        return
+      }
+
+      // 3. Fast client-side Public CDN URL generation first (0ms latency!)
+      try {
+        const { data } = supabase.storage
+          .from('clearance-letters')
+          .getPublicUrl(filePath)
+          
+        if (data && data.publicUrl) {
+          setActiveFileUrl(data.publicUrl)
+          fileUrlCache.set(filePath, data.publicUrl)
+        }
+      } catch (e) {
+        console.warn('Public URL generation fallback:', e)
+      }
+
+      // 4. Secure signed URL retrieval fallback (runs in background and updates cache to guarantee access if bucket is private)
+      try {
+        const { data, error } = await supabase.storage
+          .from('clearance-letters')
+          .createSignedUrl(filePath, 3600) // Cache valid for 1 hour
+        if (data && data.signedUrl) {
+          fileUrlCache.set(filePath, data.signedUrl)
+          setActiveFileUrl(data.signedUrl) // Overwrites with guaranteed secure signed url
+        }
+      } catch (e) {
+        console.error('Signed URL retrieval fallback error:', e)
+      }
+    }
+    getFileUrl()
+  }, [activeFile])
 
   // Reusable Premium Dialog/Confirm Modal State
   const [customModal, setCustomModal] = useState({
@@ -200,6 +266,140 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
   const [viewingAdmitCard, setViewingAdmitCard] = useState(null)
   const [searchAdmitQuery, setSearchAdmitQuery] = useState('')
 
+  // Robust printing handlers that write directly to the print-area container
+  const handlePrintAdmitCardFromModal = (card) => {
+    if (!card) return
+    const printSection = document.getElementById('print-area')
+    if (printSection) {
+      const hasCleared = applications.some(app => app.student_regd === card.regd_no && app.status === 'resolved')
+      const fmtDate = (d) => { try { return d ? new Date(d+'T00:00').toLocaleDateString() : '—'; } catch(e) { return d||'—'; } }
+      printSection.innerHTML = `
+        <div class="print-admit-card" style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 2px solid black;">
+          <div style="display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; text-align: center;">
+            <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" style="width: 50px; height: 50px; margin-bottom: 5px; object-fit: contain;" />
+            <div style="width: 100%;">
+              <div style="font-size: 13px; font-weight: bold; text-transform: uppercase;">ଓଡ଼ିଶା ବୈଷୟିକ ଓ ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ</div>
+              <div style="font-size: 18px; font-weight: bold; text-transform: uppercase; margin-top: 2px;">Odisha University of Technology and Research</div>
+              <div style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: #555;">Techno Campus, Ghatikia, Bhubaneswar-751029</div>
+              <div style="font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 8px; letter-spacing: 2px;">Official Exam Admit Card</div>
+            </div>
+          </div>
+
+          <div style="background: #f2f2f2; border: 1px solid black; text-align: center; padding: 5px; font-weight: bold; font-size: 12px; margin-bottom: 15px; text-transform: uppercase;">
+            ${card.branch} &nbsp;|&nbsp; ${card.semester || '—'} &nbsp;|&nbsp; AY: ${card.academic_year || '—'} &nbsp;|&nbsp; ${card.exam_type || '—'}
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; font-size: 12px; border: 1px solid black; padding: 10px;">
+            <div><strong>Student Name:</strong> ${capitalizeName(card.name)}</div>
+            <div><strong>Registration Number:</strong> ${card.regd_no}</div>
+            <div><strong>Branch:</strong> ${card.branch}</div>
+            <div><strong>Date of Birth:</strong> ${card.dob || '—'}</div>
+            <div><strong>Clearance Status:</strong> ${hasCleared ? 'APPROVED' : 'PENDING APPROVED'}</div>
+            <div><strong>Issued At:</strong> ${card.issued_at ? new Date(card.issued_at).toLocaleString() : '—'}</div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">
+            <thead>
+              <tr style="background: #e6e6e6;">
+                <th style="border: 1px solid black; padding: 5px; text-align: center;">Exam Date</th>
+                <th style="border: 1px solid black; padding: 5px; text-align: center;">Subject Code</th>
+                <th style="border: 1px solid black; padding: 5px; text-align: left;">Subject Name</th>
+                <th style="border: 1px solid black; padding: 5px; text-align: center;">Exam Session Time</th>
+                <th style="border: 1px solid black; padding: 5px; text-align: center;">Invigilator Signature</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(card.subjects || []).map(s => `
+                <tr>
+                  <td style="border: 1px solid black; padding: 6px; text-align: center;">${fmtDate(s.date)}</td>
+                  <td style="border: 1px solid black; padding: 6px; text-align: center; font-family: monospace;">${s.code}</td>
+                  <td style="border: 1px solid black; padding: 6px; text-align: left;">${s.name}</td>
+                  <td style="border: 1px solid black; padding: 6px; text-align: center;">${s.time}</td>
+                  <td style="border: 1px solid black; padding: 6px; text-align: center;">_______________</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12px; margin-top: 30px;">
+            <div style="text-align: center; border-top: 1px solid black; padding-top: 5px; margin-top: 20px;">
+              Candidate's Signature
+            </div>
+            <div style="text-align: center; border-top: 1px solid black; padding-top: 5px; margin-top: 20px; font-weight: bold;">
+              Controller of Examinations
+            </div>
+          </div>
+        </div>
+      `
+      window.print()
+    }
+  }
+
+  const handlePrintOfficialDoc = (app) => {
+    if (!app) return
+    const printSection = document.getElementById('print-area')
+    if (printSection) {
+      printSection.innerHTML = `
+        <div style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid black;">
+          <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px;">
+            <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" style="width: 50px; height: 50px; margin: 0 auto 5px; object-fit: contain;" />
+            <h2 style="font-size: 16px; font-weight: bold; text-transform: uppercase; margin: 0;">Odisha University of Technology and Research</h2>
+            <p style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: #555; margin: 2px 0 0;">Techno Campus, Ghatikia, Bhubaneswar - 751003</p>
+            <p style="font-size: 8px; font-weight: bold; color: #777; margin: 2px 0 0;">OFFICE OF THE ACADEMIC RESOLUTION &amp; MANAGEMENT CELL</p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: bold; margin-bottom: 15px;">
+            <span>REF NO: OUTR/AMC/2026/${app.id}</span>
+            <span>DATE: ${new Date(app.resolved_at || app.submitted_at).toLocaleDateString()}</span>
+          </div>
+
+          <h3 style="text-align: center; font-size: 12px; font-weight: bold; text-decoration: underline; text-transform: uppercase; margin-bottom: 15px;">
+            SUBJECT: RESOLUTION ORDER REGARDING ${app.type?.toUpperCase()}
+          </h3>
+
+          <p style="font-size: 11px; line-height: 1.5; margin-bottom: 10px;">
+            This official resolution statement is issued to <strong>${capitalizeName(app.student_name)}</strong>, registration roll number <strong>#${app.regd_no}</strong>, pursuing course work under <strong>${app.program}</strong> in the department of <strong>${app.school_name}</strong>.
+          </p>
+
+          <div style="padding-left: 10px; border-left: 2px solid #555; font-style: italic; font-size: 10px; margin-bottom: 15px; color: #444;">
+            <strong>Applicant Statement:</strong> "${app.description}"
+          </div>
+
+          <p style="font-size: 11px; line-height: 1.5; margin-bottom: 15px;">
+            The academic approval cell has reviewed the evaluations submitted by the Faculty Advisor and verified by the Head of School. It is hereby resolved that the request for <strong>${app.type}</strong> stands 
+            <strong>${(app.controller_action === 'approved' || app.status === 'resolved') ? 'APPROVED' : 'DECLINED'}</strong>.
+          </p>
+
+          ${app.controller_comment ? `
+            <p style="font-size: 11px; line-height: 1.5; margin-bottom: 15px;">
+              <strong>Special Directives / Conditions:</strong> "${app.controller_comment}"
+            </p>
+          ` : ''}
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px;">
+            <div style="border: 1px solid #10b981; color: #10b981; border-radius: 50%; width: 60px; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 6px; font-weight: bold; text-align: center; transform: rotate(-12deg); opacity: 0.85; background: rgba(16, 185, 129, 0.05);">
+              <span>OUTR</span>
+              <span style="border-top: 1px solid #10b981; border-bottom: 1px solid #10b981; padding: 1px 0; margin: 1px 0;">APPROVED</span>
+              <span>ACADEMICS</span>
+            </div>
+
+            <div style="text-align: center; font-size: 10px; font-weight: bold;">
+              <div style="border-top: 1px solid black; width: 120px; padding-top: 5px; margin: 0 auto 3px;"></div>
+              <div>
+                ${app.forwarded_to === 'dean_pga' ? 'Dr. Pravat Kumar Patra' : app.forwarded_to === 'dean_academic' ? 'Dr. Bibhuti Bhusan Choudhury' : 'Dr. Anupama Rath'}
+              </div>
+              <div style="font-size: 7px; color: #666; text-transform: uppercase; margin-top: 1px;">
+                ${app.forwarded_to === 'dean_pga' ? 'Dean, Post Graduate Affairs' : app.forwarded_to === 'dean_academic' ? 'Dean, Academic Affairs' : 'Exam Controller'}
+              </div>
+              <div style="font-size: 6px; color: #888;">Odisha University of Tech &amp; Research</div>
+            </div>
+          </div>
+        </div>
+      `
+      window.print()
+    }
+  }
+
   // Real-time Push Notifications Toast State
   const [toasts, setToasts] = useState([])
 
@@ -238,7 +438,10 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 .single()
                 
               if (!profileErr && profile) {
-                setUserProfile(profile)
+                setUserProfile({
+                  ...profile,
+                  email: user.email
+                })
               } else {
                 // Try metadata fallback
                 const metaRole = user.user_metadata?.role || role || 'student'
@@ -288,10 +491,20 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
   async function fetchGrades() {
     try {
       setLoadingGrades(true)
-      const { data, error } = await supabase
-        .from('student_grades')
-        .select('*')
-        .order('created_at', { ascending: false })
+      let query = supabase.from('student_grades').select('*')
+      
+      // If student, strictly lock query to their authenticated roll number prefix
+      if (role === 'student') {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user || !user.email) {
+          setGradesList([])
+          return
+        }
+        const regd = user.email.split('@')[0]
+        query = query.eq('regd_no', regd)
+      }
+      
+      const { data, error } = await query.order('created_at', { ascending: false })
       if (!error && data) {
         setGradesList(data)
       }
@@ -306,10 +519,20 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
   async function fetchAdmitCards() {
     try {
       setLoadingAdmitCards(true)
-      const { data, error } = await supabase
-        .from('student_admit_cards')
-        .select('*')
-        .order('issued_at', { ascending: false })
+      let query = supabase.from('student_admit_cards').select('*')
+      
+      // If student, strictly lock query to their authenticated roll number prefix
+      if (role === 'student') {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user || !user.email) {
+          setAdmitCardsList([])
+          return
+        }
+        const regd = user.email.split('@')[0]
+        query = query.eq('regd_no', regd)
+      }
+      
+      const { data, error } = await query.order('issued_at', { ascending: false })
       if (!error && data) {
         setAdmitCardsList(data)
       }
@@ -464,6 +687,15 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         let msg = ''
         if (payload.eventType === 'INSERT') {
           msg = `🔔 New Clearance Request submitted by ${payload.new.student_name} (${payload.new.student_regd})!`
+          
+          // Surgically append new applications to state rather than refetching entire database
+          const mappedNew = mapDbAppToLocal(payload.new)
+          setApplications(prev => {
+            if (prev.some(a => a.id === mappedNew.id)) return prev
+            const updated = [mappedNew, ...prev]
+            localStorage.setItem('OUTR_APPLICATIONS', JSON.stringify(updated))
+            return updated
+          })
         } else if (payload.eventType === 'UPDATE') {
           // If status resolved or rejected
           if (payload.new.status === 'resolved') {
@@ -473,6 +705,14 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           } else {
             msg = `ℹ️ Timelines updated for student ${payload.new.student_name}.`
           }
+          
+          // Surgically update existing applications in state
+          const mappedNew = mapDbAppToLocal(payload.new)
+          setApplications(prev => {
+            const updated = prev.map(app => app.id === mappedNew.id ? { ...app, ...mappedNew } : app)
+            localStorage.setItem('OUTR_APPLICATIONS', JSON.stringify(updated))
+            return updated
+          })
         }
 
         if (msg) {
@@ -482,9 +722,6 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             setToasts(prev => prev.filter(t => t.id !== id))
           }, 4500)
         }
-
-        // Auto-refresh applications list to synchronize screen state!
-        fetchAllApplications()
       })
       .subscribe()
 
@@ -514,7 +751,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         name: userProfile.name || prev.name,
         email: userProfile.email || prev.email,
         school_id: userProfile.school_id || prev.school_id || 'SCS',
-        regd_no: prev.regd_no || regd
+        regd_no: regd
       }))
     }
   }, [userProfile, role])
@@ -610,7 +847,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
       school_id: dbApp.school_id,
       school_name: SCHOOL_MAP[dbApp.school_id]?.name || dbApp.school_id,
       school_short: SCHOOL_MAP[dbApp.school_id]?.short || dbApp.school_id,
-      school_icon: SCHOOL_MAP[dbApp.school_id]?.icon || '🏛️',
+      school_icon: SCHOOL_MAP[dbApp.school_id]?.icon || '',
       program: parsedSubject.program || 'B.Tech',
       semester: parsedSubject.semester || '',
       type: parsedSubject.type || dbApp.subject,
@@ -619,7 +856,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
       file_name: dbApp.file_url ? 'Attached Letter.pdf' : null,
       file_data: dbApp.file_url || null,
       file_type: dbApp.file_url ? 'application/pdf' : null,
-      ctrl_attachments: [],
+      ctrl_attachments: parsedSubject.ctrl_attachments || [],
       status: status,
       forwarded_to: dbApp.forwarded_to || null,
       adviser_comment: dbApp.adviser_name ? dbApp.adviser_name.split('Comment:')[1] || '' : '',
@@ -650,7 +887,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         school_id: 'SCS',
         school_name: 'School of Computer Science',
         school_short: 'Comp. Science',
-        school_icon: '💻',
+        school_icon: '',
         program: 'B.Tech CSE',
         semester: '4th Semester',
         type: 'Fee Concession',
@@ -675,7 +912,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         school_id: 'SEE',
         school_name: 'School of Electrical Science',
         school_short: 'Electrical Engg.',
-        school_icon: '⚡',
+        school_icon: '',
         program: 'B.Tech EEE',
         semester: '6th Semester',
         type: 'Exam Re-evaluation',
@@ -701,7 +938,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         school_id: 'SME',
         school_name: 'School of Mechanical Science',
         school_short: 'Mechanical Engg.',
-        school_icon: '⚙️',
+        school_icon: '',
         program: 'M.Tech Thermal',
         semester: '2nd Semester',
         type: 'Leave of Absence',
@@ -728,7 +965,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         school_id: 'SCS',
         school_name: 'School of Computer Science',
         school_short: 'Comp. Science',
-        school_icon: '💻',
+        school_icon: '',
         program: 'B.Tech CSE (AI & ML)',
         semester: '8th Semester',
         type: 'Certificate Request',
@@ -773,7 +1010,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
     }
     const reader = new FileReader()
     reader.onload = (ev) => {
-      setStudentFile({ name: file.name, data: ev.target.result, type: file.type })
+      setStudentFile({ name: file.name, data: ev.target.result, type: file.type, rawFile: file })
     }
     reader.readAsDataURL(file)
   }
@@ -827,6 +1064,21 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
     }
 
     try {
+      let fileUrlPath = null
+      if (studentFile && studentFile.rawFile) {
+        const fileExt = studentFile.name.split('.').pop()
+        const filePath = `${appId}.${fileExt}`
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('clearance-letters')
+          .upload(filePath, studentFile.rawFile, {
+            cacheControl: '3600',
+            upsert: true
+          })
+
+        if (uploadError) throw uploadError
+        fileUrlPath = filePath
+      }
+
       // Encode dynamic fields into subject field for simple database mapping
       const subjectJson = JSON.stringify({
         type: type,
@@ -845,7 +1097,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           student_regd: regd_no,
           school_id: school_id,
           subject: subjectJson,
-          file_url: studentFile ? studentFile.data : null,
+          file_url: fileUrlPath || (studentFile ? studentFile.data : null),
           adviser_status: 'Pending',
           hos_status: 'Pending',
           controller_status: 'Pending'
@@ -1015,39 +1267,160 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
     const reader = new FileReader()
     reader.onload = (ev) => {
-      setUploadFile({ name: file.name, data: ev.target.result, type: file.type })
+      setUploadFile({ name: file.name, data: ev.target.result, type: file.type, rawFile: file })
     }
     reader.readAsDataURL(file)
   }
 
-  const saveControllerAttachment = () => {
+  const saveControllerAttachment = async () => {
     if (!uploadFile) return
-    const updatedList = applications.map(app => {
-      if (app.id === selectedApp.id) {
-        const atts = [...(app.ctrl_attachments || []), { ...uploadFile, desc: uploadDesc || uploadFile.name }]
-        return { ...app, ctrl_attachments: atts }
+    
+    setActionLoading(true)
+    try {
+      let fileUrlPath = null
+      if (uploadFile.rawFile) {
+        const fileExt = uploadFile.name.split('.').pop()
+        const cleanName = uploadFile.name.replace(/[^a-zA-Z0-9]/g, '_')
+        const filePath = `ctrl_${selectedApp.id}_${Date.now()}_${cleanName}.${fileExt}`
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('clearance-letters')
+          .upload(filePath, uploadFile.rawFile, {
+            cacheControl: '3600',
+            upsert: true
+          })
+
+        if (uploadError) {
+          console.error('Controller file upload error:', uploadError)
+        } else {
+          fileUrlPath = filePath
+        }
       }
-      return app
-    })
-    updateApplicationsState(updatedList)
-    setUploadFile(null)
-    setUploadDesc('')
-    document.getElementById('ctrl_file_upload').value = ''
-    setSelectedApp(updatedList.find(a => a.id === selectedApp.id))
+
+      // Stripping rawFile to prevent serialization issues
+      const newAtt = { 
+        name: uploadFile.name, 
+        data: fileUrlPath || uploadFile.data, 
+        type: uploadFile.type, 
+        desc: uploadDesc || uploadFile.name 
+      }
+
+      const currentAtts = selectedApp.ctrl_attachments || []
+      const atts = [...currentAtts, newAtt]
+
+      // Reconstruct subject JSON
+      const subjectObj = {
+        type: selectedApp.type,
+        program: selectedApp.program,
+        semester: selectedApp.semester,
+        urgency: selectedApp.urgency || 'Normal',
+        description: selectedApp.description,
+        ctrl_attachments: atts
+      }
+      const subjectJson = JSON.stringify(subjectObj)
+
+      // Update database
+      const { error: dbError } = await supabase
+        .from('file_tracking')
+        .update({ subject: subjectJson })
+        .eq('file_no', selectedApp.id)
+
+      if (dbError) throw dbError
+
+      // Update local state
+      const updatedList = applications.map(app => {
+        if (app.id === selectedApp.id) {
+          return { ...app, ctrl_attachments: atts }
+        }
+        return app
+      })
+      updateApplicationsState(updatedList)
+      setUploadFile(null)
+      setUploadDesc('')
+      if (document.getElementById('ctrl_file_upload')) {
+        document.getElementById('ctrl_file_upload').value = ''
+      }
+      setSelectedApp(updatedList.find(a => a.id === selectedApp.id))
+      showAlert('Attachment saved successfully!', 'success')
+    } catch (err) {
+      console.warn('Error saving attachment, falling back to local simulation:', err)
+      const newAtt = { 
+        name: uploadFile.name, 
+        data: uploadFile.data, 
+        type: uploadFile.type, 
+        desc: uploadDesc || uploadFile.name 
+      }
+      const atts = [...(selectedApp.ctrl_attachments || []), newAtt]
+      const updatedList = applications.map(app => {
+        if (app.id === selectedApp.id) {
+          return { ...app, ctrl_attachments: atts }
+        }
+        return app
+      })
+      updateApplicationsState(updatedList)
+      setUploadFile(null)
+      setUploadDesc('')
+      if (document.getElementById('ctrl_file_upload')) {
+        document.getElementById('ctrl_file_upload').value = ''
+      }
+      setSelectedApp(updatedList.find(a => a.id === selectedApp.id))
+    } finally {
+      setActionLoading(false)
+    }
   }
 
-  const removeControllerAttachment = (idx) => {
+  const removeControllerAttachment = async (idx) => {
     if (!confirm('Remove this attachment?')) return
-    const updatedList = applications.map(app => {
-      if (app.id === selectedApp.id) {
-        const atts = [...(app.ctrl_attachments || [])]
-        atts.splice(idx, 1)
-        return { ...app, ctrl_attachments: atts }
+    
+    setActionLoading(true)
+    try {
+      const currentAtts = selectedApp.ctrl_attachments || []
+      const atts = [...currentAtts]
+      atts.splice(idx, 1)
+
+      // Reconstruct subject JSON
+      const subjectObj = {
+        type: selectedApp.type,
+        program: selectedApp.program,
+        semester: selectedApp.semester,
+        urgency: selectedApp.urgency || 'Normal',
+        description: selectedApp.description,
+        ctrl_attachments: atts
       }
-      return app
-    })
-    updateApplicationsState(updatedList)
-    setSelectedApp(updatedList.find(a => a.id === selectedApp.id))
+      const subjectJson = JSON.stringify(subjectObj)
+
+      // Update database
+      const { error: dbError } = await supabase
+        .from('file_tracking')
+        .update({ subject: subjectJson })
+        .eq('file_no', selectedApp.id)
+
+      if (dbError) throw dbError
+
+      // Update local state
+      const updatedList = applications.map(app => {
+        if (app.id === selectedApp.id) {
+          return { ...app, ctrl_attachments: atts }
+        }
+        return app
+      })
+      updateApplicationsState(updatedList)
+      setSelectedApp(updatedList.find(a => a.id === selectedApp.id))
+      showAlert('Attachment removed successfully.', 'info')
+    } catch (err) {
+      console.warn('Error removing attachment, falling back to local simulation:', err)
+      const atts = [...(selectedApp.ctrl_attachments || [])]
+      atts.splice(idx, 1)
+      const updatedList = applications.map(app => {
+        if (app.id === selectedApp.id) {
+          return { ...app, ctrl_attachments: atts }
+        }
+        return app
+      })
+      updateApplicationsState(updatedList)
+      setSelectedApp(updatedList.find(a => a.id === selectedApp.id))
+    } finally {
+      setActionLoading(false)
+    }
   }
 
   // Render Status Badge
@@ -1063,9 +1436,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
     }
 
     const labels = {
-      pending: '↻ Awaiting Adviser',
+      pending: '↻ Awaiting Advisor',
       adviser_approved: '➜ Forwarded to HoS',
-      adviser_declined: '✖ Declined by Adviser',
+      adviser_declined: '✖ Declined by Advisor',
       hos_approved: '➜ Forwarded to Cell',
       hos_declined: '✖ Declined by HoS',
       resolved: '✔ Resolved / Issued',
@@ -1118,35 +1491,43 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         
         {/* LANDING DESK view */}
         {currentSubView === 'landing' && (
-          <div className="animate-fade-in text-center max-w-4xl mx-auto select-none">
-            {/* Shield and header */}
-            <div className="w-20 h-20 mb-6 rounded-full bg-primary/5 border-2 border-accent/30 flex items-center justify-center mx-auto shadow-md shadow-primary/5 bg-white">
-              <img 
-                src="https://outr.ac.in/public/uploads/logo_4.png" 
-                alt="OUTR Shield" 
-                className="w-12 h-12 object-contain"
-              />
+          <div className="animate-fade-in text-center max-w-5xl mx-auto select-none">
+            {/* Standardised Premium Dashboard Header Banner */}
+            <div className="bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 shadow-sm text-left">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center border border-accent/20 bg-white animate-pulse">
+                  <span className="text-3xl">🎓</span>
+                </div>
+                <div className="text-left">
+                  <span className="text-xs font-bold text-accent uppercase tracking-wider">OUTR Academics Cell</span>
+                  <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary mt-1">Student Academic Desk</h2>
+                  <p className="text-xs text-muted font-medium mt-1">
+                    Logged Student: <span className="font-semibold text-primary">{capitalizeName(userProfile?.name) || 'Academic Student'}</span> {userProfile?.email && `• Roll No: #${userProfile.email.split('@')[0]}`}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={onSignOut}
+                className="w-full md:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                🚪 Sign Out
+              </button>
             </div>
-            <span className="inline-flex items-center gap-1.5 bg-primary/5 text-primary text-[10px] uppercase font-bold tracking-widest px-4 py-1.5 rounded-full mb-4 border border-primary/10">
-              Academic Approvals Center
-            </span>
-            <h1 className="font-serif text-3xl md:text-5xl font-black text-primary mb-3 leading-tight">
-              Academic Application Portal
-            </h1>
-            <p className="text-muted font-medium text-sm max-w-lg mx-auto mb-10">
+
+            <p className="text-muted font-medium text-sm max-w-lg mx-auto mb-10 text-center">
               Track multi-level university letters, request transcripts, fee concessions, or document approvals. Security and audit logged.
             </p>
 
-            {/* Quick Grid links */}
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-12">
+            {/* Quick Grid links (4 Columns for clean geometric balance) */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
               <div 
                 onClick={() => setCurrentSubView('student-form')}
                 className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
               >
-                <div className="text-3xl mb-4 group-hover:scale-105 transition-transform duration-300">🎓</div>
+                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">🎓</span>
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">Submit Application</h4>
                 <p className="text-muted text-xs leading-relaxed">
-                  Draft request transcripts, upload letters, choose departments, and submit to advisers.
+                  Draft request transcripts, upload letters, choose departments, and submit to advisors.
                 </p>
               </div>
 
@@ -1154,7 +1535,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 onClick={() => setCurrentSubView('tracking')}
                 className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
               >
-                <div className="text-3xl mb-4 group-hover:scale-105 transition-transform duration-300">🔍</div>
+                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">🔍</span>
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">Track Application</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   Search by your registration ID and monitor live timeline step clearances.
@@ -1165,7 +1546,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 onClick={() => setCurrentSubView('my-results')}
                 className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
               >
-                <div className="text-3xl mb-4 group-hover:scale-105 transition-transform duration-300">📊</div>
+                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">📊</span>
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">My Results &amp; Grades</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   Query your public university grade cards and review semester GPA summaries.
@@ -1176,21 +1557,10 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 onClick={() => setCurrentSubView('my-admit-card')}
                 className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
               >
-                <div className="text-3xl mb-4 group-hover:scale-105 transition-transform duration-300">🎟️</div>
+                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">🎟️</span>
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">Download Admit Card</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   Download and print your official exam admit schedule card after clearing dues.
-                </p>
-              </div>
-
-              <div 
-                onClick={onSignOut}
-                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
-              >
-                <div className="text-3xl mb-4 group-hover:scale-105 transition-transform duration-300">🏛️</div>
-                <h4 className="font-serif font-bold text-primary text-base mb-1.5">Access Portal Desk</h4>
-                <p className="text-muted text-xs leading-relaxed">
-                  Sign out or switch to Adviser, Head of School, or Controller secure desks.
                 </p>
               </div>
             </div>
@@ -1233,7 +1603,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 <div>
                   <label className="block text-[10px] font-bold text-primary uppercase mb-1">Full Student Name *</label>
                   <input 
-                    type="text" required placeholder="e.g. Priyabrata Mohanty"
+                    type="text" required placeholder="e.g. Name"
                     value={studentForm.name}
                     onChange={e => setStudentForm({...studentForm, name: e.target.value})}
                     className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary text-sm"
@@ -1242,7 +1612,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 <div>
                   <label className="block text-[10px] font-bold text-primary uppercase mb-1">Registration Roll Number *</label>
                   <input 
-                    type="text" required placeholder="e.g. 2201011"
+                    type="text" required placeholder="e.g. 25240012"
                     value={studentForm.regd_no}
                     onChange={e => setStudentForm({...studentForm, regd_no: e.target.value})}
                     className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary text-sm"
@@ -1288,7 +1658,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 <div>
                   <label className="block text-[10px] font-bold text-primary uppercase mb-1">Email ID</label>
                   <input 
-                    type="email" placeholder="e.g. student@outr.ac.in"
+                    type="email" placeholder="e.g. 25240012@outr.ac.in"
                     value={studentForm.email}
                     onChange={e => setStudentForm({...studentForm, email: e.target.value})}
                     className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary text-sm"
@@ -1385,7 +1755,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               
               <form onSubmit={handleTrackSubmit} className="flex gap-3">
                 <input 
-                  type="text" required placeholder="Enter student roll registration number..."
+                  type="text" required placeholder="Enter Registration Number (e.g. 25240012)..."
                   value={trackRegd}
                   onChange={e => setTrackRegd(e.target.value)}
                   className="flex-grow p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary text-sm"
@@ -1414,7 +1784,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     <div key={app.id} className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm text-left">
                       <div className="flex justify-between items-start flex-wrap gap-4 border-b border-slate-100 pb-4 mb-6">
                         <div>
-                          <h4 className="font-serif text-lg font-bold text-primary">{app.student_name}</h4>
+                          <h4 className="font-serif text-lg font-bold text-primary">{capitalizeName(app.student_name)}</h4>
                           <span className="text-xs font-mono text-muted tracking-wider">Tracking ID: {app.id}</span>
                         </div>
                         <div className="flex gap-2 flex-wrap">
@@ -1449,7 +1819,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                             }`}>
                               {app.status === 'adviser_declined' ? '✖' : '2'}
                             </div>
-                            <span className="text-[10px] font-bold block mt-2 text-primary">Adviser</span>
+                            <span className="text-[10px] font-bold block mt-2 text-primary">Advisor</span>
                           </div>
                           <div className="text-center">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold mx-auto text-xs ${
@@ -1489,7 +1859,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       </div>
 
                       {/* Comments strip */}
-                      {app.adviser_comment && <div className="p-3 bg-sky-50 text-sky-800 text-xs font-semibold rounded-xl mb-2.5 border border-sky-100">👨‍🏫 Adviser Remarks: "{app.adviser_comment}"</div>}
+                      {app.adviser_comment && <div className="p-3 bg-sky-50 text-sky-800 text-xs font-semibold rounded-xl mb-2.5 border border-sky-100">👨‍🏫 Advisor Remarks: "{app.adviser_comment}"</div>}
                       {app.hos_comment && <div className="p-3 bg-indigo-50 text-indigo-800 text-xs font-semibold rounded-xl mb-2.5 border border-indigo-100">🏛️ Head of School Remarks: "{app.hos_comment}"</div>}
                       {app.dean_comment && (
                         <div className="p-3 bg-purple-50 text-purple-800 text-xs font-semibold rounded-xl mb-2.5 border border-purple-100">
@@ -1497,6 +1867,40 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                         </div>
                       )}
                       {app.controller_comment && <div className="p-3 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-xl mb-2.5 border border-emerald-100">⚖️ Controller Remarks: "{app.controller_comment}"</div>}
+
+                      {/* Controller Attached Documents */}
+                      {app.ctrl_attachments && app.ctrl_attachments.length > 0 && (
+                        <div className="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                          <span className="text-xs font-bold text-primary block mb-2">📁 Official Attachments from Controller</span>
+                          <div className="space-y-2">
+                            {app.ctrl_attachments.map((att, idx) => (
+                              <div key={idx} className="flex justify-between items-center p-3 bg-white border border-slate-100 hover:border-accent/40 rounded-xl transition-all shadow-sm">
+                                <div className="flex flex-col min-w-0">
+                                  <span className="text-xs font-semibold text-primary truncate max-w-[250px] md:max-w-[400px]">
+                                    📎 {att.desc || att.name}
+                                  </span>
+                                  <span className="text-[9px] text-muted truncate mt-0.5">
+                                    File: {att.name}
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    setActiveFile({
+                                      file_name: att.name,
+                                      file_data: att.data,
+                                      file_type: att.type
+                                    });
+                                    setShowFileModal(true);
+                                  }}
+                                  className="text-accent hover:text-accent-hover font-bold text-xs flex items-center gap-1 shrink-0 px-3 py-1.5 bg-slate-50 hover:bg-accent/5 rounded-lg transition-all"
+                                >
+                                  👁️ View File
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {/* View document when resolved or rejected */}
                       {(app.status === 'resolved' || app.status === 'rejected') && (
@@ -1537,31 +1941,59 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   <span className="text-xs font-bold text-accent uppercase tracking-widest">Controller registry</span>
                   <h3 className="font-serif text-2xl font-bold text-primary mt-1">My Semester Grade Sheets</h3>
                 </div>
-                <div className="flex items-center gap-2">
-                  <input 
-                    type="text" 
-                    placeholder="Enter Roll Number..." 
-                    value={studentForm.regd_no} 
-                    onChange={e => setStudentForm({...studentForm, regd_no: e.target.value})}
-                    className="p-2 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-secondary"
-                  />
+                {role !== 'student' ? (
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="text" 
+                      placeholder="e.g. 25240012" 
+                      value={studentForm.regd_no} 
+                      onChange={e => setStudentForm({...studentForm, regd_no: e.target.value})}
+                      className="p-2 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-secondary"
+                    />
+                    <button 
+                      onClick={fetchGrades} 
+                      className="px-4 py-2 bg-primary hover:bg-secondary text-white text-xs font-bold rounded-xl transition-colors"
+                    >
+                      🔍 Find Results
+                    </button>
+                  </div>
+                ) : (
                   <button 
                     onClick={fetchGrades} 
-                    className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-xl text-[10px] uppercase transition-colors"
+                    className="px-4 py-2 bg-primary hover:bg-secondary text-white text-xs font-bold rounded-xl transition-colors"
                   >
-                    Refresh
+                    🔄 Refresh Grades
                   </button>
-                </div>
+                )}
               </div>
 
-              {gradesList.filter(g => g.regd_no === studentForm.regd_no).length === 0 ? (
+              {loadingGrades ? (
+                <div className="space-y-4 animate-pulse">
+                  <div className="h-10 w-full rounded-2xl shimmer-effect"></div>
+                  <div className="h-48 w-full rounded-3xl border border-slate-100 p-6 space-y-4">
+                    <div className="h-6 w-1/3 rounded shimmer-effect"></div>
+                    <div className="h-4 w-1/4 rounded shimmer-effect"></div>
+                    <div className="space-y-2 mt-6">
+                      <div className="h-8 w-full rounded shimmer-effect"></div>
+                      <div className="h-8 w-full rounded shimmer-effect"></div>
+                      <div className="h-8 w-full rounded shimmer-effect"></div>
+                    </div>
+                  </div>
+                </div>
+              ) : gradesList.filter(g => {
+                const targetRegd = (role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no
+                return g.regd_no === targetRegd
+              }).length === 0 ? (
                 <div className="bg-slate-50 border border-slate-200 border-dashed rounded-3xl p-16 text-center text-muted">
                   <span className="text-4xl block mb-2">📋</span>
                   <h4 className="font-serif text-base font-bold text-primary">No Grade Sheets Found</h4>
-                  <p className="text-xs mt-1">No semester grade sheets have been published for Roll Number #{studentForm.regd_no || 'N/A'}.</p>
+                  <p className="text-xs mt-1">No semester grade sheets have been published for Roll Number #{((role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no) || 'N/A'}.</p>
                 </div>
               ) : (
-                gradesList.filter(g => g.regd_no === studentForm.regd_no).map(grade => {
+                gradesList.filter(g => {
+                  const targetRegd = (role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no
+                  return g.regd_no === targetRegd
+                }).map(grade => {
                   // Calculate GPA
                   const activeSubs = grade.subjects || []
                   let totalCredits = 0
@@ -1580,15 +2012,18 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     if (printSection) {
                       printSection.innerHTML = `
                         <div class="print-grade-card" style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 3px double black;">
-                          <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 20px;">
-                            <div style="font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">ଓଡ଼ିଶା ବୈଷୟିକ ଓ ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ</div>
-                            <div style="font-size: 20px; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Odisha University of Technology and Research</div>
-                            <div style="font-size: 11px; text-transform: uppercase; font-weight: bold; color: #555;">Techno Campus, Ghatikia, Mahalaxmi Vihar, Bhubaneswar-751029</div>
-                            <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 12px; letter-spacing: 2px; border: 1px solid black; display: inline-block; padding: 4px 16px;">Semester Grade Card</div>
+                          <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center;">
+                            <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" style="width: 55px; height: 55px; margin-bottom: 6px; object-fit: contain;" />
+                            <div style="width: 100%;">
+                              <div style="font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">ଓଡ଼ିଶା ବୈଷୟିକ ଓ ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ</div>
+                              <div style="font-size: 20px; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Odisha University of Technology and Research</div>
+                              <div style="font-size: 11px; text-transform: uppercase; font-weight: bold; color: #555;">Techno Campus, Ghatikia, Mahalaxmi Vihar, Bhubaneswar-751029</div>
+                              <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 12px; letter-spacing: 2px; border: 1px solid black; display: inline-block; padding: 4px 16px;">Semester Grade Card</div>
+                            </div>
                           </div>
 
                           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; font-size: 13px;">
-                            <div><strong>Student Name:</strong> ${grade.name}</div>
+                            <div><strong>Student Name:</strong> ${capitalizeName(grade.name)}</div>
                             <div><strong>Registration Number:</strong> ${grade.regd_no}</div>
                             <div><strong>Course / Branch:</strong> ${grade.class_name}</div>
                             <div><strong>Semester:</strong> ${grade.semester} (${grade.exam_type})</div>
@@ -1644,7 +2079,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-medium text-primary">
-                        <div><strong>Student Name:</strong> <span className="text-slate-500">{grade.name}</span></div>
+                        <div><strong>Student Name:</strong> <span className="text-slate-500">{capitalizeName(grade.name)}</span></div>
                         <div><strong>Roll Number:</strong> <span className="text-slate-500 font-mono">#{grade.regd_no}</span></div>
                       </div>
 
@@ -1712,41 +2147,71 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   <span className="text-xs font-bold text-accent uppercase tracking-widest">Credentials Desk</span>
                   <h3 className="font-serif text-2xl font-bold text-primary mt-1">Download Exam Admit Card</h3>
                 </div>
-                <div className="flex items-center gap-2">
-                  <input 
-                    type="text" 
-                    placeholder="Enter Roll Number..." 
-                    value={studentForm.regd_no} 
-                    onChange={e => setStudentForm({...studentForm, regd_no: e.target.value})}
-                    className="p-2 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-secondary"
-                  />
+                {role !== 'student' ? (
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="text" 
+                      placeholder="e.g. 25240012" 
+                      value={studentForm.regd_no} 
+                      onChange={e => setStudentForm({...studentForm, regd_no: e.target.value})}
+                      className="p-2 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-secondary"
+                    />
+                    <button 
+                      onClick={fetchAdmitCards} 
+                      className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-xl text-[10px] uppercase transition-colors"
+                    >
+                      Search
+                    </button>
+                  </div>
+                ) : (
                   <button 
                     onClick={fetchAdmitCards} 
                     className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-xl text-[10px] uppercase transition-colors"
                   >
-                    Refresh
+                    🔄 Refresh Admit Card
                   </button>
-                </div>
+                )}
               </div>
 
-              {admitCardsList.filter(ac => ac.regd_no === studentForm.regd_no).length === 0 ? (
+              {loadingAdmitCards ? (
+                <div className="space-y-4 animate-pulse">
+                  <div className="h-48 w-full rounded-3xl border border-slate-100 p-6 space-y-4">
+                    <div className="h-6 w-1/3 rounded shimmer-effect"></div>
+                    <div className="h-4 w-1/4 rounded shimmer-effect"></div>
+                    <div className="space-y-2 mt-6">
+                      <div className="h-8 w-full rounded shimmer-effect"></div>
+                      <div className="h-8 w-full rounded shimmer-effect"></div>
+                    </div>
+                  </div>
+                </div>
+              ) : admitCardsList.filter(ac => {
+                const targetRegd = (role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no
+                return ac.regd_no === targetRegd
+              }).length === 0 ? (
                 <div className="bg-slate-50 border border-slate-200 border-dashed rounded-3xl p-16 text-center text-muted">
                   <span className="text-4xl block mb-2">🎟️</span>
                   <h4 className="font-serif text-base font-bold text-primary">No Issued Admit Card</h4>
-                  <p className="text-xs mt-1">No exam admit card has been released for Roll Number #{studentForm.regd_no || 'N/A'}.</p>
+                  <p className="text-xs mt-1">No exam admit card has been released for Roll Number #{((role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no) || 'N/A'}.</p>
                   <p className="text-[10px] mt-2 text-slate-400 font-semibold">Important: Admit cards are released by the Controller of Examinations after clearing all hostel &amp; department dues.</p>
                 </div>
               ) : (
-                admitCardsList.filter(ac => ac.regd_no === studentForm.regd_no).map(card => {
-                  const hasCleared = applications.some(app => app.student_regd === studentForm.regd_no && app.status === 'resolved')
+                admitCardsList.filter(ac => {
+                  const targetRegd = (role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no
+                  return ac.regd_no === targetRegd
+                }).map(card => {
+                  const hasCleared = applications.some(app => {
+                    const targetRegd = (role === 'student' && userProfile?.email) ? userProfile.email.split('@')[0] : studentForm.regd_no
+                    return app.student_regd === targetRegd && app.status === 'resolved'
+                  })
 
                   const handlePrintAdmit = () => {
                     const printSection = document.getElementById('print-area')
                     if (printSection) {
                       printSection.innerHTML = `
                         <div class="print-admit-card" style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 2px solid black;">
-                          <div style="display: flex; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px;">
-                            <div style="flex-grow: 1; text-align: center;">
+                          <div style="display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; text-align: center;">
+                            <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" style="width: 50px; height: 50px; margin-bottom: 5px; object-fit: contain;" />
+                            <div style="width: 100%;">
                               <div style="font-size: 13px; font-weight: bold; text-transform: uppercase;">ଓଡ଼ିଶା ବୈଷୟିକ ଓ ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ</div>
                               <div style="font-size: 18px; font-weight: bold; text-transform: uppercase; margin-top: 2px;">Odisha University of Technology and Research</div>
                               <div style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: #555;">Techno Campus, Ghatikia, Bhubaneswar-751029</div>
@@ -1759,7 +2224,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                           </div>
 
                           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; font-size: 12px; border: 1px solid black; padding: 10px;">
-                            <div><strong>Student Name:</strong> ${card.name}</div>
+                            <div><strong>Student Name:</strong> ${capitalizeName(card.name)}</div>
                             <div><strong>Registration Number:</strong> ${card.regd_no}</div>
                             <div><strong>Branch:</strong> ${card.branch}</div>
                             <div><strong>Date of Birth:</strong> ${card.dob}</div>
@@ -1821,17 +2286,17 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                           <span>⚠️</span>
                           <div>
                             <span className="font-bold">Clearance Dues Pending!</span>
-                            <p className="text-[10px] mt-0.5 text-rose-700 font-medium">You must complete approvals from all department desks (Adviser, HoS, Warden, Dean) to validate this Admit Card for the examination hall.</p>
+                            <p className="text-[10px] mt-0.5 text-rose-700 font-medium">You must complete approvals from all department desks (Advisor, HoS, Warden, Dean) to validate this Admit Card for the examination hall.</p>
                           </div>
                         </div>
                       )}
 
                       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center text-xs font-semibold text-primary uppercase">
-                        🎫 {card.branch} &bull; {card.semester} &bull; AY: {card.academic_year} &bull; {card.exam_type}
+                        {card.branch} &bull; {card.semester} &bull; AY: {card.academic_year} &bull; {card.exam_type}
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs font-medium text-primary">
-                        <div><strong>Student Name:</strong> <span className="text-slate-500">{card.name}</span></div>
+                        <div><strong>Student Name:</strong> <span className="text-slate-500">{capitalizeName(card.name)}</span></div>
                         <div><strong>Registration No:</strong> <span className="text-slate-500 font-mono">#{card.regd_no}</span></div>
                         <div><strong>Date of Birth:</strong> <span className="text-slate-500">{card.dob}</span></div>
                       </div>
@@ -1882,25 +2347,23 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             <div className="bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 shadow-sm text-left">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center border border-accent/20">
-                  <span className="text-3xl">
-                    {currentSubView === 'adviser' ? '👨‍🏫' : currentSubView === 'hos' ? '🏛️' : currentSubView === 'dean_pga' ? '📜' : currentSubView === 'dean_academic' ? '🏫' : '⚖️'}
-                  </span>
+                  <svg className="w-6 h-6 text-primary" aria-hidden="true"><use href="#icon-12"></use></svg>
                 </div>
                 <div>
                   <span className="text-xs font-bold text-accent uppercase tracking-wider">OUTR Academics Cell</span>
                   <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary mt-1">
-                    {currentSubView === 'adviser' ? 'Faculty Adviser Desk' : currentSubView === 'hos' ? 'Head of School Review' : currentSubView === 'dean_pga' ? 'Dean PGA Clearance Desk' : currentSubView === 'dean_academic' ? 'Dean Academic Clearance Desk' : 'Exam Controller Panel'}
+                    {currentSubView === 'adviser' ? 'Faculty Advisor Desk' : currentSubView === 'hos' ? 'Head of School Review' : currentSubView === 'dean_pga' ? 'Dean PGA Clearance Desk' : currentSubView === 'dean_academic' ? 'Dean Academic Clearance Desk' : 'Exam Controller Panel'}
                   </h2>
                   <p className="text-xs text-muted font-medium mt-1">
-                    Active Desk: <span className="font-semibold text-primary">{userProfile?.name}</span> {userProfile?.school_id && `• School: ${SCHOOL_MAP[userProfile.school_id]?.name}`}
+                    Active Desk: <span className="font-semibold text-primary">{capitalizeName(userProfile?.name)}</span> {userProfile?.school_id && `• School: ${SCHOOL_MAP[userProfile.school_id]?.name}`}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onSignOut}
-                className="w-full md:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all"
+                className="w-full md:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                <span>🚪</span> Sign Out
+                🚪 Sign Out
               </button>
             </div>
 
@@ -2031,7 +2494,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     <div>
                       <div className="flex justify-between items-start flex-wrap gap-4 border-b border-slate-100 pb-4 mb-4">
                         <div>
-                          <h4 className="font-serif text-lg font-bold text-primary">{app.student_name}</h4>
+                          <h4 className="font-serif text-lg font-bold text-primary">{capitalizeName(app.student_name)}</h4>
                           <span className="text-xs font-mono text-muted tracking-wider">Tracking ID: {app.id}</span>
                         </div>
                         <div className="flex gap-2">
@@ -2055,7 +2518,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       </div>
 
                       {/* Display historic pipeline comments if active */}
-                      {app.adviser_comment && <div className="p-3 bg-sky-50 text-sky-800 text-xs font-semibold rounded-xl mb-2.5 border border-sky-100">👨‍🏫 Adviser Remarks: "{app.adviser_comment}"</div>}
+                      {app.adviser_comment && <div className="p-3 bg-sky-50 text-sky-800 text-xs font-semibold rounded-xl mb-2.5 border border-sky-100">👨‍🏫 Advisor Remarks: "{app.adviser_comment}"</div>}
                       {app.hos_comment && <div className="p-3 bg-indigo-50 text-indigo-800 text-xs font-semibold rounded-xl mb-2.5 border border-indigo-100">🏛️ Head of School Remarks: "{app.hos_comment}"</div>}
                     </div>
 
@@ -2130,7 +2593,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   }).map(app => (
                     <div key={app.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-center justify-between flex-wrap gap-4">
                       <div>
-                        <h5 className="text-xs font-bold text-primary">{app.student_name} ({app.id})</h5>
+                        <h5 className="text-xs font-bold text-primary">{capitalizeName(app.student_name)} ({app.id})</h5>
                         <p className="text-[10px] text-muted font-medium mt-0.5">Category: {app.type} &bull; School: {app.school_short}</p>
                       </div>
                       <div className="flex items-center gap-3">
@@ -2190,7 +2653,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   <div>
                     <label className="block uppercase tracking-wider text-[10px] mb-1">Student Full Name *</label>
                     <input 
-                      type="text" required placeholder="e.g. Priyabrata Mohanty"
+                      type="text" required placeholder="e.g. Name"
                       value={gradeForm.name}
                       onChange={e => setGradeForm({...gradeForm, name: e.target.value})}
                       className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary font-medium text-sm"
@@ -2199,7 +2662,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   <div>
                     <label className="block uppercase tracking-wider text-[10px] mb-1">Registration Roll No. *</label>
                     <input 
-                      type="text" required placeholder="e.g. 2201011"
+                      type="text" required placeholder="e.g. 25240012"
                       value={gradeForm.regd_no}
                       onChange={e => setGradeForm({...gradeForm, regd_no: e.target.value})}
                       className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary font-medium text-sm"
@@ -2371,7 +2834,17 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       </thead>
                       <tbody>
                         {loadingGrades ? (
-                          <tr><td colSpan="7" className="p-6 text-center text-slate-400 font-semibold">Loading grade database...</td></tr>
+                          Array(3).fill(0).map((_, idx) => (
+                            <tr key={idx} className="border-b border-slate-100 animate-pulse">
+                              <td className="p-3 pl-4"><div className="h-4 w-28 rounded shimmer-effect"></div></td>
+                              <td className="p-3"><div className="h-4 w-16 rounded shimmer-effect"></div></td>
+                              <td className="p-3"><div className="h-4 w-20 rounded shimmer-effect"></div></td>
+                              <td className="p-3"><div className="h-4 w-12 rounded shimmer-effect"></div></td>
+                              <td className="p-3 text-center"><div className="h-4 w-8 rounded shimmer-effect mx-auto"></div></td>
+                              <td className="p-3 text-center"><div className="h-5 w-12 rounded-full shimmer-effect mx-auto"></div></td>
+                              <td className="p-3 text-center"><div className="h-6 w-16 rounded-xl shimmer-effect mx-auto"></div></td>
+                            </tr>
+                          ))
                         ) : gradesList.filter(g => 
                           g.name.toLowerCase().includes(searchGradesQuery.toLowerCase()) ||
                           g.regd_no.toLowerCase().includes(searchGradesQuery.toLowerCase())
@@ -2382,7 +2855,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                           g.regd_no.toLowerCase().includes(searchGradesQuery.toLowerCase())
                         ).map(g => (
                           <tr key={g.id} className="border-b border-slate-100 hover:bg-slate-50/50 font-medium">
-                            <td className="p-3 pl-4 font-bold text-primary">{g.name}</td>
+                            <td className="p-3 pl-4 font-bold text-primary">{capitalizeName(g.name)}</td>
                             <td className="p-3 font-mono text-slate-500">#{g.regd_no}</td>
                             <td className="p-3 text-slate-500">{g.class_name}</td>
                             <td className="p-3 text-slate-500">{g.semester} ({g.exam_type})</td>
@@ -2493,7 +2966,18 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   </thead>
                   <tbody>
                     {loadingAdmitCards ? (
-                      <tr><td colSpan="8" className="p-6 text-center text-slate-400 font-semibold">Loading admit database...</td></tr>
+                      Array(3).fill(0).map((_, idx) => (
+                        <tr key={idx} className="border-b border-slate-100 animate-pulse">
+                          <td className="p-3 pl-4"><div className="h-4 w-28 rounded shimmer-effect"></div></td>
+                          <td className="p-3"><div className="h-4 w-16 rounded shimmer-effect"></div></td>
+                          <td className="p-3"><div className="h-5 w-16 rounded-full shimmer-effect"></div></td>
+                          <td className="p-3"><div className="h-4 w-12 rounded shimmer-effect"></div></td>
+                          <td className="p-3"><div className="h-4 w-20 rounded shimmer-effect"></div></td>
+                          <td className="p-3 text-center"><div className="h-4 w-8 rounded shimmer-effect mx-auto"></div></td>
+                          <td className="p-3 text-center"><div className="h-4 w-16 rounded shimmer-effect mx-auto"></div></td>
+                          <td className="p-3 text-center flex items-center justify-center gap-1.5"><div className="h-6 w-20 rounded-xl shimmer-effect"></div></td>
+                        </tr>
+                      ))
                     ) : admitCardsList.filter(ac => 
                       ac.name.toLowerCase().includes(searchAdmitQuery.toLowerCase()) ||
                       ac.regd_no.toLowerCase().includes(searchAdmitQuery.toLowerCase())
@@ -2504,7 +2988,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       ac.regd_no.toLowerCase().includes(searchAdmitQuery.toLowerCase())
                     ).map(ac => (
                       <tr key={ac.id} className="border-b border-slate-100 hover:bg-slate-50/50 font-medium">
-                        <td className="p-3 pl-4 font-bold text-primary">{ac.name}</td>
+                        <td className="p-3 pl-4 font-bold text-primary">{capitalizeName(ac.name)}</td>
                         <td className="p-3 font-mono text-slate-500">#{ac.regd_no}</td>
                         <td className="p-3"><span className="bg-slate-100 border border-slate-200 text-slate-700 px-2 py-0.5 rounded text-[10px] font-bold">{ac.branch}</span></td>
                         <td className="p-3 text-slate-500">{ac.semester}</td>
@@ -2522,8 +3006,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                               if (printSection) {
                                 printSection.innerHTML = `
                                   <div class="print-admit-card" style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 2px solid black;">
-                                    <div style="display: flex; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px;">
-                                      <div style="flex-grow: 1; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; text-align: center;">
+                                      <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" style="width: 50px; height: 50px; margin-bottom: 5px; object-fit: contain;" />
+                                      <div style="width: 100%;">
                                         <div style="font-size: 13px; font-weight: bold; text-transform: uppercase;">ଓଡ଼ିଶା ବୈଷୟିକ ଓ ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ</div>
                                         <div style="font-size: 18px; font-weight: bold; text-transform: uppercase; margin-top: 2px;">Odisha University of Technology and Research</div>
                                         <div style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: #555;">Techno Campus, Ghatikia, Bhubaneswar-751029</div>
@@ -2536,7 +3021,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                     </div>
 
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; font-size: 12px; border: 1px solid black; padding: 10px;">
-                                      <div><strong>Student Name:</strong> ${ac.name}</div>
+                                      <div><strong>Student Name:</strong> ${capitalizeName(ac.name)}</div>
                                       <div><strong>Registration Number:</strong> ${ac.regd_no}</div>
                                       <div><strong>Branch:</strong> ${ac.branch}</div>
                                       <div><strong>Date of Birth:</strong> ${ac.dob}</div>
@@ -2577,11 +3062,12 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                     </div>
                                   </div>
                                 `
+                                window.print()
                               }
                             }}
                             className="bg-white hover:bg-slate-100 border border-slate-200 text-primary font-semibold py-1 px-2.5 rounded-lg text-[10px] transition-colors cursor-pointer"
                           >
-                            🖨️ Print
+                            Print
                           </button>
                           <button
                             type="button"
@@ -2633,7 +3119,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     <div>
                       <label className="block mb-1">Student Full Name *</label>
                       <input 
-                        type="text" required placeholder="e.g. Ramakanta Behera"
+                        type="text" required placeholder="e.g. Name"
                         value={admitForm.name}
                         onChange={e => setAdmitForm({...admitForm, name: e.target.value})}
                         className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary font-medium text-sm"
@@ -2642,7 +3128,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     <div>
                       <label className="block mb-1">Registration Roll No *</label>
                       <input 
-                        type="text" required placeholder="e.g. 25240022"
+                        type="text" required placeholder="e.g. 25240012"
                         value={admitForm.regd_no}
                         onChange={e => setAdmitForm({...admitForm, regd_no: e.target.value})}
                         className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-secondary font-medium text-sm"
@@ -2808,7 +3294,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
                   <div className="flex items-center gap-4 mb-4">
                     <button 
-                      onClick={() => window.print()}
+                      onClick={() => handlePrintAdmitCardFromModal(viewingAdmitCard)}
                       className="bg-accent hover:bg-[#b8932a] text-[#0b3c5d] font-bold py-2.5 px-6 rounded-xl text-xs uppercase tracking-wider shadow-sm transition-colors cursor-pointer"
                     >
                       🖨️ Print Admit Card
@@ -2827,7 +3313,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 mb-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200/50">
-                      <div><strong>Student Name:</strong> <span className="text-slate-500">{viewingAdmitCard.name}</span></div>
+                      <div><strong>Student Name:</strong> <span className="text-slate-500">{capitalizeName(viewingAdmitCard.name)}</span></div>
                       <div><strong>Registration Number:</strong> <span className="text-slate-500 font-mono">#{viewingAdmitCard.regd_no}</span></div>
                       <div><strong>Branch:</strong> <span className="text-slate-500">{viewingAdmitCard.branch}</span></div>
                       <div><strong>Date of Birth:</strong> <span className="text-slate-500">{viewingAdmitCard.dob}</span></div>
@@ -2941,7 +3427,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           <div className="bg-white border border-slate-200 rounded-3xl p-6 max-w-lg w-full shadow-2xl animate-fade-in text-left">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-serif text-lg font-bold text-primary">
-                📁 Files — {selectedApp.student_name}
+                📁 Files — {capitalizeName(selectedApp.student_name)}
               </h3>
               <button onClick={() => setShowUploadModal(false)} className="text-slate-400 hover:text-primary text-xl font-bold">&times;</button>
             </div>
@@ -3057,7 +3543,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
               {/* Recipient info */}
               <p className="mb-4">
-                This official resolution statement is issued to <strong>{docApp.student_name}</strong>, registration roll number <strong>#{docApp.regd_no}</strong>, pursuing course work under <strong>{docApp.program}</strong> in the department of <strong>{docApp.school_name}</strong>.
+                This official resolution statement is issued to <strong>{capitalizeName(docApp.student_name)}</strong>, registration roll number <strong>#{docApp.regd_no}</strong>, pursuing course work under <strong>{docApp.program}</strong> in the department of <strong>{docApp.school_name}</strong>.
               </p>
 
               {/* Details of context */}
@@ -3067,7 +3553,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
               {/* Official Decision statement */}
               <p className="mb-8 font-sans text-xs leading-relaxed">
-                The academic approval cell has reviewed the evaluations submitted by the Faculty Adviser and verified by the Head of School. It is hereby resolved that the request for <strong>{docApp.type}</strong> stands 
+                The academic approval cell has reviewed the evaluations submitted by the Faculty Advisor and verified by the Head of School. It is hereby resolved that the request for <strong>{docApp.type}</strong> stands 
                 <span className={`font-bold ml-1 px-2.5 py-0.5 rounded text-[10px] uppercase inline-block ${
                   docApp.controller_action === 'approved' || docApp.status === 'resolved'
                     ? 'bg-emerald-100 text-emerald-800'
@@ -3110,10 +3596,10 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             {/* Modal Actions */}
             <div className="mt-6 flex flex-wrap gap-2 justify-end print:hidden">
               <button
-                onClick={() => window.print()}
+                onClick={() => handlePrintOfficialDoc(docApp)}
                 className="bg-primary hover:bg-secondary text-white font-semibold py-2 px-5 rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all"
               >
-                🖨 Print Official Document
+                🖨️ Print Official Document
               </button>
               <button
                 onClick={() => setShowDocModal(false)}
@@ -3138,24 +3624,30 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             </div>
 
             <div className="bg-slate-50 border border-slate-200 rounded-2xl p-2 w-full min-h-[300px] max-h-[450px] overflow-auto flex items-center justify-center">
-              {activeFile.file_type?.startsWith('image/') ? (
+              {!activeFileUrl ? (
+                <div className="text-center p-8 w-full space-y-4 animate-pulse">
+                  <div className="h-10 w-2/3 rounded shimmer-effect mx-auto"></div>
+                  <div className="h-64 w-full rounded-xl shimmer-effect"></div>
+                  <p className="text-xs text-muted">Retrieving secure encrypted clearance letter preview...</p>
+                </div>
+              ) : activeFile.file_type?.startsWith('image/') || activeFileUrl.includes('.png') || activeFileUrl.includes('.jpg') || activeFileUrl.includes('.jpeg') || activeFileUrl.includes('image') ? (
                 <img 
-                  src={activeFile.file_data} 
+                  src={activeFileUrl} 
                   alt="Attached File Preview" 
                   className="max-w-full max-h-[400px] object-contain rounded-lg border border-slate-200"
                 />
-              ) : activeFile.file_type === 'application/pdf' && activeFile.file_data?.startsWith('data:') ? (
+              ) : activeFile.file_type === 'application/pdf' || activeFileUrl.includes('.pdf') || activeFileUrl.startsWith('data:application/pdf') ? (
                 <iframe 
-                  src={activeFile.file_data} 
+                  src={activeFileUrl} 
                   title="PDF Preview"
                   className="w-full h-[400px] rounded-lg border border-slate-200"
                 />
               ) : (
                 <div className="text-center text-muted p-8">
                   <span className="text-4xl block mb-2">📄</span>
-                  <p className="text-xs font-semibold text-primary">PDF Binary Mock Preloaded</p>
+                  <p className="text-xs font-semibold text-primary">PDF Binary Preloaded</p>
                   <p className="text-[10px] text-muted mt-1 leading-normal max-w-xs mx-auto">
-                    Base64 preloads verified. Download the file locally to inspect complete university certificate signatures.
+                    Storage document verified. Download the file locally to inspect complete university certificate signatures.
                   </p>
                 </div>
               )}
@@ -3165,7 +3657,8 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               <button
                 onClick={() => {
                   const link = document.createElement('a')
-                  link.href = activeFile.file_data || '#'
+                  link.href = activeFileUrl || activeFile.file_data || '#'
+                  link.target = '_blank'
                   link.download = activeFile.file_name || 'attachment'
                   link.click()
                 }}

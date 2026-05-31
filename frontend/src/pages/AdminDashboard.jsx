@@ -14,8 +14,17 @@ const provisionClient = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
-export default function AdminDashboard({ onSignOut, onNavigate }) {
-  const [adminProfile, setAdminProfile] = useState(null)
+const capitalizeName = (name) => {
+  if (!name) return ''
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
+  const [adminProfile, setAdminProfile] = useState(sessionUser)
   const [profiles, setProfiles] = useState([])
   const [loadingProfiles, setLoadingProfiles] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -26,30 +35,39 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
   const [password, setPassword] = useState('')
   const [selectedRole, setSelectedRole] = useState('student')
   const [schoolId, setSchoolId] = useState('SCS')
+  const [regdNo, setRegdNo] = useState('')
   const [provisioning, setProvisioning] = useState(false)
   const [successMsg, setSuccessMsg] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  useEffect(() => {
-    async function loadAdminData() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single()
-          setAdminProfile(profile || { name: 'Super Admin', role: 'admin' })
-        }
-        await fetchAllProfiles()
-      } catch (err) {
-        console.error('Error loading admin profile:', err.message)
-      }
+  const handleRoleChange = (role) => {
+    setSelectedRole(role)
+    if (role === 'warden') {
+      setSchoolId('APJKHR') // default hostel
+    } else if (role === 'student' || role === 'adviser' || role === 'hos') {
+      setSchoolId('SCS') // default academic school
+    } else {
+      setSchoolId('') // Dean/Controller/Admin
     }
-    loadAdminData()
-  }, [])
+    setRegdNo('')
+  }
+
+  const handleRegdNoChange = (val) => {
+    setRegdNo(val)
+    if (val) {
+      setEmail(`${val.trim()}@outr.ac.in`)
+    } else {
+      setEmail('')
+    }
+  }
+
+  useEffect(() => {
+    if (sessionUser) {
+      setAdminProfile(sessionUser)
+    }
+    fetchAllProfiles()
+  }, [sessionUser])
 
   async function fetchAllProfiles() {
     setLoadingProfiles(true)
@@ -90,26 +108,13 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
 
       if (error) throw error
 
-      // 2. Insert profile record directly to public database profiles table
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([{
-            id: data.user.id,
-            name: name,
-            role: selectedRole,
-            school_id: schoolId
-          }])
-        
-        if (profileError) {
-          console.warn('Profile direct insert completed or handled by trigger:', profileError.message)
-        }
-      }
+
 
       setSuccessMsg(`User account successfully provisioned for ${name} as ${selectedRole.toUpperCase()}!`)
       setName('')
       setEmail('')
       setPassword('')
+      setRegdNo('')
       
       // Refresh registry list
       await fetchAllProfiles()
@@ -141,11 +146,11 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
               <span className="text-xs font-bold text-accent uppercase tracking-wider">OUTR Core Registry</span>
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary mt-1">Super Admin Console</h2>
               <p className="text-xs text-muted font-medium mt-1">
-                Authorized Super Admin: <span className="font-semibold text-primary">{adminProfile?.name}</span>
+                Authorized Super Admin: <span className="font-semibold text-primary">{capitalizeName(adminProfile?.name)}</span>
               </p>
             </div>
           </div>
-          <button 
+          <button
             onClick={onSignOut}
             className="px-6 py-2.5 bg-rose-50 border border-rose-100 hover:bg-rose-100/50 text-rose-700 font-bold text-xs rounded-xl shadow-sm transition-all duration-300 cursor-pointer"
           >
@@ -177,7 +182,16 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
                 <div>
                   <label className="block text-[10px] font-bold text-primary uppercase mb-1">Full Name</label>
                   <input 
-                    type="text" required placeholder="e.g. Prof. Sangram Mohanty"
+                    type="text" required 
+                    placeholder={
+                      selectedRole === 'student' ? 'e.g. Name' :
+                      selectedRole === 'hos' ? 'e.g. HoS Name' :
+                      selectedRole === 'adviser' ? 'e.g. Advisor Name' :
+                      selectedRole === 'warden' ? 'e.g. Warden Name' :
+                      selectedRole === 'controller' ? 'e.g. Controller Name' :
+                      selectedRole?.startsWith('dean_') ? 'e.g. Dean Name' :
+                      'e.g. Name'
+                    }
                     value={name} onChange={(e) => setName(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary transition-colors"
                   />
@@ -224,12 +238,12 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
                   <div>
                     <label className="block text-[10px] font-bold text-primary uppercase mb-1">System Role</label>
                     <select 
-                      value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)}
+                      value={selectedRole} onChange={(e) => handleRoleChange(e.target.value)}
                       className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
                     >
                       <option value="student">Student</option>
                       <option value="warden">Hostel Warden</option>
-                      <option value="adviser">Faculty Adviser</option>
+                      <option value="adviser">Faculty Advisor</option>
                       <option value="hos">Head of School (HoS)</option>
                       <option value="dean_academic">Dean Academic</option>
                       <option value="dean_pga">Dean PGA</option>
@@ -238,22 +252,65 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
                     </select>
                   </div>
 
-                  <div>
-                    <label className="block text-[10px] font-bold text-primary uppercase mb-1">School ID</label>
-                    <select 
-                      value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
-                    >
-                      <option value="SCS">SCS (Computer Sci)</option>
-                      <option value="SMS">SMS (Mechanical)</option>
-                      <option value="SIP">SIP (Civil/Infra)</option>
-                      <option value="SEEC">SEEC (Electronics)</option>
-                      <option value="SEEE">SEEE (Electrical)</option>
-                      <option value="Biotech">Biotech Dept</option>
-                      <option value="SBSH">SBSH (Humanities)</option>
-                    </select>
-                  </div>
+                  {selectedRole === 'warden' ? (
+                    <div>
+                      <label className="block text-[10px] font-bold text-primary uppercase mb-1">Assigned Hostel</label>
+                      <select 
+                        value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                      >
+                        <option value="APJKHR">APJKHR (Kalam Hall)</option>
+                        <option value="KHR">KHR (Kharavela Hall)</option>
+                        <option value="RHR">RHR (Ramanujan Hall)</option>
+                        <option value="KCHR">KCHR (Chawla Hall)</option>
+                      </select>
+                    </div>
+                  ) : (selectedRole === 'student' || selectedRole === 'adviser' || selectedRole === 'hos') ? (
+                    <div>
+                      <label className="block text-[10px] font-bold text-primary uppercase mb-1">School ID</label>
+                      <select 
+                        value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                      >
+                        <option value="SCS">SCS (Computer Sci)</option>
+                        <option value="SMS">SMS (Mechanical)</option>
+                        <option value="SIP">SIP (Civil/Infra)</option>
+                        <option value="SEEC">SEEC (Electronics)</option>
+                        <option value="SEEE">SEEE (Electrical)</option>
+                        <option value="Biotech">Biotech Dept</option>
+                        <option value="SBSH">SBSH (Humanities)</option>
+                      </select>
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-[10px] font-bold text-primary uppercase mb-1">Affiliation ID</label>
+                      <select 
+                        value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                      >
+                        <option value="">Global / All</option>
+                        <option value="SCS">SCS (Computer Sci)</option>
+                        <option value="SMS">SMS (Mechanical)</option>
+                        <option value="SIP">SIP (Civil/Infra)</option>
+                        <option value="SEEC">SEEC (Electronics)</option>
+                        <option value="SEEE">SEEE (Electrical)</option>
+                        <option value="Biotech">Biotech Dept</option>
+                        <option value="SBSH">SBSH (Humanities)</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
+
+                {selectedRole === 'student' && (
+                  <div>
+                    <label className="block text-[10px] font-bold text-primary uppercase mb-1">Student Registration Number</label>
+                    <input 
+                      type="text" required placeholder="e.g. 25240012"
+                      value={regdNo} onChange={(e) => handleRegdNoChange(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary transition-colors font-semibold"
+                    />
+                  </div>
+                )}
 
                 <button
                   type="submit" disabled={provisioning}
@@ -305,7 +362,7 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
                     <tbody className="divide-y divide-slate-50">
                       {filteredProfiles.map((p) => (
                         <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                          <td className="py-3 pl-2 font-bold text-[#0b3c5d]">{p.name || 'Anonymous User'}</td>
+                          <td className="py-3 pl-2 font-bold text-[#0b3c5d]">{capitalizeName(p.name) || 'Anonymous User'}</td>
                           <td className="py-3 font-semibold">
                             <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                               p.role === 'admin' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
@@ -316,7 +373,7 @@ export default function AdminDashboard({ onSignOut, onNavigate }) {
                               p.role === 'controller' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
                               'bg-slate-50 text-slate-600 border border-slate-200'
                             }`}>
-                              {p.role?.toUpperCase()}
+                              {p.role === 'adviser' ? 'ADVISOR' : p.role?.toUpperCase()}
                             </span>
                           </td>
                           <td className="py-3 font-bold text-slate-500">{p.school_id || 'Global'}</td>

@@ -47,18 +47,6 @@ export default function Navbar({ onNavigate }) {
 
       {/* MAIN NAVBAR */}
       <nav id="navbar" className="flex flex-col font-sans select-none scrolled" style={{ top: scrolled ? '0px' : '34px' }}>
-        {/* Ticker */}
-        <div id="ticker-bar" className="w-full bg-[#ef4444] text-white text-[11.5px] font-semibold overflow-hidden relative flex items-center h-[30px] shadow-sm">
-          <div className="max-w-7xl mx-auto px-5 w-full flex items-center">
-            <span className="flex-shrink-0 bg-black/20 px-2 py-0.5 rounded text-[9px] font-black tracking-wider mr-4 uppercase animate-pulse">Alert</span>
-            <div className="relative w-full overflow-hidden whitespace-nowrap">
-              <div className="inline-block pl-[100%] animate-marquee hover:[animation-play-state:paused] cursor-pointer text-xs tracking-wide">
-                🔥 Secure React unified Academic Portal is active &bull; Use your Supabase email &amp; password or the Developer Desks to log in instantly &bull; Warden check-ins and applications tracking are online.
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="nav-bar-inner">
           <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
             {/* Brand Logo + Identity */}
@@ -165,13 +153,13 @@ export default function Navbar({ onNavigate }) {
                             <div className="dd-sub">Academic boards &amp; groups</div>
                           </div>
                         </a>
-                        <a href="/OUTR website/courses/scs/UGcourses.html" className="dd-card">
+                        <button onClick={() => handleNavigation('syllabus')} className="dd-card bg-transparent border-none text-left w-full font-sans cursor-pointer">
                           <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-7"></use></svg></div>
                           <div>
                             <div className="dd-title">Syllabus</div>
                             <div className="dd-sub">UG and PG course syllabi</div>
                           </div>
-                        </a>
+                        </button>
                         <a href="#" className="dd-card">
                           <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
                           <div>
@@ -201,14 +189,14 @@ export default function Navbar({ onNavigate }) {
                       <div className="dd-icon bg-[#fff7ed]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-13"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Board of Management</div>
                     </button>
-                    <a href="/administration/Dean.html" className="dd-card">
+                    <button onClick={() => handleNavigation('deans')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans cursor-pointer">
                       <div className="dd-icon bg-[#f0fdf4]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-4"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Dean</div>
-                    </a>
-                    <a href="/administration/HOD.html" className="dd-card">
+                    </button>
+                    <button onClick={() => handleNavigation('hods')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans cursor-pointer">
                       <div className="dd-icon bg-[#fff1f2]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-5"></use></svg></div>
                       <div className="dd-title text-[12.5px]">HODs</div>
-                    </a>
+                    </button>
                     <button onClick={() => handleNavigation('antiragging')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans">
                       <div className="dd-icon bg-[#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-6"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Anti-Ragging</div>
@@ -386,7 +374,7 @@ export default function Navbar({ onNavigate }) {
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
                   <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
                   <a href="/administration/SA_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Committees</a>
-                  <a href="/OUTR website/courses/scs/UGcourses.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Syllabus</a>
+                  <button onClick={() => { handleNavigation('syllabus'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Syllabus</button>
                 </div>
               </details>
               <div className="h-px w-full bg-slate-200"></div>
@@ -399,8 +387,8 @@ export default function Navbar({ onNavigate }) {
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
                   <button onClick={() => { handleNavigation('vc-desk'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">VC Desk</button>
                   <button onClick={() => { handleNavigation('bom'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Board of Management</button>
-                  <a href="/administration/Dean.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Dean</a>
-                  <a href="/administration/HOD.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">HODs</a>
+                  <button onClick={() => { handleNavigation('deans'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Dean</button>
+                  <button onClick={() => { handleNavigation('hods'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">HODs</button>
                   <button onClick={() => { handleNavigation('antiragging'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Anti-Ragging</button>
                   <a href="/administration/AR_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Academic Council</a>
                   <a href="/administration/L_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Students Grievance</a>

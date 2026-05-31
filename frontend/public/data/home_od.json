@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "lastUpdated": {
+      "notices": "2026-05-12",
+      "events": "2026-05-12",
+      "footer": "2026-05-12",
+      "social": "2026-05-12"
+    }
+  },
+  "notices": [
+    { "title": "B.Tech / B.Arch / B.Plan ୨୦୨୫-୨୬ ପାଇଁ ନାମଲେଖା ସୂଚନା", "date": "12 Mar 2025", "tag": "NEW" },
+    { "title": "Ph.D. ପ୍ରବେଶିକା ପରୀକ୍ଷା - ସୂଚୀ ଏବଂ ଆଡମିଟ୍ କାର୍ଡ ଡାଉନଲୋଡ୍", "date": "10 Mar 2025", "tag": "NEW" },
+    { "title": "ସେମିଷ୍ଟାର ଶେଷ ପରୀକ୍ଷା ଫର୍ମ ପୂରଣ - ଷଷ୍ଠ ସେମିଷ୍ଟାର", "date": "05 Mar 2025" },
+    { "title": "ବାର୍ଷିକ କ୍ରୀଡ଼ା ମିଟ୍ ୨୦୨୫ - ପଞ୍ଜୀକରଣ ଚାଲୁଅଛି", "date": "28 Feb 2025" },
+    { "title": "AI ଏବଂ ମେସିନ୍ ଲର୍ଣ୍ଣିଂ ଉପରେ ଅତିଥି ବକ୍ତୃତା - CSE ସ୍କୁଲ୍", "date": "25 Feb 2025" },
+    { "title": "ଟେଣ୍ଡର ସୂଚନା: ଲାବୋରେଟୋରୀ ଉପକରଣ ଯୋଗାଣ ୨୦୨୫", "date": "20 Feb 2025" },
+    { "title": "ମିଡ୍ ସେମିଷ୍ଟାର ପରୀକ୍ଷା ଫଳାଫଳ - ଯୁଗ୍ମ ସେମିଷ୍ଟାର ୨୦୨୪-୨୫", "date": "18 Feb 2025" }
+  ],
+  "events": [
+    { "day": "22", "month": "MAR", "title": "XTASY ୨୦୨୫ - ବାର୍ଷିକ ବୈଷୟିକ ଉତ୍ସବ", "location": "ମୁଖ୍ୟ ପ୍ରେକ୍ଷାଳୟ, OUTR କ୍ୟାମ୍ପସ", "color": "var(--primary)" },
+    { "day": "28", "month": "MAR", "title": "ସ୍ଥାୟୀ ଇଞ୍ଜିନିୟରିଂ ଉପରେ ଜାତୀୟ ସେମିନାର", "location": "ସମ୍ମିଳନୀ କକ୍ଷ, ବ୍ଲକ୍ A", "color": "var(--secondary)" },
+    { "day": "05", "month": "APR", "title": "କ୍ୟାମ୍ପସ ପ୍ଲେସମେଣ୍ଟ ଡ୍ରାଇଭ୍ - TCS, Infosys, Wipro", "location": "ପ୍ଲେସମେଣ୍ଟ ସେଲ୍, ବ୍ଲକ୍ C", "color": "#1e293b" },
+    { "day": "10", "month": "APR", "title": "ବାର୍ଷିକ ସମାବର୍ତ୍ତନ ଉତ୍ସବ ୨୦୨୫", "location": "ବିଶ୍ୱବିଦ୍ୟାଳୟ ମୁକ୍ତ ପଡ଼ିଆ, OUTR", "color": "var(--accent)" }
+  ],
+  "departments": [
+    { "icon": "icon-8", "title": "କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ ସ୍କୁଲ୍", "subtitle": "CSE - IT - MCA - AI&ML" },
+    { "icon": "icon-9", "title": "ଯାନ୍ତ୍ରିକ ବିଜ୍ଞାନ ସ୍କୁଲ୍", "subtitle": "ME - R&AI - IEM - D&D" },
+    { "icon": "icon-2", "title": "ଭିତ୍ତିଭୂମି ଏବଂ ଯୋଜନା ସ୍କୁଲ୍", "subtitle": "Civil - B.Arch - B.Plan - WRE" },
+    { "icon": "icon-11", "title": "ଇଲେକ୍ଟ୍ରୋନିକ୍ ବିଜ୍ଞାନ ସ୍କୁଲ୍", "subtitle": "ECE - EIE - VLSI - ICE" }
+  ],
+  "quickLinks": [
+    { "label": "ଏବେ ଆବେଦନ କରନ୍ତୁ", "href": "https://ojee.nic.in/" },
+    { "label": "ନୋଟିସ୍ ଏବଂ ସର୍କୁଲାର୍", "href": "#notices" },
+    { "label": "ପରୀକ୍ଷା ଫଳାଫଳ", "href": "/?view=student-clearance" },
+    { "label": "ଶିକ୍ଷା ପଞ୍ଜିକା", "href": "#" },
+    { "label": "ନାମଲେଖା ୨୦୨୫", "href": "/?view=student-clearance" },
+    { "label": "ଛାତ୍ର ଇ-ପୋର୍ଟାଲ୍", "href": "/?view=student-clearance" }
+  ],
+  "gallery": [
+    {
+      "group": "କ୍ୟାମ୍ପସ",
+      "cover": "OUTR website/images/gallery/clg.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg.jpg", "label": "ମୁଖ୍ୟ ଭବନ — ଆକାଶ ମାର୍ଗରୁ ଦୃଶ୍ୟ" },
+        { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "କ୍ୟାମ୍ପସ ପଡ଼ିଆ" }
+      ]
+    },
+    {
+      "group": "କାର୍ଯ୍ୟକ୍ରମ",
+      "cover": "OUTR website/images/gallery/event.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/event.jpg", "label": "ଉଦ୍‌ଘାଟନୀ ସମାରୋହ" },
+        { "image": "OUTR website/images/gallery/event 2.jpg", "label": "ସାଂସ୍କୃତିକ କାର୍ଯ୍ୟକ୍ରମ" },
+        { "image": "OUTR website/images/gallery/event 3.jpg", "label": "ଟେକ୍ ଫେଷ୍ଟ କାର୍ଯ୍ୟକ୍ରମ" },
+        { "image": "OUTR website/images/gallery/function.jpg", "label": "ବାର୍ଷିକ ସମାବର୍ତ୍ତନ ଉତ୍ସବ" },
+        { "image": "OUTR website/images/gallery/function 2.jpg", "label": "ଆଧିକାରିକ ଉଦ୍‌ଘାଟନୀ ଉତ୍ସବ" }
+      ]
+    },
+    {
+      "group": "କ୍ୟାମ୍ପସ ଜୀବନ",
+      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "କ୍ୟାମ୍ପସ ପଥ — ସନ୍ଧ୍ୟାକାଳୀନ ଦୃଶ୍ୟ" },
+        { "image": "OUTR website/images/gallery/dance.jpg", "label": "ପାରମ୍ପରିକ ନୃତ୍ୟ ପ୍ରଦର୍ଶନ" },
+        { "image": "OUTR website/images/gallery/dj.jpg", "label": "ଡିଜେ ନାଇଟ୍ ଏବଂ ସାଂସ୍କୃତିକ କାର୍ଯ୍ୟକ୍ରମ" }
+      ]
+    },
+    {
+      "group": "ରାତ୍ରି ଜୀବନ",
+      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "କ୍ୟାମ୍ପସ ପଥ — ରାତ୍ରି ଦୃଶ୍ୟ" },
+        { "image": "OUTR website/images/gallery/dj.jpg", "label": "ଡିଜେ ନାଇଟ୍ ଏବଂ ଉତ୍ସବ" },
+        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "ବାର୍ଷିକ ଉତ୍ସବ — XTASY ନାଇଟ୍ କନସର୍ଟ" },
+        { "image": "OUTR website/images/gallery/dance.jpg", "label": "ସାଂସ୍କୃତିକ ରାତ୍ରି ପ୍ରଦର୍ଶନ" }
+      ]
+    },
+    {
+      "group": "କ୍ରୀଡ଼ା",
+      "cover": "OUTR website/images/gallery/sports.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/sports.jpg", "label": "ବାର୍ଷିକ କ୍ରୀଡ଼ା ମିଟ୍" },
+        { "image": "OUTR website/images/gallery/sports 2.jpg", "label": "ଆଥଲେଟିକ୍ସ ପ୍ରତିଯୋଗିତା" }
+      ]
+    }
+  ],
+  "footer": {
+    "identity": {
+      "logo": "https://outr.ac.in/public/uploads/logo_4.png",
+      "line1": "ଓଡ଼ିଶା ପ୍ରଯୁକ୍ତିବିଦ୍ୟା ଏବଂ",
+      "line2": "ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ",
+      "address": ["ଟେକ୍ନୋ କ୍ୟାମ୍ପସ, ଘାଟିକିଆ", "ଭୁବନେଶ୍ୱର, ଓଡ଼ିଶା - ୭୫୧୦୨୯", "ଭାରତ"],
+      "phone": "0674-2725223",
+      "email": "registrar@outr.ac.in",
+      "social": [
+        { "href": "https://www.facebook.com/OUTRuniversity/", "icon": "facebook" },
+        { "href": "https://www.instagram.com/outruniversity/", "icon": "instagram" },
+        { "href": "https://www.linkedin.com/school/rani-nilima-kumari-mahila-mahavidyalaya-dharupur-pratapgarh/", "icon": "linkedin" },
+        { "href": "https://www.youtube.com/@outrlive", "icon": "youtube" }
+      ]
+    },
+    "columns": {
+      "quickLinks": [
+        { "label": "ହୋମ୍", "href": "#hero" },
+        { "label": "OUTR ବିଷୟରେ", "href": "OUTR website/about.html" },
+        { "label": "ନାମଲେଖା", "href": "/?view=student-clearance" },
+        { "label": "RTI", "href": "https://rti.gov.in/" },
+        { "label": "କ୍ୟାରିଅର୍", "href": "#" },
+        { "label": "ଟେଣ୍ଡର", "href": "#" },
+        { "label": "NIRF ତଥ୍ୟ", "href": "https://www.nirfindia.org/" }
+      ],
+      "academics": [
+        { "label": "ପାର୍ଥ୍ୟକ୍ରମ ସମୂହ", "href": "OUTR website/schools.html" },
+        { "label": "UG ସିଲାବସ୍", "href": "OUTR website/courses/scs/UGcourses.html" },
+        { "label": "PG ସିଲାବସ୍", "href": "OUTR website/courses/scs/PGcourses.html" },
+        { "label": "ଶିକ୍ଷା ପଞ୍ଜିକା", "href": "#" },
+        { "label": "COE - AI & ICT", "href": "/?view=coe-desk" },
+        { "label": "ପରୀକ୍ଷା ବିଭାଗ", "href": "/?view=auth&role=controller" }
+      ],
+      "contact": [
+        { "label": "ଠିକଣା ଏବଂ ମାନଚିତ୍ର", "href": "OUTR website/location.html" },
+        { "label": "ଫୋନ୍ ଡିରେକ୍ଟୋରୀ", "href": "OUTR website/location.html" },
+        { "label": "ଇମେଲ୍ ଡିରେକ୍ଟୋରୀ", "href": "OUTR website/location.html" },
+        { "label": "ଅଭିଯୋଗ ପ୍ରକୋଷ୍ଠ", "href": "administration/L_commitee.html" },
+        { "label": "ସୋସିଆଲ୍ ମିଡିଆ ହବ୍", "href": "social.html" },
+        { "label": "ମତାମତ", "href": "#" }
+      ]
+    },
+    "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },
+    "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
+    "copyright": "© ୨୦୨୫ ଓଡ଼ିଶା ପ୍ରଯୁକ୍ତିବିଦ୍ୟା ଏବଂ ଗବେଷଣା ବିଶ୍ୱବିଦ୍ୟାଳୟ. ସର୍ବାଧିକାର ସଂରକ୍ଷିତ."
+  }
+}

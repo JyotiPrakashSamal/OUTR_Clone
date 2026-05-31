@@ -2,12 +2,83 @@ import { useState, useEffect } from 'react'
 
 export default function Footer() {
   const [aqiValue, setAqiValue] = useState('38')
-  const [aqiStatus, setAqiStatus] = useState('Excellent')
+  const [aqiStatus, setAqiStatus] = useState('Good')
+  const [aqiColor, setAqiColor] = useState('text-emerald-400')
 
   useEffect(() => {
-    // Keep exact AQI values aligned with the dynamic loader
-    setAqiValue('38')
-    setAqiStatus('Excellent')
+    const fetchLiveAQI = async () => {
+      try {
+        // 1. Try local cache first to avoid API spamming on page switches
+        const cacheKey = 'outr_live_aqi_v1'
+        const cached = localStorage.getItem(cacheKey)
+        if (cached) {
+          const parsed = JSON.parse(cached)
+          // 15-minute cache lifespan
+          if (parsed.timestamp && Date.now() - parsed.timestamp < 15 * 60 * 1000) {
+            setAqiValue(parsed.value)
+            setAqiStatus(parsed.status)
+            setAqiColor(parsed.color)
+            return
+          }
+        }
+
+        // 2. Fetch live data from Open-Meteo Air Quality API for Bhubaneswar
+        const response = await fetch(
+          'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=20.2644&longitude=85.8081&current=us_aqi'
+        )
+        const data = await response.json()
+        const usAqi = data?.current?.us_aqi
+
+        if (typeof usAqi === 'number') {
+          const valueStr = String(Math.round(usAqi))
+          let statusStr = 'Good'
+          let colorClass = 'text-emerald-400'
+
+          if (usAqi <= 50) {
+            statusStr = 'Good'
+            colorClass = 'text-emerald-400'
+          } else if (usAqi <= 100) {
+            statusStr = 'Moderate'
+            colorClass = 'text-yellow-400'
+          } else if (usAqi <= 150) {
+            statusStr = 'Poor'
+            colorClass = 'text-orange-400'
+          } else if (usAqi <= 200) {
+            statusStr = 'Unhealthy'
+            colorClass = 'text-rose-400'
+          } else if (usAqi <= 300) {
+            statusStr = 'Very Unhealthy'
+            colorClass = 'text-purple-400'
+          } else {
+            statusStr = 'Hazardous'
+            colorClass = 'text-red-500'
+          }
+
+          setAqiValue(valueStr)
+          setAqiStatus(statusStr)
+          setAqiColor(colorClass)
+
+          // Save to local cache
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              value: valueStr,
+              status: statusStr,
+              color: colorClass,
+              timestamp: Date.now()
+            })
+          )
+        }
+      } catch (err) {
+        console.warn('Unable to retrieve live AQI:', err)
+        // Fallback to safe defaults
+        setAqiValue('38')
+        setAqiStatus('Good')
+        setAqiColor('text-emerald-400')
+      }
+    }
+
+    fetchLiveAQI()
   }, [])
 
   return (
@@ -38,7 +109,7 @@ export default function Footer() {
             ✉️ Email: registrar@outr.ac.in
           </p>
         </div>
-
+ 
         {/* Column 2: Quick Links */}
         <div>
           <h4 className="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">
@@ -51,7 +122,7 @@ export default function Footer() {
             <li><a href="/social.html" className="hover:text-white transition-colors no-underline">Social Media Hub</a></li>
           </ul>
         </div>
-
+ 
         {/* Column 3: Academics */}
         <div>
           <h4 className="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">
@@ -64,7 +135,7 @@ export default function Footer() {
             <li><a href="/Student and Event/Hostel/hostel.html" className="hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
           </ul>
         </div>
-
+ 
         {/* Column 4: Live AQI Info */}
         <div className="flex flex-col space-y-4">
           <h4 className="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">
@@ -75,7 +146,7 @@ export default function Footer() {
               <span className="text-2xl">🌱</span>
               <div>
                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Air Quality (AQI)</div>
-                <div className="text-sm font-bold text-emerald-400 mt-0.5">{aqiValue} &bull; {aqiStatus}</div>
+                <div className="text-sm font-bold mt-0.5 transition-colors duration-300"><span className={aqiColor}>{aqiValue} &bull; {aqiStatus}</span></div>
               </div>
             </div>
             <p className="text-[10px] text-slate-500 leading-relaxed mt-2.5 mb-0">Live sensor reports from Techno Campus, Ghatikia.</p>

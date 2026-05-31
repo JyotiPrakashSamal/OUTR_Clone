@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from './supabaseClient'
 import Layout from './components/Layout'
 import AuthPortal from './pages/AuthPortal'
@@ -6,6 +6,10 @@ import WardenDashboard from './pages/WardenDashboard'
 import FileTrackingDashboard from './pages/FileTrackingDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import { BoardOfGovernors, AntiRaggingCommittee, VCDesk, COEDesk } from './pages/InstitutionalPages'
+import DeanDesk from './pages/DeanDesk'
+import HODDesk from './pages/HODDesk'
+import SyllabusDesk from './pages/SyllabusDesk'
+
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -17,6 +21,9 @@ function App() {
       if (viewParam === 'antiragging') return 'antiragging'
       if (viewParam === 'vc-desk') return 'vc-desk'
       if (viewParam === 'coe-desk') return 'coe-desk'
+      if (viewParam === 'deans') return 'deans'
+      if (viewParam === 'hods') return 'hods'
+      if (viewParam === 'syllabus') return 'syllabus'
       if (viewParam === 'student-clearance') return 'file-tracking-student'
       if (viewParam === 'warden' || viewParam === 'auth') return 'auth'
       if (viewParam === 'portal') return 'portal'
@@ -33,6 +40,11 @@ function App() {
     return null
   })
   const [sessionUser, setSessionUser] = useState(null)
+
+  const currentViewRef = useRef(currentView)
+  useEffect(() => {
+    currentViewRef.current = currentView
+  }, [currentView])
 
   const redirectBasedOnRole = (role) => {
     if (role === 'admin') {
@@ -63,7 +75,12 @@ function App() {
         .single()
       
       if (error) throw error
-      setSessionUser(profile)
+      const { data: { user } } = await supabase.auth.getUser()
+      const profileWithEmail = {
+        ...profile,
+        email: user?.email || ''
+      }
+      setSessionUser(profileWithEmail)
       redirectBasedOnRole(profile.role)
     } catch (err) {
       console.warn('Session profile lookup failed:', err.message)
@@ -86,52 +103,39 @@ function App() {
 
   // Unified Session and URL Query Parameters Checker on Mount
   useEffect(() => {
-    const checkAuthAndParams = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
-        const params = new URLSearchParams(window.location.search)
-        const viewParam = params.get('view')
-
-        if (session) {
-          // Retrieving the active user role and displaying dashboard
-          await checkSessionRole(session.user.id)
-          setLoading(false)
-        } else {
-          // Guest mode
-          if (viewParam) {
-            // Allows displaying the requested public/auth view immediately
-            setLoading(false)
-          } else {
-            // No active session and no target view, redirect directly to static designed home.html
-            window.location.replace('/home.html')
-          }
-        }
-      } catch (err) {
-        console.error("Authentication/Routing initialization failed:", err)
-        setLoading(false)
-      }
-    }
-
-    checkAuthAndParams()
-
-    // Listen to real-time auth changes
+    // Listen to real-time auth changes (GoTrue fires INITIAL_SESSION synchronously on mount)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const params = new URLSearchParams(window.location.search)
+      const viewParam = params.get('view')
+
       if (session) {
-        await checkSessionRole(session.user.id)
+        // Retrieving the active user role and displaying dashboard on initial load or token refresh.
+        // Active logins are handled directly by handleLoginSuccess to avoid race conditions.
+        if (event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') {
+          await checkSessionRole(session.user.id)
+        }
         setLoading(false)
       } else {
+        const prevView = currentViewRef.current
+        const isDashboard = prevView.endsWith('-dashboard') || prevView === 'file-tracking-student' || prevView === 'portal'
+
         // Reset only if not local profile mode
         setSessionUser((currUser) => {
           if (currUser && currUser.isLocal) {
             return currUser
           }
-          setCurrentView((prev) => {
-            if (prev.endsWith('-dashboard') || prev === 'file-tracking-student') return 'home'
-            return prev
-          })
           return null
         })
         setSelectedRoleForPortal(null)
+
+        if (isDashboard) {
+          setCurrentView('portal')
+          setLoading(false)
+        } else if (viewParam) {
+          setLoading(false)
+        } else {
+          window.location.replace('/home.html')
+        }
       }
     })
 
@@ -175,6 +179,12 @@ function App() {
       targetView = 'vc-desk'
     } else if (currentView === 'coe-desk') {
       targetView = 'coe-desk'
+    } else if (currentView === 'deans') {
+      targetView = 'deans'
+    } else if (currentView === 'hods') {
+      targetView = 'hods'
+    } else if (currentView === 'syllabus') {
+      targetView = 'syllabus'
     } else if (currentView === 'file-tracking-student') {
       targetView = 'student-clearance'
     }
@@ -244,7 +254,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }}
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -258,7 +268,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -273,7 +283,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -288,7 +298,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -303,7 +313,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -318,7 +328,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -333,7 +343,7 @@ function App() {
         onSignOut={async () => {
           setSessionUser(null)
           await supabase.auth.signOut()
-          setCurrentView('home')
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -345,9 +355,10 @@ function App() {
       <FileTrackingDashboard 
         role="student" 
         sessionUser={sessionUser}
-        onSignOut={() => {
+        onSignOut={async () => {
           setSessionUser(null)
-          setCurrentView('home')
+          await supabase.auth.signOut()
+          setCurrentView('portal')
         }} 
         onNavigate={(view) => setCurrentView(view)}
       />
@@ -386,193 +397,67 @@ function App() {
     )
   }
 
-  if (currentView === 'auth') {
+  if (currentView === 'deans') {
+    return (
+      <Layout onNavigate={setCurrentView}>
+        <DeanDesk />
+      </Layout>
+    )
+  }
+
+  if (currentView === 'hods') {
+    return (
+      <Layout onNavigate={setCurrentView}>
+        <HODDesk />
+      </Layout>
+    )
+  }
+
+  if (currentView === 'syllabus') {
+    return (
+      <Layout onNavigate={setCurrentView}>
+        <SyllabusDesk />
+      </Layout>
+    )
+  }
+
+  if (currentView === 'portal' || currentView === 'auth') {
     return (
       <div className="relative">
         <AuthPortal 
           initialRole={selectedRoleForPortal} 
           onLoginSuccess={handleLoginSuccess}
         />
-        {/* Universal Back to Home overlay helper for testing convenience */}
+        {/* Universal Back to Homepage helper */}
         <button
           onClick={() => {
-            setCurrentView('portal')
-            setSelectedRoleForPortal(null)
+            setCurrentView('home')
           }}
           className="fixed bottom-4 right-4 z-50 bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold py-2.5 px-4 rounded-full shadow-lg border border-slate-700/50 hover:scale-105 transition-all duration-300"
         >
-          🏠 Return to Landing Desk
+          ↩ Return to University Homepage
         </button>
       </div>
     )
   }
 
-  if (currentView === 'portal') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        {/* Main Content Area */}
-        <div className="flex flex-col items-center justify-center px-6 py-20 max-w-4xl mx-auto text-center animate-fade-in select-none">
-          {/* Logo Shield Placeholder */}
-          <div className="w-24 h-24 mb-6 rounded-full bg-primary/5 flex items-center justify-center border-2 border-accent/30 shadow-lg shadow-primary/5">
-            <img 
-              src="https://outr.ac.in/public/uploads/logo_4.png" 
-              alt="OUTR Shield" 
-              className="w-16 h-16 object-contain"
-            />
-          </div>
-
-          {/* Hero Section */}
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-primary font-bold tracking-tight leading-tight mb-4">
-            Odisha University of <br />
-            <span className="text-secondary">Technology and Research</span>
-          </h1>
-          
-          <p className="text-muted max-w-xl mx-auto text-lg mb-8 leading-relaxed font-medium">
-            Official unified services portal for students, faculty, and administrative departments of OUTR Bhubaneswar.
-          </p>
-
-          {/* Quick Access Portal Modules Grid */}
-          <div className="grid md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto mb-12">
-            {/* Card 1: Warden Portal */}
-            <div 
-              onClick={() => openPortalForRole('warden')}
-              className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200/60 shadow-md shadow-slate-100 flex flex-col justify-between text-left group hover:border-accent/40 hover:shadow-lg transition-all duration-300"
-            >
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  🔑
-                </div>
-                <h3 className="font-serif text-xl font-bold text-primary mb-2">Hostel Warden Portal</h3>
-                <p className="text-muted text-sm leading-relaxed mb-4">
-                  Secure access control panel for room allocation, student check-in/out records, and live hostel statistics.
-                </p>
-              </div>
-              <div className="text-accent text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-                Access Portal <span>→</span>
-              </div>
-            </div>
-
-            {/* Card 2: Academic Applications Desk */}
-            <div 
-              onClick={() => setCurrentView('file-tracking-student')}
-              className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200/60 shadow-md shadow-slate-100 flex flex-col justify-between text-left group hover:border-accent/40 hover:shadow-lg transition-all duration-300"
-            >
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  📄
-                </div>
-                <h3 className="font-serif text-xl font-bold text-primary mb-2">Academic Applications</h3>
-                <p className="text-muted text-sm leading-relaxed mb-4">
-                  Submit academic applications, request fee concessions or certificates, and track live review timelines.
-                </p>
-              </div>
-              <div className="text-accent text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-                Open Applications Center <span>→</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Global Access Button */}
-          <div className="mb-8">
-            <button
-              onClick={() => setCurrentView('auth')}
-              className="bg-primary hover:bg-secondary text-white font-semibold py-3 px-8 rounded-xl shadow-md hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
-            >
-              Go to Dedicated Login Portal
-            </button>
-          </div>
-
-          {/* Security Badge */}
-          <div className="inline-flex items-center gap-2 bg-primary/5 border border-primary/10 text-primary px-4 py-2 rounded-full text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            🔒 Secured under OUTR Unified Encryption Protocol • Bhubaneswar
-          </div>
-        </div>
-      </Layout>
-    )
-  }
-
+  // Fallback default return: unified login gateway
   return (
-    <Layout onNavigate={setCurrentView}>
-      {/* Main Content Area */}
-      <div className="flex flex-col items-center justify-center px-6 py-20 max-w-4xl mx-auto text-center animate-fade-in select-none">
-        {/* Logo Shield Placeholder */}
-        <div className="w-24 h-24 mb-6 rounded-full bg-primary/5 flex items-center justify-center border-2 border-accent/30 shadow-lg shadow-primary/5">
-          <img 
-            src="https://outr.ac.in/public/uploads/logo_4.png" 
-            alt="OUTR Shield" 
-            className="w-16 h-16 object-contain"
-          />
-        </div>
-
-        {/* Hero Section */}
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-primary font-bold tracking-tight leading-tight mb-4">
-          Odisha University of <br />
-          <span className="text-secondary">Technology and Research</span>
-        </h1>
-        
-        <p className="text-muted max-w-xl mx-auto text-lg mb-8 leading-relaxed font-medium">
-          Official unified services portal for students, faculty, and administrative departments of OUTR Bhubaneswar.
-        </p>
-
-        {/* Quick Access Portal Modules Grid */}
-        <div className="grid md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto mb-12">
-          {/* Card 1: Warden Portal */}
-          <div 
-            onClick={() => openPortalForRole('warden')}
-            className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200/60 shadow-md shadow-slate-100 flex flex-col justify-between text-left group hover:border-accent/40 hover:shadow-lg transition-all duration-300"
-          >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                🔑
-              </div>
-              <h3 className="font-serif text-xl font-bold text-primary mb-2">Hostel Warden Portal</h3>
-              <p className="text-muted text-sm leading-relaxed mb-4">
-                Secure access control panel for room allocation, student check-in/out records, and live hostel statistics.
-              </p>
-            </div>
-            <div className="text-accent text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-              Access Portal <span>→</span>
-            </div>
-          </div>
-
-          {/* Card 2: Academic Applications Desk */}
-          <div 
-            onClick={() => setCurrentView('file-tracking-student')}
-            className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200/60 shadow-md shadow-slate-100 flex flex-col justify-between text-left group hover:border-accent/40 hover:shadow-lg transition-all duration-300"
-          >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                📄
-              </div>
-              <h3 className="font-serif text-xl font-bold text-primary mb-2">Academic Applications</h3>
-              <p className="text-muted text-sm leading-relaxed mb-4">
-                Submit academic applications, request fee concessions or certificates, and track live review timelines.
-              </p>
-            </div>
-            <div className="text-accent text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-              Open Applications Center <span>→</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Global Access Button */}
-        <div className="mb-8">
-          <button
-            onClick={() => setCurrentView('auth')}
-            className="bg-primary hover:bg-secondary text-white font-semibold py-3 px-8 rounded-xl shadow-md hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
-          >
-            Go to Dedicated Login Portal
-          </button>
-        </div>
-
-        {/* Security Badge */}
-        <div className="inline-flex items-center gap-2 bg-primary/5 border border-primary/10 text-primary px-4 py-2 rounded-full text-xs font-semibold">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          🔒 Secured under OUTR Unified Encryption Protocol • Bhubaneswar
-        </div>
-      </div>
-    </Layout>
+    <div className="relative">
+      <AuthPortal 
+        initialRole={selectedRoleForPortal} 
+        onLoginSuccess={handleLoginSuccess}
+      />
+      {/* Universal Back to Homepage helper */}
+      <button
+        onClick={() => {
+          setCurrentView('home')
+        }}
+        className="fixed bottom-4 right-4 z-50 bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold py-2.5 px-4 rounded-full shadow-lg border border-slate-700/50 hover:scale-105 transition-all duration-300"
+      >
+        ↩ Return to University Homepage
+      </button>
+    </div>
   )
 }
 

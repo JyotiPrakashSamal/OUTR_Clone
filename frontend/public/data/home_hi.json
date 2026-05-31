@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "lastUpdated": {
+      "notices": "2026-05-12",
+      "events": "2026-05-12",
+      "footer": "2026-05-12",
+      "social": "2026-05-12"
+    }
+  },
+  "notices": [
+    { "title": "B.Tech / B.Arch / B.Plan 2025-26 के लिए प्रवेश सूचना", "date": "12 Mar 2025", "tag": "NEW" },
+    { "title": "Ph.D. प्रवेश परीक्षा - अनुसूची और एडमिट कार्ड डाउनलोड", "date": "10 Mar 2025", "tag": "NEW" },
+    { "title": "समेस्टर अंत परीक्षा फॉर्म भरना - छठा समेस्टर", "date": "05 Mar 2025" },
+    { "title": "वार्षिक खेलकूद प्रतियोगिता 2025 - पंजीकरण खुला है", "date": "28 Feb 2025" },
+    { "title": "AI और मशीन लर्निंग पर अतिथि व्याख्यान - School of CSE", "date": "25 Feb 2025" },
+    { "title": "निविदा सूचना: प्रयोगशाला उपकरण की आपूर्ति 2025", "date": "20 Feb 2025" },
+    { "title": "मध्य समेस्टर परीक्षा परिणाम - सम समेस्टर 2024-25", "date": "18 Feb 2025" }
+  ],
+  "events": [
+    { "day": "22", "month": "MAR", "title": "XTASY 2025 - वार्षिक तकनीकी महोत्सव", "location": "मुख्य सभागार, OUTR कैंपस", "color": "var(--primary)" },
+    { "day": "28", "month": "MAR", "title": "सतत इंजीनियरिंग पर राष्ट्रीय संगोष्ठी", "location": "सम्मेलन कक्ष, ब्लॉक ए", "color": "var(--secondary)" },
+    { "day": "05", "month": "APR", "title": "कैंपस प्लेसमेंट ड्राइव - टीसीएस, इन्फोसिस, विप्रो", "location": "प्लेसमेंट सेल, ब्लॉक सी", "color": "#1e293b" },
+    { "day": "10", "month": "APR", "title": "वार्षिक दीक्षांत समारोह 2025", "location": "विश्वविद्यालय खुला मैदान, OUTR", "color": "var(--accent)" }
+  ],
+  "departments": [
+    { "icon": "icon-8", "title": "कंप्यूटर विज्ञान स्कूल", "subtitle": "CSE - IT - MCA - AI&ML" },
+    { "icon": "icon-9", "title": "यांत्रिक विज्ञान स्कूल", "subtitle": "ME - R&AI - IEM - D&D" },
+    { "icon": "icon-2", "title": "बुनियादी ढांचा और योजना स्कूल", "subtitle": "Civil - B.Arch - B.Plan - WRE" },
+    { "icon": "icon-11", "title": "इलेक्ट्रॉनिक विज्ञान स्कूल", "subtitle": "ECE - EIE - VLSI - ICE" }
+  ],
+  "quickLinks": [
+    { "label": "अभी आवेदन करें", "href": "https://ojee.nic.in/" },
+    { "label": "सूचनाएं और परिपत्र", "href": "#notices" },
+    { "label": "परीक्षा परिणाम", "href": "/?view=student-clearance" },
+    { "label": "अकादमिक कैलेंडर", "href": "#" },
+    { "label": "प्रवेश 2025", "href": "/?view=student-clearance" },
+    { "label": "छात्र ई-पोर्टल", "href": "/?view=student-clearance" }
+  ],
+  "gallery": [
+    {
+      "group": "कैंपस",
+      "cover": "OUTR website/images/gallery/clg.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg.jpg", "label": "मुख्य भवन — हवाई दृश्य" },
+        { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "कैंपस मैदान" }
+      ]
+    },
+    {
+      "group": "कार्यक्रम",
+      "cover": "OUTR website/images/gallery/event.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/event.jpg", "label": "उद्घाटन समारोह" },
+        { "image": "OUTR website/images/gallery/event 2.jpg", "label": "सांस्कृतिक उत्सव" },
+        { "image": "OUTR website/images/gallery/event 3.jpg", "label": "टेक फेस्ट कार्यक्रम" },
+        { "image": "OUTR website/images/gallery/function.jpg", "label": "वार्षिक दीक्षांत समारोह" },
+        { "image": "OUTR website/images/gallery/function 2.jpg", "label": "आधिकारिक उद्घाटन समारोह" }
+      ]
+    },
+    {
+      "group": "कैंपस जीवन",
+      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग — शाम का दृश्य" },
+        { "image": "OUTR website/images/gallery/dance.jpg", "label": "पारंपरिक नृत्य प्रदर्शन" },
+        { "image": "OUTR website/images/gallery/dj.jpg", "label": "डीजे नाइट और सांस्कृतिक उत्सव" }
+      ]
+    },
+    {
+      "group": "नाइट लाइफ",
+      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग — रात्रि दृश्य" },
+        { "image": "OUTR website/images/gallery/dj.jpg", "label": "डीजे नाइट और उत्सव" },
+        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "वार्षिक महोत्सव — XTASY नाइट कॉन्सर्ट" },
+        { "image": "OUTR website/images/gallery/dance.jpg", "label": "सांस्कृतिक रात्रि प्रदर्शन" }
+      ]
+    },
+    {
+      "group": "खेलकूद",
+      "cover": "OUTR website/images/gallery/sports.jpg",
+      "photos": [
+        { "image": "OUTR website/images/gallery/sports.jpg", "label": "वार्षिक खेलकूद प्रतियोगिता" },
+        { "image": "OUTR website/images/gallery/sports 2.jpg", "label": "एथलेटिक्स प्रतियोगिता" }
+      ]
+    }
+  ],
+  "footer": {
+    "identity": {
+      "logo": "https://outr.ac.in/public/uploads/logo_4.png",
+      "line1": "ओडिशा प्रौद्योगिकी और",
+      "line2": "अनुसंधान विश्वविद्यालय",
+      "address": ["टेक्नो कैंपस, घाटिकिया", "भुवनेश्वर, ओडिशा - 751029", "भारत"],
+      "phone": "0674-2725223",
+      "email": "registrar@outr.ac.in",
+      "social": [
+        { "href": "https://www.facebook.com/OUTRuniversity/", "icon": "facebook" },
+        { "href": "https://www.instagram.com/outruniversity/", "icon": "instagram" },
+        { "href": "https://www.linkedin.com/school/rani-nilima-kumari-mahila-mahavidyalaya-dharupur-pratapgarh/", "icon": "linkedin" },
+        { "href": "https://www.youtube.com/@outrlive", "icon": "youtube" }
+      ]
+    },
+    "columns": {
+      "quickLinks": [
+        { "label": "होम", "href": "#hero" },
+        { "label": "OUTR के बारे में", "href": "OUTR website/about.html" },
+        { "label": "प्रवेश", "href": "/?view=student-clearance" },
+        { "label": "आरटीआई", "href": "https://rti.gov.in/" },
+        { "label": "करियर", "href": "#" },
+        { "label": "निविदाएं", "href": "#" },
+        { "label": "एनआईआरएफ डेटा", "href": "https://www.nirfindia.org/" }
+      ],
+      "academics": [
+        { "label": "पाठ्यक्रमों की पेशकश", "href": "OUTR website/schools.html" },
+        { "label": "यूजी सिलेबस", "href": "OUTR website/courses/scs/UGcourses.html" },
+        { "label": "पीजी सिलेबस", "href": "OUTR website/courses/scs/PGcourses.html" },
+        { "label": "अकादमिक कैलेंडर", "href": "#" },
+        { "label": "परीक्षा नियंत्रक - एआई और आईसीटी", "href": "/?view=coe-desk" },
+        { "label": "परीक्षा विभाग", "href": "/?view=auth&role=controller" }
+      ],
+      "contact": [
+        { "label": "पता और मानचित्र", "href": "OUTR website/location.html" },
+        { "label": "फोन निर्देशिका", "href": "OUTR website/location.html" },
+        { "label": "ईमेल निर्देशिका", "href": "OUTR website/location.html" },
+        { "label": "शिकायत निवारण कक्ष", "href": "administration/L_commitee.html" },
+        { "label": "सोशल मीडिया हब", "href": "social.html" },
+        { "label": "प्रतिक्रिया", "href": "#" }
+      ]
+    },
+    "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },
+    "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
+    "copyright": "© 2025 ओडिशा प्रौद्योगिकी और अनुसंधान विश्वविद्यालय। सर्वाधिकार सुरक्षित।"
+  }
+}
