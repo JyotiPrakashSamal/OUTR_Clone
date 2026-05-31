@@ -1,8 +1,9 @@
--- EXAMS & GRADES DATABASE SCHEMA PATCH (FAIL-SAFE DEVELOPMENT VERSION)
--- Execute this patch in your Supabase SQL Editor (SQL Editor -> New Query -> paste and run).
--- This version configures RLS to allow all authenticated sessions to insert/select to prevent role mismatch blockers!
+-- ====================================================================
+-- EXAMS, GRADES, & STORAGE LOCKDOWN PATCH (PRODUCTION-GRADE VERSION)
+-- Execute this patch in your Supabase SQL Editor (New Query -> paste and run).
+-- ====================================================================
 
--- 1. Create Student Grade Sheets Table
+-- 1. Create Student Grade Sheets Table (If not exists)
 create table if not exists public.student_grades (
   id uuid default gen_random_uuid() primary key,
   regd_no text not null,
@@ -15,34 +16,67 @@ create table if not exists public.student_grades (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Enable RLS
+-- Enable Row-Level Security
 alter table public.student_grades enable row level security;
 
--- Policies for student_grades (Fail-Safe Development Rules)
+-- Drop all old permissive policies
 drop policy if exists "Anyone can select student grades." on public.student_grades;
-create policy "Anyone can select student grades."
-  on public.student_grades for select
-  using (true);
-
 drop policy if exists "Anyone can insert student grades." on public.student_grades;
-create policy "Anyone can insert student grades."
-  on public.student_grades for insert
-  with check (true);
-
 drop policy if exists "Anyone can update student grades." on public.student_grades;
-create policy "Anyone can update student grades."
-  on public.student_grades for update
-  using (true);
-
 drop policy if exists "Anyone can delete student grades." on public.student_grades;
-create policy "Anyone can delete student grades."
+drop policy if exists "Select student grades policy" on public.student_grades;
+drop policy if exists "Insert student grades policy" on public.student_grades;
+drop policy if exists "Update student grades policy" on public.student_grades;
+drop policy if exists "Delete student grades policy" on public.student_grades;
+
+-- Strict Role-Based Policies for Grades Sheets
+create policy "Select student grades policy"
+  on public.student_grades for select
+  using (
+    auth.role() = 'authenticated' 
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role in ('admin', 'controller')
+      )
+      -- Students can view their own grades if their email matches their regd_no prefix
+      or regd_no = split_part(auth.email(), '@', 1)
+    )
+  );
+
+create policy "Insert student grades policy"
+  on public.student_grades for insert
+  with check (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
+
+create policy "Update student grades policy"
+  on public.student_grades for update
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
+
+create policy "Delete student grades policy"
   on public.student_grades for delete
-  using (true);
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
 
-drop policy if exists "Admins and controllers can manage student grades." on public.student_grades;
 
-
--- 2. Create Student Admit Cards Table
+-- 2. Create Student Admit Cards Table (If not exists)
 create table if not exists public.student_admit_cards (
   id uuid default gen_random_uuid() primary key,
   regd_no text not null,
@@ -56,28 +90,84 @@ create table if not exists public.student_admit_cards (
   issued_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Enable RLS
+-- Enable Row-Level Security
 alter table public.student_admit_cards enable row level security;
 
--- Policies for student_admit_cards (Fail-Safe Development Rules)
+-- Drop all old permissive policies
 drop policy if exists "Anyone can select admit cards." on public.student_admit_cards;
-create policy "Anyone can select admit cards."
-  on public.student_admit_cards for select
-  using (true);
-
 drop policy if exists "Anyone can insert admit cards." on public.student_admit_cards;
-create policy "Anyone can insert admit cards."
-  on public.student_admit_cards for insert
-  with check (true);
-
 drop policy if exists "Anyone can update admit cards." on public.student_admit_cards;
-create policy "Anyone can update admit cards."
-  on public.student_admit_cards for update
-  using (true);
-
 drop policy if exists "Anyone can delete admit cards." on public.student_admit_cards;
-create policy "Anyone can delete admit cards."
-  on public.student_admit_cards for delete
-  using (true);
+drop policy if exists "Select admit cards policy" on public.student_admit_cards;
+drop policy if exists "Insert admit cards policy" on public.student_admit_cards;
+drop policy if exists "Update admit cards policy" on public.student_admit_cards;
+drop policy if exists "Delete admit cards policy" on public.student_admit_cards;
 
-drop policy if exists "Admins and controllers can manage admit cards." on public.student_admit_cards;
+-- Strict Role-Based Policies for Admit Cards
+create policy "Select admit cards policy"
+  on public.student_admit_cards for select
+  using (
+    auth.role() = 'authenticated' 
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role in ('admin', 'controller')
+      )
+      -- Students can view their own admit cards if their email matches their regd_no prefix
+      or regd_no = split_part(auth.email(), '@', 1)
+    )
+  );
+
+create policy "Insert admit cards policy"
+  on public.student_admit_cards for insert
+  with check (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
+
+create policy "Update admit cards policy"
+  on public.student_admit_cards for update
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
+
+create policy "Delete admit cards policy"
+  on public.student_admit_cards for delete
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
+
+
+-- 3. Supabase Storage Bucket Provisioning (For Clearance Letter uploads)
+insert into storage.buckets (id, name, public) 
+values ('clearance-letters', 'clearance-letters', false)
+on conflict (id) do nothing;
+
+-- Enable storage RLS policies
+drop policy if exists "Authenticated users can upload clearance letters" on storage.objects;
+create policy "Authenticated users can upload clearance letters"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'clearance-letters' 
+    and auth.role() = 'authenticated'
+  );
+
+drop policy if exists "Authenticated users can read clearance letters" on storage.objects;
+create policy "Authenticated users can read clearance letters"
+  on storage.objects for select
+  using (
+    bucket_id = 'clearance-letters' 
+    and auth.role() = 'authenticated'
+  );

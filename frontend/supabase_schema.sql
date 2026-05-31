@@ -119,7 +119,7 @@ create or replace trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 -- ====================================================================
--- EXAMS & GRADES SCHEMA UPGRADES (MIGRATION STAGE)
+-- EXAMS, GRADES, & STORAGE SCHEMA UPGRADES (PRODUCTION VERSION)
 -- ====================================================================
 
 -- 5. Student Grade Sheets Table
@@ -138,26 +138,54 @@ create table if not exists public.student_grades (
 -- Enable RLS
 alter table public.student_grades enable row level security;
 
--- Policies
+-- Policies for student_grades (Strict Role-Based Policies)
 drop policy if exists "Anyone can select student grades." on public.student_grades;
-create policy "Anyone can select student grades."
+create policy "Select student grades policy"
   on public.student_grades for select
-  using (true);
+  using (
+    auth.role() = 'authenticated' 
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role in ('admin', 'controller')
+      )
+      or regd_no = split_part(auth.email(), '@', 1)
+    )
+  );
 
 drop policy if exists "Anyone can insert student grades." on public.student_grades;
-create policy "Anyone can insert student grades."
+create policy "Insert student grades policy"
   on public.student_grades for insert
-  with check (true);
+  with check (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
 
 drop policy if exists "Anyone can update student grades." on public.student_grades;
-create policy "Anyone can update student grades."
+create policy "Update student grades policy"
   on public.student_grades for update
-  using (true);
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
 
 drop policy if exists "Anyone can delete student grades." on public.student_grades;
-create policy "Anyone can delete student grades."
+create policy "Delete student grades policy"
   on public.student_grades for delete
-  using (true);
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
 
 -- 6. Student Admit Cards Table
 create table if not exists public.student_admit_cards (
@@ -176,24 +204,76 @@ create table if not exists public.student_admit_cards (
 -- Enable RLS
 alter table public.student_admit_cards enable row level security;
 
--- Policies
+-- Policies for student_admit_cards (Strict Role-Based Policies)
 drop policy if exists "Anyone can select admit cards." on public.student_admit_cards;
-create policy "Anyone can select admit cards."
+create policy "Select admit cards policy"
   on public.student_admit_cards for select
-  using (true);
+  using (
+    auth.role() = 'authenticated' 
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role in ('admin', 'controller')
+      )
+      or regd_no = split_part(auth.email(), '@', 1)
+    )
+  );
 
 drop policy if exists "Anyone can insert admit cards." on public.student_admit_cards;
-create policy "Anyone can insert admit cards."
+create policy "Insert admit cards policy"
   on public.student_admit_cards for insert
-  with check (true);
+  with check (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
 
 drop policy if exists "Anyone can update admit cards." on public.student_admit_cards;
-create policy "Anyone can update admit cards."
+create policy "Update admit cards policy"
   on public.student_admit_cards for update
-  using (true);
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
 
 drop policy if exists "Anyone can delete admit cards." on public.student_admit_cards;
-create policy "Anyone can delete admit cards."
+create policy "Delete admit cards policy"
   on public.student_admit_cards for delete
-  using (true);
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('admin', 'controller')
+    )
+  );
+
+
+-- 7. Supabase Storage Bucket Provisioning
+insert into storage.buckets (id, name, public) 
+values ('clearance-letters', 'clearance-letters', false)
+on conflict (id) do nothing;
+
+-- Storage RLS Policies
+drop policy if exists "Authenticated users can upload clearance letters" on storage.objects;
+create policy "Authenticated users can upload clearance letters"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'clearance-letters' 
+    and auth.role() = 'authenticated'
+  );
+
+drop policy if exists "Authenticated users can read clearance letters" on storage.objects;
+create policy "Authenticated users can read clearance letters"
+  on storage.objects for select
+  using (
+    bucket_id = 'clearance-letters' 
+    and auth.role() = 'authenticated'
+  );
+
 

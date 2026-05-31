@@ -2,6 +2,15 @@
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 
+const capitalizeName = (name) => {
+  if (!name) return ''
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export default function AuthPortal({ onLoginSuccess, initialRole }) {
   const [selectedRole, setSelectedRole] = useState(initialRole || null)
   const [email, setEmail] = useState('')
@@ -25,7 +34,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
   const roles = [
     { id: 'student', title: 'Student Result Portal', icon: '🎓', desc: 'View academic grades & track clearance files.' },
     { id: 'warden', title: 'Hostel Warden Portal', icon: '🔑', desc: 'Allocate rooms & register checked-in students.' },
-    { id: 'adviser', title: 'Faculty Adviser Desk', icon: '📄', desc: 'First level department review of student clearances.' },
+    { id: 'adviser', title: 'Faculty Advisor Desk', icon: '📄', desc: 'First level department review of student clearances.' },
     { id: 'hos', title: 'Head of School (HoS)', icon: '🏛️', desc: 'Verify reviews & choose clearance forwarding route.' },
     { id: 'dean_academic', title: 'Dean Academic Desk', icon: '🏫', desc: 'Review & approve academic syllabus clearances.' },
     { id: 'dean_pga', title: 'Dean PGA Desk', icon: '📜', desc: 'Review & approve post-graduate clearances.' },
@@ -46,35 +55,6 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
     setLoading(true)
     setErrorMsg('')
     setSuccessMsg('')
-
-    // Developer Preview Login Bypass for Offline/Local Testing Convenience
-    const isDemoAdmin = selectedRole === 'admin' && email === 'admin@outr.ac.in' && password === 'admin@123'
-    const isDemoWarden = selectedRole === 'warden' && email === 'warden@outr.ac.in' && password === 'warden@123'
-    const isDemoAdviser = selectedRole === 'adviser' && email === 'adviser@outr.ac.in' && password === 'adv@123'
-    const isDemoHos = selectedRole === 'hos' && email === 'hos@outr.ac.in' && password === 'hos@123'
-    const isDemoDeanAcad = selectedRole === 'dean_academic' && email === 'deanacad@outr.ac.in' && password === 'dean@123'
-    const isDemoDeanPga = selectedRole === 'dean_pga' && email === 'deanpga@outr.ac.in' && password === 'dean@123'
-    const isDemoController = selectedRole === 'controller' && email === 'controller@outr.ac.in' && password === 'ctrl@123'
-    const isDemoStudent = selectedRole === 'student' && email === 'student@outr.ac.in' && password === 'student@123'
-
-    if (isDemoAdmin || isDemoWarden || isDemoAdviser || isDemoHos || isDemoDeanAcad || isDemoDeanPga || isDemoController || isDemoStudent) {
-      const demoRole = selectedRole
-      setSuccessMsg(`Welcome back, Demo ${demoRole.toUpperCase()}! Redirecting to dashboard...`)
-      setTimeout(() => {
-        if (onLoginSuccess) {
-          onLoginSuccess(demoRole, { 
-            role: demoRole, 
-            name: `Demo ${demoRole.toUpperCase()}`, 
-            school_id: 'SCS',
-            isLocal: true
-          })
-        }
-        setLoading(false)
-      }, 1000)
-      return
-    }
-
-
 
     try {
       // Normal Cloud Database Auth Sign-in
@@ -102,13 +82,18 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
         throw new Error(`Access denied. Your account is registered as a ${profile.role}, not a ${selectedRole}.`)
       }
 
-      setSuccessMsg(`Welcome back, ${profile?.name || data.user.email}! Redirecting to dashboard...`)
+      setSuccessMsg(`Welcome back, ${capitalizeName(profile?.name) || data.user.email}! Redirecting to dashboard...`)
       
+      const profileWithEmail = {
+        ...(profile || { role: selectedRole }),
+        email: data.user.email
+      }
+
       setTimeout(() => {
         if (onLoginSuccess) {
-          onLoginSuccess(selectedRole, profile || { role: selectedRole })
+          onLoginSuccess(selectedRole, profileWithEmail)
         }
-      }, 1000)
+      }, 300)
 
     } catch (err) {
       setErrorMsg(err.message || 'Authentication failed. Please verify your credentials.')
@@ -130,29 +115,29 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
     setErrorMsg('')
     setSuccessMsg('')
     if (roleId === 'student') {
-      setEmail('student@outr.ac.in')
-      setPassword('student@123')
+      setEmail('2201011@outr.ac.in')
+      setPassword('SecureStudent#2026')
     } else if (roleId === 'admin') {
-      setEmail('admin@outr.ac.in')
-      setPassword('admin@123')
+      setEmail('admin.desk@outr.ac.in')
+      setPassword('SecureAdmin#2026')
     } else if (roleId === 'warden') {
-      setEmail('warden@outr.ac.in')
-      setPassword('warden@123')
+      setEmail('warden.desk@outr.ac.in')
+      setPassword('SecureWarden#2026')
     } else if (roleId === 'adviser') {
-      setEmail('adviser@outr.ac.in')
-      setPassword('adv@123')
+      setEmail('adviser.desk@outr.ac.in')
+      setPassword('SecureAdviser#2026')
     } else if (roleId === 'hos') {
-      setEmail('hos@outr.ac.in')
-      setPassword('hos@123')
+      setEmail('hos.desk@outr.ac.in')
+      setPassword('SecureHos#2026')
     } else if (roleId === 'dean_academic') {
-      setEmail('deanacad@outr.ac.in')
-      setPassword('dean@123')
+      setEmail('deanacad.desk@outr.ac.in')
+      setPassword('SecureDean#2026')
     } else if (roleId === 'dean_pga') {
-      setEmail('deanpga@outr.ac.in')
-      setPassword('dean@123')
+      setEmail('deanpga.desk@outr.ac.in')
+      setPassword('SecureDean#2026')
     } else if (roleId === 'controller') {
-      setEmail('controller@outr.ac.in')
-      setPassword('ctrl@123')
+      setEmail('controller.desk@outr.ac.in')
+      setPassword('SecureController#2026')
     } else {
       setEmail('')
       setPassword('')
@@ -179,13 +164,15 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,90,138,0.4),transparent)]"></div>
             
             <div className="relative z-10 flex items-center gap-3">
-              <img 
-                src="https://outr.ac.in/public/uploads/logo_4.png" 
-                alt="OUTR Logo" 
-                onClick={handleLogoClick}
-                className="w-10 h-10 object-contain invert brightness-200 cursor-pointer select-none active:scale-95 transition-transform duration-200"
-                title="OUTR Shield Services"
-              />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-0.5 shadow-sm active:scale-95 transition-transform duration-200 cursor-pointer">
+                <img 
+                  src="/OUTR website/images/outrLogo.png" 
+                  alt="OUTR Logo" 
+                  onClick={handleLogoClick}
+                  className="w-full h-full object-contain select-none"
+                  title="OUTR Shield Services"
+                />
+              </div>
               <span className="font-serif font-bold text-lg tracking-wide select-none">OUTR Portal</span>
             </div>
 
@@ -199,7 +186,6 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
               </p>
             </div>
 
-            {/* Developer Fast Bypass presetted shortcuts (Hidden behind a 5-click secret trigger on the university logo for 100% authentic production aesthetic) */}
             {showDevShortcuts && (
               <div className="relative z-10 p-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] space-y-1 animate-fade-in">
                 <div className="font-bold text-accent uppercase tracking-wider mb-1">⚡ Developer Quick Seed Logins</div>
@@ -207,7 +193,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                   <button onClick={() => handleQuickSeed('student')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🎓 Student Desk</button>
                   <button onClick={() => handleQuickSeed('admin')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">⚙️ Super Admin</button>
                   <button onClick={() => handleQuickSeed('warden')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🔑 Warden Desk</button>
-                  <button onClick={() => handleQuickSeed('adviser')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📄 Adviser Desk</button>
+                  <button onClick={() => handleQuickSeed('adviser')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📄 Advisor Desk</button>
                   <button onClick={() => handleQuickSeed('hos')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🏛️ HoS Desk</button>
                   <button onClick={() => handleQuickSeed('dean_academic')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🏫 Dean Academic</button>
                   <button onClick={() => handleQuickSeed('dean_pga')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📜 Dean PGA</button>
@@ -289,7 +275,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={`e.g. ${selectedRole}@outr.ac.in`}
+                      placeholder={selectedRole === 'student' ? 'e.g. 25240012@outr.ac.in' : `e.g. ${selectedRole}@outr.ac.in`}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary transition-colors"
                     />
                   </div>

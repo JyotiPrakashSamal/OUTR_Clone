@@ -354,7 +354,7 @@ export function COEDesk({ onNavigate }) {
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col justify-between hover:shadow-md hover:border-accent/40 transition-all duration-300">
               <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center text-xl mb-4">📊</div>
-              <h4 className="font-serif font-bold text-primary text-base mb-1">Grades & GPA Cards</h4>
+              <h4 className="font-serif font-bold text-primary text-base mb-1">Grades &amp; GPA Cards</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold mb-4">Query your public university grade cards and review semester summaries.</p>
               <button onClick={() => onNavigate('auth')} className="text-xs text-secondary font-bold hover:underline">Check Results →</button>
             </div>

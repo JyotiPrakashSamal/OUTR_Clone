@@ -9,7 +9,7 @@
 */
 
 (function() {
-  document.addEventListener("DOMContentLoaded", () => {
+  const runLoader = () => {
     // 1. Inject Head Resources (Tailwind, style.css, and Google Fonts)
     injectHeadResources();
 
@@ -43,7 +43,13 @@
         }
       }, 30);
     }
-  });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runLoader);
+  } else {
+    runLoader();
+  }
 
   // Dynamically appends stylesheets, scripts, and typography rules in head
   function injectHeadResources() {
@@ -54,6 +60,10 @@
     styleOffset.innerHTML = `
       body {
         padding-top: 110px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        padding-bottom: 0px !important;
+        margin: 0px !important;
       }
       
       /* Scoped typography overrides for the unified navbar and footer */
@@ -90,6 +100,43 @@
       #logo-name {
         transition: opacity 0.45s ease, transform 0.45s ease !important;
         display: block !important;
+      }
+
+      /* Force absolute pixel sizing to prevent sub-page rem-scaling pollution */
+      #top-bar a, #top-bar span {
+        font-size: 11px !important;
+      }
+      #navbar .logo-text {
+        font-size: 15px !important;
+        line-height: 1.2 !important;
+      }
+      #navbar .logo-sub {
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+      }
+      #navbar .nav-link {
+        font-size: 12px !important;
+      }
+      #navbar .dropdown .dd-title {
+        font-size: 13px !important;
+      }
+      #navbar .dropdown .dd-sub {
+        font-size: 10.5px !important;
+      }
+      #footer h4 {
+        font-size: 14px !important;
+      }
+      #footer a, #footer p, #footer span, #footer li {
+        font-size: 12px !important;
+      }
+      #footer #dynamic-aqi-value {
+        font-size: 14px !important;
+      }
+      #mobile-menu a, #mobile-menu span, #mobile-menu summary {
+        font-size: 15px !important;
+      }
+      #mobile-menu details a {
+        font-size: 13.5px !important;
       }
     `;
     head.appendChild(styleOffset);
@@ -658,7 +705,7 @@
                 <span class="text-2xl">🌱</span>
                 <div>
                   <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Air Quality (AQI)</div>
-                  <div class="text-sm font-bold text-emerald-400 mt-0.5">38 &bull; Excellent</div>
+                  <div id="dynamic-aqi-value" class="text-sm font-bold text-emerald-400 mt-0.5">38 &bull; Good</div>
                 </div>
               </div>
               <p class="text-[10px] text-slate-500 leading-relaxed mt-2.5 mb-0">Live sensor reports from Techno Campus, Ghatikia.</p>
@@ -689,6 +736,78 @@
       const range = document.createRange();
       const fragment = range.createContextualFragment(footerHtml);
       document.body.appendChild(fragment);
+    }
+
+    fetchLiveAQILoader();
+  }
+
+  function fetchLiveAQILoader() {
+    const aqiEl = document.getElementById("dynamic-aqi-value");
+    if (!aqiEl) return;
+
+    const cacheKey = "outr_live_aqi_v1";
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 15 * 60 * 1000) {
+          updateAqiUI(parsed.value, parsed.status, parsed.color);
+          return;
+        }
+      } catch (e) {}
+    }
+
+    // Fetch live from Open-Meteo
+    fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=20.2644&longitude=85.8081&current=us_aqi")
+      .then(res => res.json())
+      .then(data => {
+        const usAqi = data?.current?.us_aqi;
+        if (typeof usAqi === "number") {
+          const valueStr = String(Math.round(usAqi));
+          let statusStr = "Good";
+          let colorHex = "#10b981"; // emerald-400
+
+          if (usAqi <= 50) {
+            statusStr = "Good";
+            colorHex = "#10b981";
+          } else if (usAqi <= 100) {
+            statusStr = "Moderate";
+            colorHex = "#f59e0b"; // yellow-400
+          } else if (usAqi <= 150) {
+            statusStr = "Poor";
+            colorHex = "#f97316"; // orange-400
+          } else if (usAqi <= 200) {
+            statusStr = "Unhealthy";
+            colorHex = "#f43f5e"; // rose-400
+          } else if (usAqi <= 300) {
+            statusStr = "Very Unhealthy";
+            colorHex = "#a855f7"; // purple-400
+          } else {
+            statusStr = "Hazardous";
+            colorHex = "#ef4444"; // red-500
+          }
+
+          updateAqiUI(valueStr, statusStr, colorHex);
+
+          // Save to localStorage
+          localStorage.setItem(cacheKey, JSON.stringify({
+            value: valueStr,
+            status: statusStr,
+            color: colorHex.startsWith("#") ? (colorHex === "#10b981" ? "text-emerald-400" : colorHex === "#f59e0b" ? "text-yellow-400" : colorHex === "#f97316" ? "text-orange-400" : colorHex === "#f43f5e" ? "text-rose-400" : colorHex === "#a855f7" ? "text-purple-400" : "text-red-500") : colorHex,
+            timestamp: Date.now()
+          }));
+        }
+      })
+      .catch(err => {
+        console.warn("Unable to load live AQI:", err);
+      });
+
+    function updateAqiUI(val, status, color) {
+      if (color.startsWith("text-")) {
+        color = color === "text-emerald-400" ? "#10b981" : color === "text-yellow-400" ? "#f59e0b" : color === "text-orange-400" ? "#f97316" : color === "text-rose-400" ? "#f43f5e" : color === "text-purple-400" ? "#a855f7" : "#ef4444";
+      }
+      aqiEl.style.color = color;
+      aqiEl.innerHTML = `${val} &bull; ${status}`;
     }
   }
 

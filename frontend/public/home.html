@@ -15,12 +15,44 @@
   <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript">
+    // Prevent Flash of Unstyled Content (FOUC)
+    (function() {
+      const showPage = () => {
+        document.documentElement.classList.add('ready');
+      };
+      if (window.tailwind) {
+        showPage();
+      } else {
+        const interval = setInterval(() => {
+          if (window.tailwind) {
+            showPage();
+            clearInterval(interval);
+          }
+        }, 10);
+        setTimeout(() => {
+          showPage();
+          clearInterval(interval);
+        }, 600); // Fallback after 600ms
+      }
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
   <link rel="preload" as="image" href="https://outr.ac.in/public/uploads/b1_5.jpg" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* FOUC (Flash of Unstyled Content) Prevention styling */
+    html {
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
+    }
+    html.ready {
+      opacity: 1;
+  </style>
 </head>
 
 <body>

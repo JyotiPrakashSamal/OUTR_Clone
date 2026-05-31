@@ -166,9 +166,9 @@ async function loadHomeContent() {
   const lang = localStorage.getItem("outr_ui_language_v1") || "en";
   const langSuffix = lang === "en" ? "" : `_${lang}`;
   try {
-    let res = await fetch(`${ROOT_PREFIX}public/data/home${langSuffix}.json`, { cache: "no-store" });
+    let res = await fetch(`${ROOT_PREFIX}data/home${langSuffix}.json`, { cache: "no-store" });
     if (!res.ok && lang !== "en") {
-      res = await fetch(`${ROOT_PREFIX}public/data/home.json`, { cache: "no-store" });
+      res = await fetch(`${ROOT_PREFIX}data/home.json`, { cache: "no-store" });
     }
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const homeData = await res.json();
@@ -733,36 +733,67 @@ function setupSearch() {
     localStorage.setItem(RECENT_KEY, JSON.stringify(merged));
   };
 
-  function scoreItem(item, query) {
-    const text = `${item.title} ${item.subtitle}`.toLowerCase();
-    const q = query.toLowerCase();
-    let score = item.weight || 0;
-    if (item.title.toLowerCase().startsWith(q)) score += 100;
-    else if (item.title.toLowerCase().includes(q)) score += 65;
-    else if (text.includes(q)) score += 30;
-    return score;
-  }
+  // 1. Initialize Fuse.js for approximate matching
+  const fuseOptions = {
+    keys: [
+      { name: 'title', weight: 1.0 },
+      { name: 'subtitle', weight: 0.5 }
+    ],
+    threshold: 0.4,       // 0.0 is perfect match, 1.0 is mismatch
+    distance: 100,        // Proximity of matches
+    ignoreLocation: true, // Matches regardless of position in the string
+    findAllMatches: true
+  };
+
+  const fuse = new Fuse(index, fuseOptions);
+
+  // 2. Debouncing implementation to save CPU resources
+  let debounceTimeoutId = null;
+  const debounce = (func, delay) => {
+    return (...args) => {
+      clearTimeout(debounceTimeoutId);
+      debounceTimeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
 
   function getFilteredIndex(query) {
-    return index
+    if (!query) return [];
+    
+    // Fuzzy matching query execution
+    const fuseResults = fuse.search(query);
+
+    return fuseResults
+      .map(result => ({
+        ...result.item,
+        score: result.score
+      }))
       .filter((item) => {
-        const textMatch = `${item.title} ${item.subtitle}`.toLowerCase().includes(query);
         const filterMatch = activeFilter === "all" || item.category === activeFilter;
-        if (!textMatch || !filterMatch) return false;
-        // Allow nav items (subtitle starts with "Nav ·") even if href is "#"
+        if (!filterMatch) return false;
+
+        // Keep existing DOM element scroll validation intact
         const isNavItem = item.subtitle.startsWith("Nav ·");
         if (!isNavItem && (!item.href || item.href === "#")) return false;
         if (!isNavItem && item.href.startsWith("#") && item.href !== "#" && !document.querySelector(item.href)) return false;
         return true;
-      })
-      .sort((a, b) => scoreItem(b, query) - scoreItem(a, query));
+      });
   }
 
   function highlightMatch(text, query) {
     if (!query) return text;
-    const safe = escapeRegExp(query.trim());
-    if (!safe) return text;
-    return text.replace(new RegExp(`(${safe})`, "ig"), '<mark class="bg-[#fde68a] text-[#1e293b] px-[1px] rounded">$1</mark>');
+    const tokens = query.trim().split(/\s+/);
+    let highlighted = text;
+    
+    tokens.forEach(token => {
+      const safe = escapeRegExp(token);
+      if (!safe || safe.length < 2) return;
+      highlighted = highlighted.replace(
+        new RegExp(`(${safe})`, "ig"), 
+        '<mark class="bg-[#fde68a] text-[#1e293b] px-[1px] rounded">$1</mark>'
+      );
+    });
+    
+    return highlighted;
   }
 
   function getCategoryLabel(category) {
@@ -920,15 +951,26 @@ function setupSearch() {
     if (idx >= 0) handleResultAction(currentItems[idx]);
   });
 
-  searchInput.addEventListener("input", (e) => {
+  const handleSearchInput = (e) => {
     const q = e.target.value.trim().toLowerCase();
     if (q.length < 2) {
+      clearTimeout(debounceTimeoutId);
       if (searchBar.classList.contains("open")) renderRecentSearches();
       else searchResults.style.display = "none";
       searchFilters.style.display = searchBar.classList.contains("open") ? "block" : "none";
       return;
     }
     renderResults(getFilteredIndex(q), q);
+  };
+
+  const debouncedSearchInput = debounce(handleSearchInput, 85);
+
+  searchInput.addEventListener("input", (e) => {
+    if (e.target.value.trim().length < 2) {
+      handleSearchInput(e);
+    } else {
+      debouncedSearchInput(e);
+    }
   });
 
   searchInput.addEventListener("keydown", (e) => {
@@ -1151,12 +1193,12 @@ async function initLanguageSwitcher() {
   const applyTranslations = async (lang) => {
     try {
       if (!i18nCache[lang]) {
-        const res = await fetch(`${ROOT_PREFIX}public/data/i18n/${lang}.json`);
+        const res = await fetch(`${ROOT_PREFIX}data/i18n/${lang}.json`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         i18nCache[lang] = await res.json();
       }
       if (!i18nCache["en"]) {
-        const resEn = await fetch(`${ROOT_PREFIX}public/data/i18n/en.json`);
+        const resEn = await fetch(`${ROOT_PREFIX}data/i18n/en.json`);
         if (resEn.ok) i18nCache["en"] = await resEn.json();
       }
     } catch (e) {
@@ -1200,7 +1242,22 @@ async function initLanguageSwitcher() {
     document.documentElement.setAttribute("lang", finalLang);
     localStorage.setItem(STORAGE_KEY, finalLang);
     if (mobileSelect) mobileSelect.value = finalLang;
+    
+    // 1. Translate all static HTML nodes with data-i18n attributes
     await applyTranslations(finalLang);
+
+    // 2. Fetch the corresponding dynamic JSON translation data (home_hi.json, home_od.json, or home.json)
+    await loadHomeContent();
+
+    // 3. Re-render all dynamic layouts instantly with translated data
+    renderTicker();
+    renderFreshnessBadges();
+    renderQuickLinks();
+    renderNotices();
+    renderEvents();
+    renderGallery();
+    renderFooter();
+    setupSearch(); // Rebuild search index in target language!
   };
 
   await setLanguage(localStorage.getItem(STORAGE_KEY) || "en");
@@ -1212,26 +1269,23 @@ async function initLanguageSwitcher() {
   });
 
   options.forEach((option) => {
-    option.addEventListener("click", () => {
+    option.addEventListener("click", async () => {
       const newLang = option.dataset.lang || "en";
       const currentLang = localStorage.getItem(STORAGE_KEY) || "en";
       if (newLang !== currentLang) {
-        localStorage.setItem(STORAGE_KEY, newLang);
-        window.location.reload();
-      } else {
-        closeMenu();
-        btn.focus();
+        await setLanguage(newLang);
       }
+      closeMenu();
+      btn.focus();
     });
   });
 
   if (mobileSelect) {
-    mobileSelect.addEventListener("change", (e) => {
+    mobileSelect.addEventListener("change", async (e) => {
       const newLang = e.target.value;
       const currentLang = localStorage.getItem(STORAGE_KEY) || "en";
       if (newLang !== currentLang) {
-        localStorage.setItem(STORAGE_KEY, newLang);
-        window.location.reload();
+        await setLanguage(newLang);
       }
     });
   }

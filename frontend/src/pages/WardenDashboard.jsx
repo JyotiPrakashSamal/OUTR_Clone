@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import Layout from '../components/Layout'
 
+const capitalizeName = (name) => {
+  if (!name) return ''
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) {
   const [warden, setWarden] = useState(null)
   const [students, setStudents] = useState([])
@@ -333,7 +342,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               <span className="text-xs font-bold text-accent uppercase tracking-wider">OUTR Hostels Portal</span>
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary mt-1">Warden Control Desk</h2>
               <p className="text-xs text-muted font-medium mt-1">
-                Authorized Warden: <span className="font-semibold text-primary">{warden?.name}</span> &bull; Assigned: <span className="font-semibold text-primary">{warden?.hostel} Hostel</span>
+                Authorized Warden: <span className="font-semibold text-primary">{capitalizeName(warden?.name)}</span> &bull; Assigned: <span className="font-semibold text-primary">{warden?.hostel} Hostel</span>
               </p>
             </div>
           </div>
@@ -343,13 +352,13 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               onClick={() => setShowAddForm(!showAddForm)}
               className="w-full sm:w-auto bg-primary hover:bg-secondary text-white font-semibold py-2.5 px-6 rounded-xl text-xs hover:shadow-md hover:shadow-primary/5 transition-all duration-300 flex items-center justify-center gap-2"
             >
-              <span>➕</span> Register Student Check-in
+              Register Student Check-in
             </button>
             <button
               onClick={handleSignOut}
               className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all duration-300"
             >
-              <span>🚪</span> Sign Out
+              🚪 Sign Out
             </button>
           </div>
         </div>
@@ -374,7 +383,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               <div>
                 <label className="block text-xs font-bold text-primary mb-1">Registration Number</label>
                 <input 
-                  type="text" required placeholder="e.g. 2201009"
+                  type="text" required placeholder="e.g. 25240012"
                   value={newStudent.regd_no}
                   onChange={e => setNewStudent({...newStudent, regd_no: e.target.value})}
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
@@ -383,7 +392,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               <div>
                 <label className="block text-xs font-bold text-primary mb-1">Full Name</label>
                 <input 
-                  type="text" required placeholder="e.g. Priyabrata Mohanty"
+                  type="text" required placeholder="e.g. Name"
                   value={newStudent.name}
                   onChange={e => setNewStudent({...newStudent, name: e.target.value})}
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
@@ -417,7 +426,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               <div>
                 <label className="block text-xs font-bold text-primary mb-1">Contact Phone</label>
                 <input 
-                  type="tel" placeholder="e.g. 9876543210"
+                  type="tel" placeholder="e.g. 6372677399"
                   value={newStudent.phone}
                   onChange={e => setNewStudent({...newStudent, phone: e.target.value})}
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
@@ -426,7 +435,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               <div>
                 <label className="block text-xs font-bold text-primary mb-1">University Email</label>
                 <input 
-                  type="email" placeholder="e.g. student@outr.ac.in"
+                  type="email" placeholder="e.g. 25240012@outr.ac.in"
                   value={newStudent.email}
                   onChange={e => setNewStudent({...newStudent, email: e.target.value})}
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
@@ -468,7 +477,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full pl-11 pr-10 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
               />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">🔍</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
               {searchQuery && (
                 <button
                   type="button"
@@ -488,7 +497,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                       onClick={() => { setSearchQuery(s.name); executeSearch(s.regd_no); }}
                       className="p-3 rounded-xl hover:bg-slate-50 cursor-pointer text-xs font-semibold text-primary flex justify-between items-center"
                     >
-                      <span>👤 {s.name}</span>
+                      <span>{capitalizeName(s.name)}</span>
                       <span className="text-[10px] text-muted tracking-wider">#{s.regd_no}</span>
                     </li>
                   ))}
@@ -509,22 +518,22 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
         {(searching || searchedStudent !== null) && (
           <section className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 mb-8 shadow-sm text-left animate-fade-in">
             <h3 className="font-serif text-lg font-bold text-primary mb-4 flex items-center gap-2">
-              <span>👤</span> Student Detail Card
+              Student Detail Card
             </h3>
 
             {searching ? (
               // Skeleton Loading State
-              <div className="border border-slate-100 rounded-2xl overflow-hidden animate-pulse">
-                <div className="bg-slate-100 h-28 p-6 flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-slate-200"></div>
+              <div className="border border-slate-100 rounded-2xl overflow-hidden">
+                <div className="bg-slate-50 h-28 p-6 flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-slate-200 shimmer-effect"></div>
                   <div className="flex-grow space-y-2">
-                    <div className="h-5 bg-slate-200 w-1/3 rounded-lg"></div>
-                    <div className="h-4 bg-slate-200 w-1/4 rounded-lg"></div>
+                    <div className="h-5 bg-slate-200 w-1/3 rounded-lg shimmer-effect"></div>
+                    <div className="h-4 bg-slate-200 w-1/4 rounded-lg shimmer-effect"></div>
                   </div>
                 </div>
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {Array(6).fill(0).map((_, i) => (
-                    <div key={i} className="h-16 bg-slate-100 rounded-xl"></div>
+                    <div key={i} className="h-16 bg-slate-100 rounded-xl shimmer-effect"></div>
                   ))}
                 </div>
               </div>
@@ -538,7 +547,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                       {searchedStudent.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold text-primary">{searchedStudent.name}</h4>
+                      <h4 className="text-lg font-bold text-primary">{capitalizeName(searchedStudent.name)}</h4>
                       <span className="text-xs text-muted tracking-wider font-semibold">Regd No: #{searchedStudent.regd_no}</span>
                     </div>
                   </div>
@@ -652,7 +661,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                 <tbody className="divide-y divide-slate-50">
                   {students.map((s) => (
                     <tr key={s.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="py-3.5 pl-2 font-bold text-[#0b3c5d]">{s.name}</td>
+                      <td className="py-3.5 pl-2 font-bold text-[#0b3c5d]">{capitalizeName(s.name)}</td>
                       <td className="py-3.5 font-mono text-[11px] font-semibold text-slate-500">#{s.regd_no}</td>
                       <td className="py-3.5 font-bold text-slate-600">🚪 {s.room || 'N/A'}</td>
                       <td className="py-3.5 text-slate-500">
