@@ -1,7 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 import App from './App'
-import { supabase } from './supabaseClient'
 
 // Mock Supabase client
 vi.mock('./supabaseClient', () => {

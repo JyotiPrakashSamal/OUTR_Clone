@@ -43,7 +43,6 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
   const [admitSubjects, setAdmitSubjects] = useState([{ code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])
   const [editingAdmitCardId, setEditingAdmitCardId] = useState(null)
   const [showAdmitModal, setShowAdmitModal] = useState(false)
-  const [viewingAdmitCard, setViewingAdmitCard] = useState(null)
 
   // Fetch Grades Sheets
   async function fetchGrades() {
@@ -100,8 +99,10 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
 
   // Load initial data
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchGrades()
     fetchAdmitCards()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin, userProfile])
 
   // Custom Modal/Alert trigger (standard browsers fallback)

@@ -64,6 +64,8 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
 
   useEffect(() => {
     if (sessionUser) {
+      // Sync admin profile from session prop — intentional direct set
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAdminProfile(sessionUser)
     }
     fetchAllProfiles()
@@ -94,7 +96,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
 
     try {
       // 1. Create standard Auth User via secondary provisionClient to protect current Super Admin Session
-      const { data, error } = await provisionClient.auth.signUp({
+      const { error } = await provisionClient.auth.signUp({
         email,
         password,
         options: {

@@ -754,7 +754,7 @@
           updateAqiUI(parsed.value, parsed.status, parsed.color);
           return;
         }
-      } catch (e) {}
+      } catch { /* ignore corrupt cache */ }
     }
 
     // Fetch live from Open-Meteo
@@ -764,8 +764,8 @@
         const usAqi = data?.current?.us_aqi;
         if (typeof usAqi === "number") {
           const valueStr = String(Math.round(usAqi));
-          let statusStr = "Good";
-          let colorHex = "#10b981"; // emerald-400
+          let statusStr;
+          let colorHex;
 
           if (usAqi <= 50) {
             statusStr = "Good";

@@ -92,7 +92,7 @@ export const handlePrintAdmitCardFromModal = (card, applications = []) => {
   const printSection = document.getElementById('print-area')
   if (printSection) {
     const hasCleared = applications.some(app => app.student_regd === card.regd_no && app.status === 'resolved')
-    const fmtDate = (d) => { try { return d ? new Date(d+'T00:00').toLocaleDateString() : '—'; } catch(e) { return d||'—'; } }
+    const fmtDate = (d) => { try { return d ? new Date(d+'T00:00').toLocaleDateString() : '—'; } catch { return d||'—'; } }
     printSection.innerHTML = `
       <div class="print-admit-card" style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 2px solid black;">
         <div style="display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; text-align: center;">
