@@ -1,12 +1,11 @@
 # CODEOWNERS — https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 #
 # All changes require approval from the repository owner.
-# This ensures no code reaches main without explicit review.
 
 # Default owner for everything in the repo
 * @JyotiPrakashSamal
 
 # Specific folder ownership for team members
-"/Phase-1 Integration/administration/" @Rama-Desk
-"/Phase-1 Integration/Student and Event/" @sonaligupta-04047
-"/Phase-1 Integration/OUTR website/" @AmritaSahu25
+/frontend/public/administration/ @Rama-Desk
+/frontend/public/Student and Event/ @sonaligupta-04047
+/frontend/public/OUTR website/ @AmritaSahu25

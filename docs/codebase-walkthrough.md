@@ -6,7 +6,7 @@ Welcome to the technical guide of the **OUTR_Clone** codebase! This document pro
 
 ## 🏛️ 1. Core Architecture Design
 
-The project is designed as a **client-side static front-end website**. 
+The project is designed as a **hybrid web application** — a static marketing homepage with a React SPA portal backed by Supabase.
 
 ### Why This Stack?
 - **High Accessibility:** Built entirely with pure **HTML5, TailwindCSS (CDN), Vanilla CSS, and Vanilla JavaScript**.
@@ -112,32 +112,31 @@ The global search panel provides interactive navigation across the entire homepa
 
 ---
 
-## 🏢 5. Mock Administrative Modules
+## 🏢 5. Administrative Modules
 
-To replicate the real governance features of the university, we built client-side mock panels inside the `/Phase-1 Integration/administration/` directory:
+The governance features are split between static pages and React dashboards:
 
-### Admit Card Generator (`Admitcard_Management.html`)
-- **Working:** Allows mock students to input their parameters (Name, Roll Number, Stream, Semester).
-- **Execution:** Generates a clean, dynamically structured print preview that conforms to academic layouts. It utilizes CSS print directives (`@media print`) so users can print/save their mock hall ticket directly from the browser window.
+### React Dashboards (Supabase-backed)
+- **Admin Dashboard** (`AdminDashboard.jsx`) — Account provisioning for all university roles.
+- **File Tracking** (`FileTrackingDashboard.jsx`) — 7-stage clearance approval chain with PDF uploads and realtime notifications.
+- **Warden Dashboard** (`WardenDashboard.jsx`) — Hostel room allocation and student roster management.
+- **Exam Management Desk** (`ExamManagementDesk.jsx`) — Grade sheet upload, admit card generation, and result publication.
 
-### Results Query System (`Admin_result_Management.html`)
-- **Working:** Simulates a student examination ledger search. 
-- **Execution:** Processes a mock database search query client-side, spitting out formatted academic ledger cards with grades and SGPA mock calculations.
+### Static Committee Pages
+- Committee HTML pages under `frontend/public/administration/` display governance body members with photos and designations.
 
 ---
 
-## ⚠️ 6. Current Architectural Limitations & Recommendations
+## ⚠️ 6. Current Architecture Notes
 
-While the simple static architecture makes collaboration incredibly lightweight, there are critical limitations to be aware of if migrating to production:
+Many of the original limitations have been addressed:
 
-### 1. Code Duplication (Dry vs. Wet Layouts)
-*   **The Problem:** Since this is pure static HTML, shared components like the navigation bar and footer are duplicated inside every separate HTML file. If you edit a menu link, you must update it in every file.
-*   **Recommendation:** Move to a Static Site Generator (SSG) like **Astro** or **Eleventy** to bundle these shared components into reusable templates without losing speed or simplicity.
+### ✅ Resolved
+- **Code Duplication** — `navbar-footer-loader.js` now dynamically injects a unified header/footer into all static sub-pages. Editing one file updates every page.
+- **TailwindCSS CDN Performance** — The React SPA uses build-time Tailwind via `@tailwindcss/vite`. Only the legacy static sub-pages still use the CDN version.
+- **No Server Database** — Supabase provides PostgreSQL with Row Level Security, Auth, file storage, and realtime subscriptions. File tracking, grades, hostel management, and admit cards are all database-backed.
 
-### 2. TailwindCSS CDN Performance Overhead
-*   **The Problem:** In development, loading `tailwindcss` via the CDN script is easy because it dynamically compiles CSS rules on the fly inside the browser. However, this causes a flash of unstyled content (FOUC), downloads a large JS engine, and is inefficient for real production traffic.
-*   **Recommendation:** Use a CSS build step (`npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify`) during final deployment to parse the files and generate a tiny, optimized stylesheet containing only the classes actually used.
+### ⚠️ Remaining
+- **Static sub-pages** (schools, faculty profiles, committee pages) are still standalone HTML files. Migrating them to React components would eliminate the last CDN Tailwind dependency.
+- **Directory names with spaces** (`OUTR website/`, `Student and Event/`) work but are unconventional for web projects.
 
-### 3. Client-Side Only Mock Features
-*   **The Problem:** The notices, events, file tracking, results search, and admit cards are stored locally as static JSON files or processed entirely client-side. There is no server database to persist or modify this data.
-*   **Recommendation:** Connect the custom JS fetch calls to a backend REST API backed by a database (e.g., Node.js/Express with MongoDB or PostgreSQL) when moving to a production phase.

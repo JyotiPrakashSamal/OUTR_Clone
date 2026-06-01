@@ -27,13 +27,19 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 2. **Clone** your fork locally:
    ```bash
    git clone https://github.com/YOUR_USERNAME/OUTR_Clone.git
-   cd OUTR_Clone
+   cd OUTR_Clone/frontend
    ```
-3. **Add upstream** remote:
+3. **Install dependencies:**
+   ```bash
+   cp .env.example .env.local
+   npm install
+   npm run dev
+   ```
+4. **Add upstream** remote:
    ```bash
    git remote add upstream https://github.com/JyotiPrakashSamal/OUTR_Clone.git
    ```
-4. **Create a branch** for your work:
+5. **Create a branch** for your work:
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -112,10 +118,10 @@ refactor: extract navbar into reusable component
 
 ## Pull Request Process
 
-1. **Update your branch** with the latest from `develop`:
+1. **Update your branch** with the latest from `main`:
    ```bash
    git fetch upstream
-   git rebase upstream/develop
+   git rebase upstream/main
    ```
 
 2. **Push** your branch:
@@ -123,7 +129,7 @@ refactor: extract navbar into reusable component
    git push origin feature/your-feature-name
    ```
 
-3. **Open a Pull Request** against the `develop` branch (NOT `main`)
+3. **Open a Pull Request** against the `main` branch
 
 4. **Fill out the PR template** completely:
    - Describe what you changed and why
@@ -140,6 +146,7 @@ refactor: extract navbar into reusable component
 ### PR Checklist
 - [ ] My code follows the project's code style
 - [ ] I have tested my changes in Chrome, Firefox, and mobile view
+- [ ] I have run `npm run build` and it succeeds without errors
 - [ ] I have updated documentation if needed
 - [ ] My changes don't break existing functionality
 - [ ] I have linked the related issue
@@ -162,16 +169,18 @@ refactor: extract navbar into reusable component
 - Add comments for non-obvious sections
 - Prefer TailwindCSS utilities; use custom CSS only when needed
 
-### JavaScript
+### JavaScript / React (JSX)
 - Use **2-space indentation**
 - Use `const` and `let` (never `var`)
 - Use **camelCase** for variables and functions
-- Use **PascalCase** for class names
+- Use **PascalCase** for React components and class names
 - Add JSDoc comments for functions
 - Handle errors gracefully
+- React components go in `frontend/src/pages/` or `frontend/src/components/`
 
 ### File Naming
-- HTML files: **camelCase** or **PascalCase** (match existing patterns)
+- React components: **PascalCase** (e.g., `AuthPortal.jsx`, `WardenDashboard.jsx`)
+- Static HTML files: **camelCase** or **PascalCase** (match existing patterns)
 - CSS files: **camelCase** with descriptive names
 - JavaScript files: **camelCase**
 - Image files: **descriptive names** with hyphens (e.g., `campus-aerial-view.jpg`)

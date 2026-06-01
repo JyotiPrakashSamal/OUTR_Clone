@@ -114,18 +114,6 @@ npm run lint     # ESLint checks
 
 ---
 
-## 🌐 Deployment (Netlify)
-
-See [`frontend/DEPLOYMENT.md`](frontend/DEPLOYMENT.md) for the full step-by-step guide.
-
-**Quick version:**
-1. Connect GitHub repo to Netlify → Set **Base directory = `frontend`**
-2. Add env vars: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
-3. Run `supabase_schema.sql` in your Supabase SQL Editor (one-time)
-4. Deploy — homepage works immediately, dashboards need Supabase credentials
-
----
-
 ## 👥 The Development Team
 
 - **Jyoti Prakash Samal** ([@JyotiPrakashSamal](https://github.com/JyotiPrakashSamal)) — Repository Owner. Homepage, global search, i18n, React SPA architecture, CI/CD, and deployment.
