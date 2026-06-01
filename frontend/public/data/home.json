@@ -31,10 +31,10 @@
   "quickLinks": [
     { "label": "Apply Now", "href": "https://ojee.nic.in/" },
     { "label": "Notices & Circulars", "href": "#notices" },
-    { "label": "Exam Results", "href": "/?view=student-clearance" },
-    { "label": "Academic Calendar", "href": "#" },
-    { "label": "Admissions 2025", "href": "/?view=student-clearance" },
-    { "label": "Student E-Portal", "href": "/?view=student-clearance" }
+    { "label": "Exam Results", "href": "/portal?role=student" },
+    { "label": "Academic Calendar", "href": "/coming-soon.html?title=Academic%20Calendar" },
+    { "label": "Admissions 2025", "href": "https://ojee.nic.in/" },
+    { "label": "Student E-Portal", "href": "/portal?role=student" }
   ],
   "gallery": [
     {
@@ -95,35 +95,35 @@
       "social": [
         { "href": "https://www.facebook.com/OUTRuniversity/", "icon": "facebook" },
         { "href": "https://www.instagram.com/outruniversity/", "icon": "instagram" },
-        { "href": "https://www.linkedin.com/school/rani-nilima-kumari-mahila-mahavidyalaya-dharupur-pratapgarh/", "icon": "linkedin" },
+        { "href": "https://www.linkedin.com/school/odisha-university-of-technology-and-research/", "icon": "linkedin" },
         { "href": "https://www.youtube.com/@outrlive", "icon": "youtube" }
       ]
     },
     "columns": {
       "quickLinks": [
         { "label": "Home", "href": "#hero" },
-        { "label": "About OUTR", "href": "OUTR website/about.html" },
-        { "label": "Admissions", "href": "/?view=student-clearance" },
+        { "label": "About OUTR", "href": "/about" },
+        { "label": "Admissions", "href": "https://ojee.nic.in/" },
         { "label": "RTI", "href": "https://rti.gov.in/" },
-        { "label": "Careers", "href": "#" },
-        { "label": "Tenders", "href": "#" },
+        { "label": "Careers", "href": "/coming-soon.html?title=Careers" },
+        { "label": "Tenders", "href": "/coming-soon.html?title=Tenders" },
         { "label": "NIRF Data", "href": "https://www.nirfindia.org/" }
       ],
       "academics": [
         { "label": "Programs Offered", "href": "OUTR website/schools.html" },
-        { "label": "UG Syllabus", "href": "OUTR website/courses/scs/UGcourses.html" },
-        { "label": "PG Syllabus", "href": "OUTR website/courses/scs/PGcourses.html" },
-        { "label": "Academic Calendar", "href": "#" },
-        { "label": "COE - AI & ICT", "href": "/?view=coe-desk" },
-        { "label": "Examination Cell", "href": "/?view=auth&role=controller" }
+        { "label": "UG Syllabus", "href": "/syllabus" },
+        { "label": "PG Syllabus", "href": "/syllabus" },
+        { "label": "Academic Calendar", "href": "/coming-soon.html?title=Academic%20Calendar" },
+        { "label": "COE - AI & ICT", "href": "/coe-desk" },
+        { "label": "Examination Cell", "href": "/portal?role=controller" }
       ],
       "contact": [
-        { "label": "Address & Map", "href": "OUTR website/location.html" },
-        { "label": "Phone Directory", "href": "OUTR website/location.html" },
-        { "label": "Email Directory", "href": "OUTR website/location.html" },
-        { "label": "Grievance Cell", "href": "administration/L_commitee.html" },
+        { "label": "Address & Map", "href": "/location" },
+        { "label": "Phone Directory", "href": "/location" },
+        { "label": "Email Directory", "href": "/location" },
+        { "label": "Grievance Cell", "href": "/students-grievance" },
         { "label": "Social Media Hub", "href": "social.html" },
-        { "label": "Feedback", "href": "#" }
+        { "label": "Feedback", "href": "/coming-soon.html?title=Feedback" }
       ]
     },
     "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },

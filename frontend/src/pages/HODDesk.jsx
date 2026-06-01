@@ -1,9 +1,172 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function HODDesk() {
   const [selectedSchool, setSelectedSchool] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [activeModalId, setActiveModalId] = useState(null)
+  const [lang, setLang] = useState(() => localStorage.getItem('selectedLanguage') || 'en')
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setLang(localStorage.getItem('selectedLanguage') || 'en')
+    }
+    window.addEventListener('storage', handleStorageChange)
+    const interval = setInterval(handleStorageChange, 1000)
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
+
+  const t = {
+    en: {
+      title: "Head of",
+      titleSpan: "Schools",
+      subtitle: "Meet the academic leaders guiding and inspiring each school at OUTR, Bhubaneswar.",
+      searchPlaceholder: "Search by name, role, school...",
+      all: "All Schools",
+      cs: "Computer Science",
+      mech: "Mechanical",
+      elec: "Electrical",
+      electronics: "Electronics",
+      textile: "Textile",
+      basic: "Basic Sciences",
+      biotech: "Biotechnology",
+      infra: "Infra. & Planning",
+      viewProfile: "View Complete Profile",
+      closeProfile: "Close Profile",
+      noLeaders: "No Leaders Found",
+      noLeadersDesc: "We couldn't find any HODs matching your active school filter or search queries.",
+      about: "About",
+      contact: "Direct Contact",
+      locationLabel: "Location",
+      qualifications: "Academic Qualifications",
+      researchInterests: "Research Interests",
+      keyPublications: "Key Publications",
+      patents: "Patents & Designs",
+      experience: "Professional Experience",
+      guidance: "Research Guidance",
+      phone: "Phone",
+      email: "Email",
+      selectSchool: "Select Your School",
+      // Dynamic Role & HOD info translations
+      "Head of the School": "Head of the School",
+      "Associate Head of the School": "Associate Head of the School",
+      "Professor": "Professor",
+      "Associate Professor, Mechanical": "Associate Professor, Mechanical",
+      "Associate Professor, E & I Engg.": "Associate Professor, E & I Engg.",
+      "Associate Professor, Civil": "Associate Professor, Civil",
+      "Associate Professor, Chemistry": "Associate Professor, Chemistry",
+      "Assistant Professor, Biotech": "Assistant Professor, Biotech",
+      "Associate Professor, Mathematics": "Associate Professor, Mathematics",
+      "School of Computer Science & Engineering": "School of Computer Science & Engineering",
+      "School of Mechanical Engineering": "School of Mechanical Engineering",
+      "School of Electrical Science": "School of Electrical Science",
+      "School of Electronics": "School of Electronics",
+      "School of Textile Engineering": "School of Textile Engineering",
+      "School of Basic Sciences & Humanities": "School of Basic Sciences & Humanities",
+      "School of Biotechnology": "School of Biotechnology",
+      "School of Infrastructure & Planning": "School of Infrastructure & Planning"
+    },
+    hi: {
+      title: "स्कूलों के",
+      titleSpan: "प्रमुख",
+      subtitle: "ओयूटीआर, भुवनेश्वर में प्रत्येक स्कूल का मार्गदर्शन और प्रेरणा देने वाले अकादमिक नेताओं से मिलें।",
+      searchPlaceholder: "नाम, भूमिका, स्कूल द्वारा खोजें...",
+      all: "सभी स्कूल",
+      cs: "कंप्यूटर विज्ञान",
+      mech: "मैकेनिकल",
+      elec: "इलेक्ट्रिकल",
+      electronics: "इलेक्ट्रॉनिक्स",
+      textile: "टेक्सटाइल",
+      basic: "बुनियादी विज्ञान",
+      biotech: "बायोटेक्नोलॉजी",
+      infra: "इन्फ्रा और योजना",
+      viewProfile: "पूर्ण प्रोफ़ाइल देखें",
+      closeProfile: "प्रोफ़ाइल बंद करें",
+      noLeaders: "कोई नेता नहीं मिला",
+      noLeadersDesc: "हमें आपके सक्रिय स्कूल फ़िल्टर या खोज प्रश्नों से मेल खाने वाला कोई भी विभागाध्यक्ष नहीं मिला।",
+      about: "के बारे में",
+      contact: "सीधा संपर्क",
+      locationLabel: "स्थान",
+      qualifications: "अकादमिक योग्यताएं",
+      researchInterests: "अनुसंधान रुचि",
+      keyPublications: "प्रमुख प्रकाशन",
+      patents: "पेटेंट और डिजाइन",
+      experience: "व्यावसायिक अनुभव",
+      guidance: "अनुसंधान मार्गदर्शन",
+      phone: "फ़ोन",
+      email: "ईमेल",
+      selectSchool: "अपने स्कूल का चयन करें",
+      "Head of the School": "स्कूल के प्रमुख",
+      "Associate Head of the School": "स्कूल के एसोसिएट प्रमुख",
+      "Professor": "प्रोफेसर",
+      "Associate Professor, Mechanical": "एसोसिएट प्रोफेसर, मैकेनिकल",
+      "Associate Professor, E & I Engg.": "एसोसिएट प्रोफेसर, ई एंड आई इंजी.",
+      "Associate Professor, Civil": "एसोसिएट प्रोफेसर, सिविल",
+      "Associate Professor, Chemistry": "एसोसिएट प्रोफेसर, रसायन शास्त्र",
+      "Assistant Professor, Biotech": "सहायक प्रोफेसर, बायोटेक",
+      "Associate Professor, Mathematics": "एसोसिएट प्रोफेसर, गणित",
+      "School of Computer Science & Engineering": "कंप्यूटर विज्ञान और इंजीनियरिंग स्कूल",
+      "School of Mechanical Engineering": "मैकेनिकल इंजीनियरिंग स्कूल",
+      "School of Electrical Science": "इलेक्ट्रिकल विज्ञान स्कूल",
+      "School of Electronics": "इलेक्ट्रॉनिक्स स्कूल",
+      "School of Textile Engineering": "टेक्सटाइल इंजीनियरिंग स्कूल",
+      "School of Basic Sciences & Humanities": "बुनियादी विज्ञान और मानविकी स्कूल",
+      "School of Biotechnology": "बायोटेक्नोलॉजी स्कूल",
+      "School of Infrastructure & Planning": "बुनियादी ढांचा और योजना स्कूल"
+    },
+    od: {
+      title: "ସ୍କୁଲ୍",
+      titleSpan: "ମୁଖ୍ୟମାନେ",
+      subtitle: "ଓୟୁଟିଆର୍, ଭୁବନେଶ୍ୱରର ପ୍ରତ୍ୟେକ ସ୍କୁଲକୁ ମାର୍ଗଦର୍ଶନ ଏବଂ ଅନୁପ୍ରେରିତ କରୁଥିବା ଏକାଡେମିକ୍ ନେତାମାନଙ୍କୁ ଭେଟନ୍ତୁ |",
+      searchPlaceholder: "ନାମ, ଭୂମିକା, କିମ୍ବା ସ୍କୁଲ୍ ଦ୍ୱାରା ଖୋଜନ୍ତୁ...",
+      all: "ସମସ୍ତ ସ୍କୁଲ୍",
+      cs: "କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ",
+      mech: "ମେକାନିକାଲ୍",
+      elec: "ଇଲେକ୍ଟ୍ରିକାଲ୍",
+      electronics: "ଇଲେକ୍ଟ୍ରୋନିକ୍ସ",
+      textile: "ଟେକ୍ସଟାଇଲ୍",
+      basic: "ମୌଳିକ ବିଜ୍ଞାନ",
+      biotech: "ବାୟୋଟେକ୍ନୋଲୋଜି",
+      infra: "ଇନଫ୍ରା ଏବଂ ପ୍ଲାନିଂ",
+      viewProfile: "ସମ୍ପୂର୍ଣ୍ଣ ପ୍ରୋଫାଇଲ୍ ଦେଖନ୍ତୁ",
+      closeProfile: "ପ୍ରୋଫାଇଲ୍ ବନ୍ଦ କରନ୍ତୁ",
+      noLeaders: "କୌଣସି ନେତା ମିଳିଲେ ନାହିଁ",
+      noLeadersDesc: "ଆପଣଙ୍କର ସ୍କୁଲ୍ ଫିଲ୍ଟର୍ କିମ୍ବା ସର୍ଚ୍ଚ କ୍ଵେରୀ ସହିତ ମେଳ ଖାଉଥିବା କୌଣସି HOD ମିଳିଲା ନାହିଁ ।",
+      about: "ବିଷୟରେ",
+      contact: "ସିଧାସଳଖ ଯୋଗାଯୋଗ",
+      locationLabel: "ସ୍ଥାନ",
+      qualifications: "ଶିକ୍ଷାଗତ ଯୋଗ୍ୟତା",
+      researchInterests: "ଗବେଷଣା ବିଷୟ",
+      keyPublications: "ମୁଖ୍ୟ ପ୍ରକାଶନ",
+      patents: "ପେଟେଣ୍ଟ ଏବଂ ଡିଜାଇନ",
+      experience: "ପେସାଦାର ଅଭିଜ୍ଞତା",
+      guidance: "ଗବେଷଣା ମାର୍ଗଦର୍ଶନ",
+      phone: "ଫୋନ",
+      email: "ଇମେଲ",
+      selectSchool: "ଆପଣଙ୍କର ସ୍କୁଲ୍ ଚୟନ କରନ୍ତୁ",
+      "Head of the School": "ସ୍କୁଲ୍ ମୁଖ୍ୟ",
+      "Associate Head of the School": "ସ୍କୁଲ୍ ର ସହଯୋଗୀ ମୁଖ୍ୟ",
+      "Professor": "ପ୍ରଫେସର",
+      "Associate Professor, Mechanical": "ଏସୋସିଏଟ୍ ପ୍ରଫେସର, ମେକାନିକାଲ୍",
+      "Associate Professor, E & I Engg.": "ଏସୋସିଏଟ୍ ପ୍ରଫେସର, E & I ଇଞ୍ଜି.",
+      "Associate Professor, Civil": "ଏସୋସିଏଟ୍ ପ୍ରଫେସର, ସିଭିଲ୍",
+      "Associate Professor, Chemistry": "ଏସୋସିଏଟ୍ ପ୍ରଫେସର, ରସାୟନ ବିଜ୍ଞାନ",
+      "Assistant Professor, Biotech": "ଆସିଷ୍ଟାଣ୍ଟ ପ୍ରଫେସର, ବାୟୋଟେକ୍",
+      "Associate Professor, Mathematics": "ଏସୋସିଏଟ୍ ପ୍ରଫେସର, ଗଣିତ",
+      "School of Computer Science & Engineering": "କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ ଓ ଇଞ୍ଜିନିୟରିଂ ସ୍କୁଲ୍",
+      "School of Mechanical Engineering": "ମେକାନିକାଲ୍ ଇଞ୍ଜିନିୟରିଂ ସ୍କୁଲ୍",
+      "School of Electrical Science": "ଇଲେକ୍ଟ୍ରିକାଲ୍ ସାଇନ୍ସ ସ୍କୁଲ୍",
+      "School of Electronics": "ଇଲେକ୍ଟ୍ରୋନିକ୍ସ ସ୍କୁଲ୍",
+      "School of Textile Engineering": "ଟେକ୍ସଟାଇଲ୍ ଇଞ୍ଜିନିୟରିଂ ସ୍କୁଲ୍",
+      "School of Basic Sciences & Humanities": "ମୌଳିକ ବିଜ୍ଞାନ ଓ ମାନବିକ ସ୍କୁଲ୍",
+      "School of Biotechnology": "ବାୟୋଟେକ୍ନୋଲୋଜି ସ୍କୁଲ୍",
+      "School of Infrastructure & Planning": "ଇନଫ୍ରାଷ୍ଟ୍ରକଚର୍ ଓ ପ୍ଲାନିଂ ସ୍କୁଲ୍"
+    }
+  }
+
+  const localized = t[lang] || t.en
 
   const schools = [
     { id: 'all', name: 'All Schools' },
@@ -298,10 +461,10 @@ export default function HODDesk() {
       {/* Page Hero */}
       <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
-          Head of <span className="text-accent">Schools</span>
+          {localized.title} <span className="text-accent">{localized.titleSpan}</span>
         </h1>
         <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed">
-          Meet the academic leaders guiding and inspiring each school at OUTR, Bhubaneswar.
+          {localized.subtitle}
         </p>
         <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded"></div>
       </div>
@@ -310,24 +473,29 @@ export default function HODDesk() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Controls Layout */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-          {/* Tabs / Selectors */}
-          <div className="flex overflow-x-auto w-full md:w-auto gap-2 pb-2 md:pb-0 scrollbar-none">
+        <div className="bg-white border border-slate-200 p-5 rounded-3xl shadow-sm text-left">
+          <p className="text-[10px] font-black text-secondary tracking-widest uppercase mb-3.5 px-1 border-b border-slate-100 pb-2">
+            {localized.selectSchool}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-9 gap-2">
             {schools.map(s => (
               <button
                 key={s.id}
                 onClick={() => setSelectedSchool(s.id)}
-                className={`px-4 py-2 text-xs font-bold rounded-full transition-all border shrink-0 cursor-pointer ${
+                className={`py-2 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                   selectedSchool === s.id
-                    ? 'bg-primary text-white border-primary shadow-md'
-                    : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-primary'
+                    ? 'bg-primary text-white border-primary shadow-sm'
+                    : 'bg-slate-50 text-slate-500 border-slate-200/60 hover:bg-slate-100 hover:text-primary'
                 }`}
               >
-                {s.name}
+                {localized[s.id] || s.name}
               </button>
             ))}
           </div>
+        </div>
 
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="w-full"></div>
           {/* Search bar */}
           <div className="relative w-full md:w-80">
             <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -335,7 +503,7 @@ export default function HODDesk() {
             </span>
             <input
               type="text"
-              placeholder="Search by name, role, school..."
+              placeholder={localized.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm text-slate-800 placeholder:text-slate-400"
@@ -369,11 +537,11 @@ export default function HODDesk() {
                       ? 'bg-amber-100 text-amber-800 border border-amber-200' 
                       : 'bg-sky-100 text-sky-800 border border-sky-200'
                   }`}>
-                    {h.type}
+                    {localized[h.type] || h.type}
                   </span>
                   <h3 className="font-serif font-black text-primary text-lg leading-snug">{h.name}</h3>
-                  <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">{h.role}</p>
-                  <p className="text-slate-500 text-xs font-semibold leading-relaxed max-w-sm mt-1">{h.schoolName}</p>
+                  <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">{localized[h.role] || h.role}</p>
+                  <p className="text-slate-500 text-xs font-semibold leading-relaxed max-w-sm mt-1">{localized[h.schoolName] || h.schoolName}</p>
                 </div>
 
                 <div className="space-y-1.5 w-full border-t border-slate-100 pt-4 mt-4">
@@ -390,7 +558,7 @@ export default function HODDesk() {
                     onClick={() => setActiveModalId(h.id)}
                     className="w-full text-center py-2 border border-primary hover:bg-primary hover:text-white text-primary text-xs font-bold rounded-xl transition-all cursor-pointer mt-3"
                   >
-                    View Complete Profile
+                    {localized.viewProfile}
                   </button>
                 </div>
               </div>
@@ -400,8 +568,8 @@ export default function HODDesk() {
           {filteredHods.length === 0 && (
             <div className="col-span-full bg-white border border-slate-200 rounded-3xl p-16 text-center space-y-3">
               <span className="text-4xl block">🔍</span>
-              <h3 className="font-serif font-bold text-primary text-lg">No Leaders Found</h3>
-              <p className="text-slate-400 text-xs max-w-xs mx-auto">We couldn't find any HODs matching your active school filter or search queries.</p>
+              <h3 className="font-serif font-bold text-primary text-lg">{localized.noLeaders}</h3>
+              <p className="text-slate-400 text-xs max-w-xs mx-auto">{localized.noLeadersDesc}</p>
             </div>
           )}
         </div>
@@ -421,9 +589,9 @@ export default function HODDesk() {
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
-              <span className="text-accent text-[9px] font-black tracking-widest uppercase block mb-1">{activeModalData.type}</span>
+              <span className="text-accent text-[9px] font-black tracking-widest uppercase block mb-1">{localized[activeModalData.type] || activeModalData.type}</span>
               <h2 className="font-serif text-2xl font-black">{activeModalData.name}</h2>
-              <p className="text-blue-100 text-xs font-bold mt-1 uppercase tracking-wider">{activeModalData.schoolName}</p>
+              <p className="text-blue-100 text-xs font-bold mt-1 uppercase tracking-wider">{localized[activeModalData.schoolName] || activeModalData.schoolName}</p>
             </div>
 
             {/* Modal Body */}
@@ -433,7 +601,7 @@ export default function HODDesk() {
               {activeModalData.about && (
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> About
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> {localized.about}
                   </h4>
                   <p className="text-slate-600 text-xs leading-relaxed font-semibold whitespace-pre-line">{activeModalData.about}</p>
                 </div>
@@ -443,16 +611,16 @@ export default function HODDesk() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Direct Contact
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> {localized.contact}
                   </h4>
                   <div className="space-y-1.5 text-xs text-slate-600 font-bold">
-                    <p className="flex items-center gap-2">Phone: <span className="text-primary">{activeModalData.phone}</span></p>
-                    <p className="flex items-center gap-2">Email: <span className="text-primary">{activeModalData.email}</span></p>
+                    <p className="flex items-center gap-2">{localized.phone}: <span className="text-primary">{activeModalData.phone}</span></p>
+                    <p className="flex items-center gap-2">{localized.email}: <span className="text-primary">{activeModalData.email}</span></p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Location
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> {localized.locationLabel}
                   </h4>
                   <p className="text-slate-600 text-xs font-bold flex items-center gap-1.5">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> {activeModalData.location || 'University Campus'}
@@ -464,7 +632,7 @@ export default function HODDesk() {
               {activeModalData.education && (
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Academic Qualifications
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> {localized.qualifications}
                   </h4>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {activeModalData.education.map((edu, idx) => (
@@ -481,7 +649,7 @@ export default function HODDesk() {
               {activeModalData.researchInterests && (
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Research Interests
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 17 22 12"/></svg> {localized.researchInterests}
                   </h4>
                   <div className="flex flex-wrap gap-2 pt-1">
                     {activeModalData.researchInterests.map((interest, idx) => (
@@ -497,7 +665,7 @@ export default function HODDesk() {
               {activeModalData.publications && (
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Key Publications
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> {localized.keyPublications}
                   </h4>
                   <ul className="space-y-2.5">
                     {activeModalData.publications.map((pub, idx) => (
@@ -514,7 +682,7 @@ export default function HODDesk() {
               {activeModalData.patents && (
                 <div className="space-y-2">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Patents &amp; Designs
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> {localized.patents}
                   </h4>
                   <ul className="space-y-2.5">
                     {activeModalData.patents.map((pat, idx) => (
@@ -533,7 +701,7 @@ export default function HODDesk() {
                   {activeModalData.experience && (
                     <div className="space-y-2">
                       <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Professional Experience
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> {localized.experience}
                       </h4>
                       <p className="text-slate-600 text-xs font-semibold leading-relaxed">{activeModalData.experience}</p>
                     </div>
@@ -541,7 +709,7 @@ export default function HODDesk() {
                   {activeModalData.researchGuidance && (
                     <div className="space-y-2">
                       <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Research Guidance
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> {localized.guidance}
                       </h4>
                       <p className="text-slate-600 text-xs font-semibold leading-relaxed">{activeModalData.researchGuidance}</p>
                     </div>
@@ -557,7 +725,7 @@ export default function HODDesk() {
                 onClick={() => setActiveModalId(null)}
                 className="bg-primary hover:bg-secondary text-white text-xs font-bold py-2.5 px-6 rounded-xl transition-all cursor-pointer"
               >
-                Close Profile
+                {localized.closeProfile}
               </button>
             </div>
 

@@ -1,69 +1,83 @@
 import { useState, useEffect, useRef } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from './supabaseClient'
 import Layout from './components/Layout'
 import AuthPortal from './pages/AuthPortal'
 import WardenDashboard from './pages/WardenDashboard'
 import FileTrackingDashboard from './pages/FileTrackingDashboard'
 import AdminDashboard from './pages/AdminDashboard'
-import { BoardOfGovernors, AntiRaggingCommittee, VCDesk, COEDesk } from './pages/InstitutionalPages'
+import { BoardOfGovernors, AntiRaggingCommittee, VCDesk, COEDesk, AboutPage, VisionMissionPage, LocationPage, ARCommittee, LegalCommittee } from './pages/InstitutionalPages'
 import DeanDesk from './pages/DeanDesk'
 import HODDesk from './pages/HODDesk'
 import SyllabusDesk from './pages/SyllabusDesk'
+import ComingSoonPage from './pages/ComingSoonPage'
+import ErrorBoundary from './components/ErrorBoundary'
 
-
-function App() {
-  const [loading, setLoading] = useState(true)
-  const [currentView, setCurrentView] = useState(() => {
-    const params = new URLSearchParams(window.location.search)
-    const viewParam = params.get('view')
-    if (viewParam) {
-      if (viewParam === 'bom') return 'bom'
-      if (viewParam === 'antiragging') return 'antiragging'
-      if (viewParam === 'vc-desk') return 'vc-desk'
-      if (viewParam === 'coe-desk') return 'coe-desk'
-      if (viewParam === 'deans') return 'deans'
-      if (viewParam === 'hods') return 'hods'
-      if (viewParam === 'syllabus') return 'syllabus'
-      if (viewParam === 'student-clearance') return 'file-tracking-student'
-      if (viewParam === 'warden' || viewParam === 'auth') return 'auth'
-      if (viewParam === 'portal') return 'portal'
-    }
-    return 'home'
-  })
-  const [selectedRoleForPortal, setSelectedRoleForPortal] = useState(() => {
-    const params = new URLSearchParams(window.location.search)
-    const viewParam = params.get('view')
-    if (viewParam === 'warden') return 'warden'
-    if (viewParam === 'auth') {
-      return params.get('role') || null
-    }
-    return null
-  })
-  const [sessionUser, setSessionUser] = useState(null)
-
-  const currentViewRef = useRef(currentView)
+function HomeRedirect() {
   useEffect(() => {
-    currentViewRef.current = currentView
-  }, [currentView])
+    window.location.replace('/home.html')
+  }, [])
+  return null
+}
+
+function ProtectedRoute({ children, allowedRoles, loading, sessionUser }) {
+  if (loading) return null
+  if (!sessionUser) return <Navigate to="/portal" replace />
+  if (allowedRoles && !allowedRoles.includes(sessionUser.role)) {
+    return <Navigate to="/portal" replace />
+  }
+  return children
+}
+
+// 404 Fallback Page
+function NotFoundPage() {
+  const navigate = useNavigate()
+  return (
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center font-sans p-6 select-none">
+      <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 shadow-xl p-10 text-center flex flex-col items-center justify-center relative overflow-hidden">
+        {/* Subtle Brand gold border accent */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#0b3c5d] via-[#d4af37] to-[#1f5a8a]"></div>
+        
+        {/* 404 Graphic */}
+        <h1 className="font-serif font-black text-8xl text-[#0b3c5d] tracking-widest mb-2">404</h1>
+        <div className="w-12 h-1 bg-[#d4af37] mb-6 rounded-full"></div>
+        
+        <h2 className="font-serif text-xl font-bold text-[#1e293b] mb-3">Page Not Found</h2>
+        <p className="text-slate-500 text-sm leading-relaxed mb-8">
+          The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+        </p>
+        
+        <button
+          onClick={() => navigate('/portal')}
+          className="bg-[#0b3c5d] hover:bg-[#1f5a8a] text-white font-bold text-xs py-3 px-6 rounded-full shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 transform hover:scale-[1.02]"
+        >
+          ↩ Back to Unified Portal
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function AppContent() {
+  const [loading, setLoading] = useState(true)
+  const [sessionUser, setSessionUser] = useState(null)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const loadingRef = useRef(loading)
+
+  useEffect(() => {
+    loadingRef.current = loading
+  }, [loading])
 
   const redirectBasedOnRole = (role) => {
-    if (role === 'admin') {
-      setCurrentView('admin-dashboard')
-    } else if (role === 'student') {
-      setCurrentView('file-tracking-student')
-    } else if (role === 'warden') {
-      setCurrentView('warden-dashboard')
-    } else if (role === 'adviser') {
-      setCurrentView('adviser-dashboard')
-    } else if (role === 'hos') {
-      setCurrentView('hos-dashboard')
-    } else if (role === 'controller') {
-      setCurrentView('controller-dashboard')
-    } else if (role === 'dean_pga') {
-      setCurrentView('dean-pga-dashboard')
-    } else if (role === 'dean_academic') {
-      setCurrentView('dean-academic-dashboard')
-    }
+    if (role === 'admin') navigate('/admin-dashboard', { replace: true })
+    else if (role === 'student') navigate('/student-clearance', { replace: true })
+    else if (role === 'warden') navigate('/warden-dashboard', { replace: true })
+    else if (role === 'adviser') navigate('/adviser-dashboard', { replace: true })
+    else if (role === 'hos') navigate('/hos-dashboard', { replace: true })
+    else if (role === 'controller') navigate('/controller-dashboard', { replace: true })
+    else if (role === 'dean_pga') navigate('/dean-pga-dashboard', { replace: true })
+    else if (role === 'dean_academic') navigate('/dean-academic-dashboard', { replace: true })
   }
 
   const checkSessionRole = async (userId) => {
@@ -81,10 +95,13 @@ function App() {
         email: user?.email || ''
       }
       setSessionUser(profileWithEmail)
-      redirectBasedOnRole(profile.role)
+      
+      // Auto redirect to dashboard if currently on the portal/auth page
+      if (location.pathname === '/portal' || location.pathname === '/auth' || location.pathname === '/') {
+        redirectBasedOnRole(profile.role)
+      }
     } catch (err) {
       console.warn('Session profile lookup failed:', err.message)
-      // Check user metadata as fallback
       const user = (await supabase.auth.getUser()).data.user
       const metaRole = user?.user_metadata?.role
       if (metaRole) {
@@ -96,46 +113,63 @@ function App() {
           email: user?.email
         }
         setSessionUser(fallbackProfile)
-        redirectBasedOnRole(metaRole)
+        if (location.pathname === '/portal' || location.pathname === '/auth' || location.pathname === '/') {
+          redirectBasedOnRole(metaRole)
+        }
       }
     }
   }
 
-  // Unified Session and URL Query Parameters Checker on Mount
+  // Handle Legacy Query Parameter redirects for backward compatibility
   useEffect(() => {
-    // Listen to real-time auth changes (GoTrue fires INITIAL_SESSION synchronously on mount)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      const params = new URLSearchParams(window.location.search)
-      const viewParam = params.get('view')
+    const params = new URLSearchParams(location.search)
+    const viewParam = params.get('view')
+    if (viewParam) {
+      if (viewParam === 'bom') navigate('/bom', { replace: true })
+      else if (viewParam === 'antiragging') navigate('/antiragging', { replace: true })
+      else if (viewParam === 'vc-desk') navigate('/vc-desk', { replace: true })
+      else if (viewParam === 'coe-desk') navigate('/coe-desk', { replace: true })
+      else if (viewParam === 'deans') navigate('/deans', { replace: true })
+      else if (viewParam === 'hods') navigate('/hods', { replace: true })
+      else if (viewParam === 'syllabus') navigate('/syllabus', { replace: true })
+      else if (viewParam === 'about') navigate('/about', { replace: true })
+      else if (viewParam === 'mission') navigate('/vision-mission', { replace: true })
+      else if (viewParam === 'location') navigate('/location', { replace: true })
+      else if (viewParam === 'academic-council') navigate('/academic-council', { replace: true })
+      else if (viewParam === 'students-grievance') navigate('/students-grievance', { replace: true })
+      else if (viewParam === 'student-clearance') navigate('/student-clearance', { replace: true })
+      else if (viewParam === 'warden') navigate('/portal?role=warden', { replace: true })
+      else if (viewParam === 'portal') navigate('/portal', { replace: true })
+      else if (viewParam === 'auth') {
+        const role = params.get('role')
+        navigate(role ? `/portal?role=${role}` : '/portal', { replace: true })
+      }
+      else if (viewParam === 'home') window.location.href = '/home.html'
+    }
+  }, [location.search, navigate])
 
+  // Session Listener on Mount
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
-        // Retrieving the active user role and displaying dashboard on initial load or token refresh.
-        // Active logins are handled directly by handleLoginSuccess to avoid race conditions.
         if (event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') {
           await checkSessionRole(session.user.id)
         }
         setLoading(false)
       } else {
-        const prevView = currentViewRef.current
-        const isDashboard = prevView.endsWith('-dashboard') || prevView === 'file-tracking-student' || prevView === 'portal'
-
-        // Reset only if not local profile mode
+        // Reset local session state if logged out
         setSessionUser((currUser) => {
           if (currUser && currUser.isLocal) {
             return currUser
           }
           return null
         })
-        setSelectedRoleForPortal(null)
 
+        const isDashboard = location.pathname.endsWith('-dashboard') || location.pathname === '/student-clearance'
         if (isDashboard) {
-          setCurrentView('portal')
-          setLoading(false)
-        } else if (viewParam) {
-          setLoading(false)
-        } else {
-          window.location.replace('/home.html')
+          navigate('/portal', { replace: true })
         }
+        setLoading(false)
       }
     })
 
@@ -143,98 +177,25 @@ function App() {
       subscription.unsubscribe()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // If currentView is set to 'home' (such as upon logout or home click), redirect back to designed home.html
-  useEffect(() => {
-    if (currentView === 'home') {
-      window.location.replace('/home.html')
-    }
-  }, [currentView])
-
-  // Synchronize state changes dynamically back to the URL query parameters
-  useEffect(() => {
-    if (loading) return
-
-    const params = new URLSearchParams(window.location.search)
-    let targetView = null
-    let targetRole = null
-
-    if (currentView === 'portal') {
-      targetView = 'portal'
-    } else if (currentView === 'auth') {
-      if (selectedRoleForPortal === 'warden') {
-        targetView = 'warden'
-      } else {
-        targetView = 'auth'
-        if (selectedRoleForPortal) {
-          targetRole = selectedRoleForPortal
-        }
-      }
-    } else if (currentView === 'bom') {
-      targetView = 'bom'
-    } else if (currentView === 'antiragging') {
-      targetView = 'antiragging'
-    } else if (currentView === 'vc-desk') {
-      targetView = 'vc-desk'
-    } else if (currentView === 'coe-desk') {
-      targetView = 'coe-desk'
-    } else if (currentView === 'deans') {
-      targetView = 'deans'
-    } else if (currentView === 'hods') {
-      targetView = 'hods'
-    } else if (currentView === 'syllabus') {
-      targetView = 'syllabus'
-    } else if (currentView === 'file-tracking-student') {
-      targetView = 'student-clearance'
-    }
-
-    if (targetView) {
-      const newParams = new URLSearchParams()
-      newParams.set('view', targetView)
-      if (targetRole) {
-        newParams.set('role', targetRole)
-      }
-      const newSearch = newParams.toString()
-      const currentSearch = window.location.search.replace(/^\?/, '')
-      if (newSearch !== currentSearch) {
-        window.history.pushState(null, '', `/?${newSearch}`)
-      }
-    } else if (currentView !== 'home') {
-      // Clean up search query params for logged-in dashboards or other non-sync views
-      if (window.location.search) {
-        window.history.pushState(null, '', '/')
-      }
-    }
-  }, [currentView, selectedRoleForPortal, loading])
+  }, [location.pathname, navigate])
 
   const handleLoginSuccess = (role, user) => {
     setSessionUser(user)
-    if (role === 'admin') {
-      setCurrentView('admin-dashboard')
-    } else if (role === 'student') {
-      setCurrentView('file-tracking-student')
-    } else if (role === 'warden') {
-      setCurrentView('warden-dashboard')
-    } else if (role === 'adviser') {
-      setCurrentView('adviser-dashboard')
-    } else if (role === 'hos') {
-      setCurrentView('hos-dashboard')
-    } else if (role === 'controller') {
-      setCurrentView('controller-dashboard')
-    } else if (role === 'dean_pga') {
-      setCurrentView('dean-pga-dashboard')
-    } else if (role === 'dean_academic') {
-      setCurrentView('dean-academic-dashboard')
-    } else {
-      console.log(`Authenticated successfully as ${role}!`)
-      setCurrentView('home')
-    }
+    redirectBasedOnRole(role)
   }
 
-  const openPortalForRole = (role) => {
-    setSelectedRoleForPortal(role)
-    setCurrentView('auth')
+  const handleSignOut = async () => {
+    setSessionUser(null)
+    await supabase.auth.signOut()
+    navigate('/portal', { replace: true })
+  }
+
+  const handleDashboardNavigation = (view) => {
+    if (view === 'home') {
+      window.location.href = '/home.html'
+    } else {
+      navigate(`/${view}`)
+    }
   }
 
   if (loading) {
@@ -247,217 +208,169 @@ function App() {
     )
   }
 
-  if (currentView === 'admin-dashboard') {
-    return (
-      <AdminDashboard 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }}
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
+  const initialRoleParam = new URLSearchParams(location.search).get('role')
 
-  if (currentView === 'warden-dashboard') {
-    return (
-      <WardenDashboard 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'adviser-dashboard') {
-    return (
-      <FileTrackingDashboard 
-        role="adviser" 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'hos-dashboard') {
-    return (
-      <FileTrackingDashboard 
-        role="hos" 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'dean-pga-dashboard') {
-    return (
-      <FileTrackingDashboard 
-        role="dean_pga" 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'dean-academic-dashboard') {
-    return (
-      <FileTrackingDashboard 
-        role="dean_academic" 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'controller-dashboard') {
-    return (
-      <FileTrackingDashboard 
-        role="controller" 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'file-tracking-student') {
-    return (
-      <FileTrackingDashboard 
-        role="student" 
-        sessionUser={sessionUser}
-        onSignOut={async () => {
-          setSessionUser(null)
-          await supabase.auth.signOut()
-          setCurrentView('portal')
-        }} 
-        onNavigate={(view) => setCurrentView(view)}
-      />
-    )
-  }
-
-  if (currentView === 'bom') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <BoardOfGovernors />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'antiragging') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <AntiRaggingCommittee />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'vc-desk') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <VCDesk />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'coe-desk') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <COEDesk onNavigate={setCurrentView} />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'deans') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <DeanDesk />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'hods') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <HODDesk />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'syllabus') {
-    return (
-      <Layout onNavigate={setCurrentView}>
-        <SyllabusDesk />
-      </Layout>
-    )
-  }
-
-  if (currentView === 'portal' || currentView === 'auth') {
-    return (
-      <div className="relative">
-        <AuthPortal 
-          initialRole={selectedRoleForPortal} 
-          onLoginSuccess={handleLoginSuccess}
-        />
-        {/* Universal Back to Homepage helper */}
-        <button
-          onClick={() => {
-            setCurrentView('home')
-          }}
-          className="fixed bottom-4 right-4 z-50 bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold py-2.5 px-4 rounded-full shadow-lg border border-slate-700/50 hover:scale-105 transition-all duration-300"
-        >
-          ↩ Return to University Homepage
-        </button>
-      </div>
-    )
-  }
-
-  // Fallback default return: unified login gateway
   return (
-    <div className="relative">
-      <AuthPortal 
-        initialRole={selectedRoleForPortal} 
-        onLoginSuccess={handleLoginSuccess}
-      />
-      {/* Universal Back to Homepage helper */}
-      <button
-        onClick={() => {
-          setCurrentView('home')
-        }}
-        className="fixed bottom-4 right-4 z-50 bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold py-2.5 px-4 rounded-full shadow-lg border border-slate-700/50 hover:scale-105 transition-all duration-300"
-      >
-        ↩ Return to University Homepage
-      </button>
-    </div>
+    <Routes>
+      {/* Public Pages wrapped in Layout */}
+      <Route path="/" element={<HomeRedirect />} />
+      <Route path="/coming-soon" element={<Layout><ComingSoonPage /></Layout>} />
+      <Route path="/bom" element={<Layout><BoardOfGovernors /></Layout>} />
+      <Route path="/antiragging" element={<Layout><AntiRaggingCommittee /></Layout>} />
+      <Route path="/vc-desk" element={<Layout><VCDesk /></Layout>} />
+      <Route path="/coe-desk" element={<Layout><COEDesk onNavigate={handleDashboardNavigation} /></Layout>} />
+      <Route path="/deans" element={<Layout><DeanDesk /></Layout>} />
+      <Route path="/hods" element={<Layout><HODDesk /></Layout>} />
+      <Route path="/syllabus" element={<Layout><SyllabusDesk /></Layout>} />
+      <Route path="/about" element={<Layout><AboutPage /></Layout>} />
+      <Route path="/vision-mission" element={<Layout><VisionMissionPage /></Layout>} />
+      <Route path="/location" element={<Layout><LocationPage /></Layout>} />
+      <Route path="/academic-council" element={<Layout><ARCommittee /></Layout>} />
+      <Route path="/students-grievance" element={<Layout><LegalCommittee /></Layout>} />
+      
+      {/* Unified Login Portal */}
+      <Route path="/portal" element={
+        sessionUser ? (
+          <Navigate to={
+            sessionUser.role === 'admin' ? '/admin-dashboard' :
+            sessionUser.role === 'student' ? '/student-clearance' :
+            sessionUser.role === 'warden' ? '/warden-dashboard' :
+            sessionUser.role === 'adviser' ? '/adviser-dashboard' :
+            sessionUser.role === 'hos' ? '/hos-dashboard' :
+            sessionUser.role === 'controller' ? '/controller-dashboard' :
+            sessionUser.role === 'dean_pga' ? '/dean-pga-dashboard' :
+            sessionUser.role === 'dean_academic' ? '/dean-academic-dashboard' : '/portal'
+          } replace />
+        ) : (
+          <div className="relative">
+            <AuthPortal 
+              initialRole={initialRoleParam} 
+              onLoginSuccess={handleLoginSuccess}
+            />
+            <button
+              onClick={() => { window.location.href = '/home.html' }}
+              className="fixed bottom-4 right-4 z-50 bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold py-2.5 px-4 rounded-full shadow-lg border border-slate-700/50 hover:scale-105 transition-all duration-300"
+            >
+              ↩ Return to University Homepage
+            </button>
+          </div>
+        )
+      } />
+
+      {/* Role-Based Protected Dashboards */}
+      <Route path="/admin-dashboard" element={
+        <ProtectedRoute allowedRoles={['admin']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <AdminDashboard 
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/warden-dashboard" element={
+        <ProtectedRoute allowedRoles={['warden']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <WardenDashboard 
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/student-clearance" element={
+        <ProtectedRoute allowedRoles={['student']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <FileTrackingDashboard 
+              role="student"
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/adviser-dashboard" element={
+        <ProtectedRoute allowedRoles={['adviser']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <FileTrackingDashboard 
+              role="adviser"
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/hos-dashboard" element={
+        <ProtectedRoute allowedRoles={['hos']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <FileTrackingDashboard 
+              role="hos"
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/dean-academic-dashboard" element={
+        <ProtectedRoute allowedRoles={['dean_academic']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <FileTrackingDashboard 
+              role="dean_academic"
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/dean-pga-dashboard" element={
+        <ProtectedRoute allowedRoles={['dean_pga']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <FileTrackingDashboard 
+              role="dean_pga"
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/controller-dashboard" element={
+        <ProtectedRoute allowedRoles={['controller']} loading={loading} sessionUser={sessionUser}>
+          <ErrorBoundary>
+            <FileTrackingDashboard 
+              role="controller"
+              sessionUser={sessionUser}
+              onSignOut={handleSignOut}
+              onNavigate={handleDashboardNavigation}
+            />
+          </ErrorBoundary>
+        </ProtectedRoute>
+      } />
+
+      {/* 404 Fallback */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   )
 }
 

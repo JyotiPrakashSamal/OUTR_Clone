@@ -276,7 +276,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder={selectedRole === 'student' ? 'e.g. 25240012@outr.ac.in' : `e.g. ${selectedRole}@outr.ac.in`}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary transition-colors"
+                      className="input-standard"
                     />
                   </div>
 
@@ -289,7 +289,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-4 pr-12 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary transition-colors"
+                        className="input-standard pr-12"
                       />
                       <button
                         type="button"
@@ -314,7 +314,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 rounded-xl bg-primary hover:bg-secondary text-white font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/10 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                    className="btn-brand-primary w-full py-3.5"
                   >
                     {loading ? (
                       <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>

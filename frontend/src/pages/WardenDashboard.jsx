@@ -350,13 +350,13 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="w-full sm:w-auto bg-primary hover:bg-secondary text-white font-semibold py-2.5 px-6 rounded-xl text-xs hover:shadow-md hover:shadow-primary/5 transition-all duration-300 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto btn-brand-primary text-xs flex items-center justify-center gap-2"
             >
               Register Student Check-in
             </button>
             <button
               onClick={handleSignOut}
-              className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all duration-300"
+              className="w-full sm:w-auto btn-brand-secondary text-xs flex items-center justify-center gap-2"
             >
               🚪 Sign Out
             </button>
@@ -386,7 +386,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   type="text" required placeholder="e.g. 25240012"
                   value={newStudent.regd_no}
                   onChange={e => setNewStudent({...newStudent, regd_no: e.target.value})}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                  className="input-standard"
                 />
               </div>
               <div>
@@ -395,7 +395,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   type="text" required placeholder="e.g. Name"
                   value={newStudent.name}
                   onChange={e => setNewStudent({...newStudent, name: e.target.value})}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                  className="input-standard"
                 />
               </div>
               <div>
@@ -404,7 +404,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   type="text" placeholder="e.g. A-302"
                   value={newStudent.room}
                   onChange={e => setNewStudent({...newStudent, room: e.target.value})}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                  className="input-standard"
                 />
               </div>
               {warden?.hostel === 'All' && (
@@ -413,7 +413,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   <select 
                     value={newStudent.hostel}
                     onChange={e => setNewStudent({...newStudent, hostel: e.target.value})}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                    className="input-standard"
                   >
                     <option value="">Select Hostel</option>
                     <option value="APJKHR">APJKHR</option>
@@ -429,7 +429,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   type="tel" placeholder="e.g. 6372677399"
                   value={newStudent.phone}
                   onChange={e => setNewStudent({...newStudent, phone: e.target.value})}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                  className="input-standard"
                 />
               </div>
               <div>
@@ -438,7 +438,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   type="email" placeholder="e.g. 25240012@outr.ac.in"
                   value={newStudent.email}
                   onChange={e => setNewStudent({...newStudent, email: e.target.value})}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                  className="input-standard"
                 />
               </div>
 
@@ -446,14 +446,14 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="bg-primary hover:bg-secondary text-white font-semibold py-2.5 px-8 rounded-xl text-xs disabled:opacity-50"
+                  className="btn-brand-primary text-xs disabled:opacity-50"
                 >
                   {actionLoading ? 'Saving...' : 'Register Check-in'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowAddForm(false)}
-                  className="bg-slate-100 hover:bg-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs"
+                  className="btn-brand-secondary text-xs"
                 >
                   Cancel
                 </button>
@@ -475,7 +475,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                 placeholder="Search by Registration Number or Student Name..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-10 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-secondary"
+                className="input-standard pl-11 pr-10 py-3"
               />
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
               {searchQuery && (
@@ -507,7 +507,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
             
             <button
               type="submit"
-              className="bg-primary hover:bg-secondary text-white font-semibold py-3 px-8 rounded-xl text-sm transition-colors"
+              className="btn-brand-primary text-sm"
             >
               Search
             </button>
@@ -646,10 +646,10 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               <p className="text-xs mt-1">Add check-ins using the register button above.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
+            <div className="table-container-responsive">
+              <table className="table-brand text-xs">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px] text-left">
+                  <tr className="table-brand-header text-[10px]">
                     <th className="pb-3 pl-2">Name</th>
                     <th className="pb-3">Regd No</th>
                     <th className="pb-3">Room</th>
@@ -658,9 +658,9 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                     <th className="pb-3 pr-2 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody>
                   {students.map((s) => (
-                    <tr key={s.id} className="hover:bg-slate-50/50 transition-colors">
+                    <tr key={s.id} className="table-brand-row">
                       <td className="py-3.5 pl-2 font-bold text-[#0b3c5d]">{capitalizeName(s.name)}</td>
                       <td className="py-3.5 font-mono text-[11px] font-semibold text-slate-500">#{s.regd_no}</td>
                       <td className="py-3.5 font-bold text-slate-600">🚪 {s.room || 'N/A'}</td>

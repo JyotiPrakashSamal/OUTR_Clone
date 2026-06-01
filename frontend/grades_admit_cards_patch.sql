@@ -171,3 +171,52 @@ create policy "Authenticated users can read clearance letters"
     bucket_id = 'clearance-letters' 
     and auth.role() = 'authenticated'
   );
+
+
+-- 4. File Tracking RLS Lockdown Patch
+alter table public.file_tracking enable row level security;
+
+drop policy if exists "Anyone can view tracking files." on public.file_tracking;
+drop policy if exists "Select tracking files policy" on public.file_tracking;
+create policy "Select tracking files policy"
+  on public.file_tracking for select
+  using (
+    auth.role() = 'authenticated'
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role in ('adviser', 'hos', 'dean_academic', 'dean_pga', 'controller', 'admin')
+      )
+      -- Students can only view their own files
+      or student_regd = split_part(auth.email(), '@', 1)
+    )
+  );
+
+drop policy if exists "Anyone can insert tracking files." on public.file_tracking;
+drop policy if exists "Insert tracking files policy" on public.file_tracking;
+create policy "Insert tracking files policy"
+  on public.file_tracking for insert
+  with check (
+    auth.role() = 'authenticated'
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role = 'student'
+      )
+      -- Ensure student_regd matches the user's registration number
+      or student_regd = split_part(auth.email(), '@', 1)
+    )
+  );
+
+drop policy if exists "Faculty and admins can manage tracking files." on public.file_tracking;
+create policy "Faculty and admins can manage tracking files."
+  on public.file_tracking for all
+  using (
+    exists (
+      select 1 from public.profiles
+      where public.profiles.id = auth.uid()
+      and public.profiles.role in ('adviser', 'hos', 'dean_academic', 'dean_pga', 'controller', 'admin')
+    )
+  );

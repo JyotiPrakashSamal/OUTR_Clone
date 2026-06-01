@@ -147,8 +147,14 @@ function validateContentSchema(data, schema) {
   }
 }
 
-function normalizeHref(href) {
-  if (!href || href.trim() === "") return "#";
+function comingSoonHref(label) {
+  const title = label || "This section";
+  return `${ROOT_PREFIX}coming-soon.html?title=${encodeURIComponent(title)}`;
+}
+
+function normalizeHref(href, label) {
+  if (!href || href.trim() === "") return comingSoonHref(label);
+  if (href === "#") return comingSoonHref(label);
   if (href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:") || href.startsWith("tel:")) return href;
   if (!LINK_READY_MODE && href !== "#about" && href !== "#hero" && href !== "#notices" && href !== "#footer" && href !== "social.html") {
     return "#";
@@ -554,7 +560,7 @@ function renderFooter() {
 
   const renderColumn = (title, links) =>
     `<div class="flex flex-col items-center lg:items-start text-center lg:text-left"><div class="${titleClass} inline-block">${title}</div>${links
-      .map((l) => `<a href="${normalizeHref(l.href)}" class="${linkClass}">${l.label}</a>`)
+      .map((l) => `<a href="${normalizeHref(l.href, l.label)}" class="${linkClass}">${l.label}</a>`)
       .join("")}</div>`;
 
   grid.innerHTML = `
@@ -660,13 +666,13 @@ function setupSearch() {
     { title: "OUTR Campus Map", subtitle: "Map · Open Google Maps location", href: "https://maps.google.com/?q=Odisha+University+of+Technology+and+Research", category: "contact", weight: 96, external: true },
     { title: "Social Media Hub", subtitle: "Connect · Official handles", href: "social.html", category: "contact", weight: 72 },
     // --- NAV: About ---
-    { title: "About OUTR", subtitle: "Nav · About → Overview & history", href: "OUTR website/about.html", category: "sections", weight: 95 },
-    { title: "Vision and Mission", subtitle: "Nav · About → Core values & goals", href: "OUTR website/mission&vission.html", category: "sections", weight: 80 },
-    { title: "Accreditation", subtitle: "Nav · About → NAAC, NBA, UGC recognition", href: "OUTR website/about.html#accreditation", category: "sections", weight: 78 },
+    { title: "About OUTR", subtitle: "Nav · About → Overview & history", href: "/?view=about", category: "sections", weight: 95 },
+    { title: "Vision and Mission", subtitle: "Nav · About → Core values & goals", href: "/?view=mission", category: "sections", weight: 80 },
+    { title: "Accreditation", subtitle: "Nav · About → NAAC, NBA, UGC recognition", href: "/?view=about#accreditation", category: "sections", weight: 78 },
     // --- NAV: Academic ---
     { title: "Academic", subtitle: "Nav · Academic section", href: departmentsSectionVisible ? "#departments" : "#about", category: "sections", weight: 85 },
-    { title: "Committees", subtitle: "Nav · Academic → Academic boards & groups", href: "administration/SA_commitee.html", category: "sections", weight: 70 },
-    { title: "Syllabus", subtitle: "Nav · Academic → UG and PG course syllabi", href: "OUTR website/courses/scs/UGcourses.html", category: "sections", weight: 72 },
+    { title: "Committees", subtitle: "Nav · Academic → Academic boards & groups", href: "/?view=academic-council", category: "sections", weight: 70 },
+    { title: "Syllabus", subtitle: "Nav · Academic → UG and PG course syllabi", href: "/?view=syllabus", category: "sections", weight: 72 },
     { title: "Academic Calendar", subtitle: "Nav · Academic → Schedule & important dates", href: "#", category: "sections", weight: 74 },
     // --- NAV: Academic → Departments (Schools) ---
     ...(departmentsSectionVisible
@@ -682,36 +688,36 @@ function setupSearch() {
         ]
       : []),
     // --- NAV: Administration ---
-    { title: "VC Desk", subtitle: "Nav · Administration → Vice-Chancellor's message", href: "administration/Vcdesk.html", category: "sections", weight: 88 },
-    { title: "Board of Management", subtitle: "Nav · Administration → Governance board", href: "administration/BOM.html", category: "sections", weight: 82 },
-    { title: "Dean", subtitle: "Nav · Administration → Dean of the university", href: "administration/Dean.html", category: "sections", weight: 80 },
-    { title: "HODs", subtitle: "Nav · Administration → Heads of Departments", href: "administration/HOD.html", category: "sections", weight: 78 },
-    { title: "Anti-Ragging", subtitle: "Nav · Administration → Anti-ragging committee", href: "administration/Antiragging.html", category: "sections", weight: 76 },
-    { title: "Academic Council", subtitle: "Nav · Administration → Academic council members", href: "administration/AR_commitee.html", category: "sections", weight: 74 },
-    { title: "Students Grievance", subtitle: "Nav · Administration → Grievance redressal", href: "administration/L_commitee.html", category: "sections", weight: 74 },
-    { title: "Controller of Exam", subtitle: "Nav · Administration → Examination controller", href: "administration/COE.html", category: "sections", weight: 72 },
-    { title: "Students Committee", subtitle: "Nav · Administration → Student representation", href: "administration/SA_commitee.html", category: "sections", weight: 70 },
-    { title: "SC/ST Committee", subtitle: "Nav · Administration → SC/ST welfare committee", href: "administration/SA_commitee.html", category: "sections", weight: 70 },
+    { title: "VC Desk", subtitle: "Nav · Administration → Vice-Chancellor's message", href: "/?view=vc-desk", category: "sections", weight: 88 },
+    { title: "Board of Management", subtitle: "Nav · Administration → Governance board", href: "/?view=bom", category: "sections", weight: 82 },
+    { title: "Dean", subtitle: "Nav · Administration → Dean of the university", href: "/?view=deans", category: "sections", weight: 80 },
+    { title: "HODs", subtitle: "Nav · Administration → Heads of Departments", href: "/?view=hods", category: "sections", weight: 78 },
+    { title: "Anti-Ragging", subtitle: "Nav · Administration → Anti-ragging committee", href: "/?view=antiragging", category: "sections", weight: 76 },
+    { title: "Academic Council", subtitle: "Nav · Administration → Academic council members", href: "/?view=academic-council", category: "sections", weight: 74 },
+    { title: "Students Grievance", subtitle: "Nav · Administration → Grievance redressal", href: "/?view=students-grievance", category: "sections", weight: 74 },
+    { title: "Controller of Exam", subtitle: "Nav · Administration → Examination controller", href: "/?view=coe-desk", category: "sections", weight: 72 },
+    { title: "Students Committee", subtitle: "Nav · Administration → Student representation", href: "/?view=academic-council", category: "sections", weight: 70 },
+    { title: "SC/ST Committee", subtitle: "Nav · Administration → SC/ST welfare committee", href: "/?view=academic-council", category: "sections", weight: 70 },
     // --- NAV: Student ---
     { title: "Event", subtitle: "Nav · Student → Fests & campus activities", href: "#notices", category: "sections", weight: 80 },
     { title: "Society / Clubs", subtitle: "Nav · Student → Join student organizations", href: "administration/SA_commitee.html", category: "sections", weight: 78 },
     { title: "Hostels", subtitle: "Nav · Student → Accommodation details", href: "Student and Event/Hostel/hostel.html", category: "sections", weight: 76 },
     { title: "Campus Life", subtitle: "Nav · Student → Experience life at OUTR", href: "Student and Event/Campus_Facilities/CampusLife.html", category: "sections", weight: 74 },
     // --- NAV: Contact ---
-    { title: "Address & Map", subtitle: "Nav · Contact → Techno Campus, Ghatikia, BBSR", href: "OUTR website/location.html", category: "contact", weight: 82 },
-    { title: "Phone & Email", subtitle: "Nav · Contact → Get in touch with us", href: "OUTR website/location.html", category: "contact", weight: 80 },
+    { title: "Address & Map", subtitle: "Nav · Contact → Techno Campus, Ghatikia, BBSR", href: "/?view=location", category: "contact", weight: 82 },
+    { title: "Phone & Email", subtitle: "Nav · Contact → Get in touch with us", href: "/?view=location", category: "contact", weight: 80 },
     // --- SERVICES ACADEMIC PORTAL & SUB-DESKS ---
     { title: "Services Academic Portal Hub", subtitle: "Portal · Access student clearance, warden, admin, and staff dashboards", href: "/?view=portal", category: "portal", weight: 99 },
     { title: "Warden Portal / Hostel Desk", subtitle: "Portal · Hostel check-ins, allocations, student registers, and warden controls", href: "/?view=warden", category: "portal", weight: 98 },
-    { title: "Student Clearance Tracker", subtitle: "Portal · Submit clearance requests, view clearance pipeline, and track files", href: "/?view=auth&role=student", category: "portal", weight: 98 },
-    { title: "Exam Controller Portal & Grade Cards", subtitle: "Portal · Input and issue student semester results, GPA statistics, and grade cards", href: "/?view=auth&role=controller", category: "portal", weight: 98 },
-    { title: "Issue Admit Cards & Tickets", subtitle: "Portal · Issue scheduled exams, print high-fidelity candidate admit cards", href: "/?view=auth&role=controller", category: "portal", weight: 97 },
-    { title: "View My Semester Results", subtitle: "Portal · Query real-time grade sheets, pass/fail status, and GPA", href: "/?view=auth&role=student", category: "portal", weight: 96 },
-    { title: "Download My Admit Card", subtitle: "Portal · Access official candidates admit card and print A4 tickets", href: "/?view=auth&role=student", category: "portal", weight: 96 },
-    { title: "Administrator Portal Control Desk", subtitle: "Portal · Admin system statistics, role allocation, and database status", href: "/?view=auth&role=admin", category: "portal", weight: 95 },
-    { title: "Advisor Clearance Desk", subtitle: "Portal · Staff advisors verify academic records and clear student tracks", href: "/?view=auth&role=adviser", category: "portal", weight: 90 },
-    { title: "Head of School (HOS) Clearance Desk", subtitle: "Portal · School heads verify and issue dynamic clearances", href: "/?view=auth&role=hos", category: "portal", weight: 90 },
-    { title: "Deans Clearance Desks", subtitle: "Portal · Deans perform final clearance review and authorize graduation", href: "/?view=auth&role=dean_pga", category: "portal", weight: 90 },
+    { title: "Student Clearance Tracker", subtitle: "Portal · Submit clearance requests, view clearance pipeline, and track files", href: "/portal?role=student", category: "portal", weight: 98 },
+    { title: "Exam Controller Portal & Grade Cards", subtitle: "Portal · Input and issue student semester results, GPA statistics, and grade cards", href: "/portal?role=controller", category: "portal", weight: 98 },
+    { title: "Issue Admit Cards & Tickets", subtitle: "Portal · Issue scheduled exams, print high-fidelity candidate admit cards", href: "/portal?role=controller", category: "portal", weight: 97 },
+    { title: "View My Semester Results", subtitle: "Portal · Query real-time grade sheets, pass/fail status, and GPA", href: "/portal?role=student", category: "portal", weight: 96 },
+    { title: "Download My Admit Card", subtitle: "Portal · Access official candidates admit card and print A4 tickets", href: "/portal?role=student", category: "portal", weight: 96 },
+    { title: "Administrator Portal Control Desk", subtitle: "Portal · Admin system statistics, role allocation, and database status", href: "/portal?role=admin", category: "portal", weight: 95 },
+    { title: "Advisor Clearance Desk", subtitle: "Portal · Staff advisors verify academic records and clear student tracks", href: "/portal?role=adviser", category: "portal", weight: 90 },
+    { title: "Head of School (HOS) Clearance Desk", subtitle: "Portal · School heads verify and issue dynamic clearances", href: "/portal?role=hos", category: "portal", weight: 90 },
+    { title: "Deans Clearance Desks", subtitle: "Portal · Deans perform final clearance review and authorize graduation", href: "/portal?role=dean_pga", category: "portal", weight: 90 },
   ];
   let activeFilter = "all";
   let currentItems = [];
@@ -1035,43 +1041,28 @@ function setupSearch() {
 }
 
 function setupComingSoonLinks() {
-  const METRICS_KEY = "outr_coming_soon_clicks_v1";
   const placeholders = document.querySelectorAll('a[href="#"]:not([data-allow-placeholder="true"])');
   placeholders.forEach((link) => {
-    // Exclude dropdown parent category toggles in navigation
     if (link.classList.contains("nav-link") || link.closest(".nav-item")?.querySelector(".dropdown")) {
       return;
     }
+    const label = link.getAttribute("data-i18n") || link.textContent?.trim() || "This section";
+    link.href = comingSoonHref(label);
     link.classList.add("coming-soon-link");
     if (!link.hasAttribute("title")) link.setAttribute("title", "Coming soon");
     if (!link.hasAttribute("aria-label")) {
-      const base = link.textContent?.trim() || "This link";
-      link.setAttribute("aria-label", `${base} (coming soon)`);
+      link.setAttribute("aria-label", `${label} (coming soon)`);
     }
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      try {
-        const label = link.getAttribute("data-i18n") || link.textContent?.trim() || "unknown";
-        const metrics = JSON.parse(localStorage.getItem(METRICS_KEY) || "{}");
-        metrics[label] = (metrics[label] || 0) + 1;
-        localStorage.setItem(METRICS_KEY, JSON.stringify(metrics));
-      } catch (err) {
-        console.warn("Could not persist coming-soon telemetry.", err);
-      }
-    });
-    link.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") e.preventDefault();
-    });
   });
 }
 
 function setupKnownLinks() {
   const linkMap = {
-    "nav.vision.title": "OUTR website/mission&vission.html",
-    "nav.accreditation.title": "OUTR website/about.html",
-    "nav.committees": "administration/SA_commitee.html",
-    "nav.syllabus.title": "OUTR website/courses/scs/UGcourses.html",
-    "nav.calendar.title": "#",
+    "nav.vision.title": "/?view=mission",
+    "nav.accreditation.title": "/?view=about",
+    "nav.committees": "/?view=academic-council",
+    "nav.syllabus.title": "/?view=syllabus",
+    "nav.calendar.title": "/coming-soon.html?title=Academic%20Calendar",
     "nav.student.event": "#notices",
     "nav.student.society": "administration/SA_commitee.html",
     "nav.student.hostels": "Student and Event/Hostel/hostel.html",

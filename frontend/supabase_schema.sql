@@ -80,15 +80,40 @@ create table if not exists public.file_tracking (
 -- Enable RLS on File Tracking
 alter table public.file_tracking enable row level security;
 
--- File Tracking Policies (Public tracking searches and inserts enabled)
-create policy "Anyone can view tracking files."
+-- File Tracking Policies (Strict Role-Based and Authenticated Access Only)
+drop policy if exists "Anyone can view tracking files." on public.file_tracking;
+create policy "Select tracking files policy"
   on public.file_tracking for select
-  using (true);
+  using (
+    auth.role() = 'authenticated'
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role in ('adviser', 'hos', 'dean_academic', 'dean_pga', 'controller', 'admin')
+      )
+      -- Students can only view their own files
+      or student_regd = split_part(auth.email(), '@', 1)
+    )
+  );
 
-create policy "Anyone can insert tracking files."
+drop policy if exists "Anyone can insert tracking files." on public.file_tracking;
+create policy "Insert tracking files policy"
   on public.file_tracking for insert
-  with check (true);
+  with check (
+    auth.role() = 'authenticated'
+    and (
+      exists (
+        select 1 from public.profiles
+        where public.profiles.id = auth.uid()
+        and public.profiles.role = 'student'
+      )
+      -- Ensure student_regd matches the user's registration number
+      or student_regd = split_part(auth.email(), '@', 1)
+    )
+  );
 
+drop policy if exists "Faculty and admins can manage tracking files." on public.file_tracking;
 create policy "Faculty and admins can manage tracking files."
   on public.file_tracking for all
   using (
@@ -275,5 +300,18 @@ create policy "Authenticated users can read clearance letters"
     bucket_id = 'clearance-letters' 
     and auth.role() = 'authenticated'
   );
+
+
+-- 8. Performance Optimization Indexes
+create index if not exists idx_profiles_role on public.profiles(role);
+create index if not exists idx_profiles_school_id on public.profiles(school_id);
+
+create index if not exists idx_students_hostel_hostel on public.students_hostel(hostel);
+create index if not exists idx_students_hostel_status on public.students_hostel(status);
+
+create index if not exists idx_file_tracking_student_regd on public.file_tracking(student_regd);
+create index if not exists idx_file_tracking_school_id on public.file_tracking(school_id);
+create index if not exists idx_file_tracking_forwarded_to on public.file_tracking(forwarded_to);
+
 
 

@@ -425,3 +425,362 @@ export function COEDesk({ onNavigate }) {
     </div>
   )
 }
+
+// 5. ABOUT PAGE
+export function AboutPage() {
+  return (
+    <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
+      {/* Page Hero */}
+      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
+          About <span className="text-accent">OUTR</span>
+        </h1>
+        <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed">
+          History, overview, and the transformative learning environment of Odisha University of Technology and Research.
+        </p>
+        <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-stretch">
+          {/* Main Description */}
+          <div className="lg:col-span-3 bg-white border border-slate-200 border-l-4 border-l-accent p-8 rounded-3xl shadow-sm text-left flex flex-col justify-between">
+            <div className="space-y-6 text-slate-600 text-sm leading-relaxed font-semibold">
+              <p>
+                The State Government established the <strong className="text-primary font-bold">"Odisha University of Technology and Research"</strong> located at Bhubaneswar by upgrading the College of Engineering &amp; Technology, Bhubaneswar through the Odisha University of Technology and Research Act, 2021 (known as Odisha Act 17 of 2021). The University started functioning with effect from 8th October, 2021 through Notification of SD&amp;TE Department, Government of Odisha. The First Statutes 2022 of the University was notified in February 2023. The University is governed by the Odisha University of Technology and Research Act, 2021 and its First Statutes, 2022.
+              </p>  
+              <p>
+                The University is located in the Techno Campus at Kalinga Nagar, Bhubaneswar, about 2.0 km away from Khandagiri-Udayagiri caves. It spreads over 100 acres of green campus with 24x7 Wi-Fi coverage in the whole premises, including hostels. The University is 5 km from the bus stop, 8 km from Biju Patnaik International Airport, and 12 km from Bhubaneswar Railway Station.
+              </p>
+              <p>
+                The meticulously nurtured learning environment in OUTR is stress-free and fear-free. It enables and encourages new ideas to flourish. Students are encouraged to persist in their quest for learning and acquire the requisite skills to excel in the present information-driven globalised world. Our core aspiration is to provide Educational Excellence, in that every student makes a positive difference during their time with us. 
+              </p>
+              <p>
+                We strive to provide a caring, supportive, and challenging environment to students, in which they can grow and flourish. The dream to make a creative, multidisciplinary institution which delivers quality education, original research and practice, is what drives the academic community here.
+              </p>
+            </div>
+            
+            <div className="mt-8 border-t border-slate-100 pt-6">
+              <p className="text-primary text-xs font-bold uppercase tracking-wider">
+                🏛️ SD&amp;TE Department, Govt. of Odisha Approved
+              </p>
+            </div>
+          </div>
+
+          {/* Right Image/Statue Graphic */}
+          <div className="lg:col-span-2 flex flex-col gap-5">
+            {/* Custom Text Card above the Image */}
+            <div className="bg-white border border-slate-200 p-5 rounded-3xl shadow-sm text-left border-l-4 border-l-primary">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">🏛️</span>
+                <h3 className="font-serif font-black text-sm text-primary">A Legacy of Innovation</h3>
+              </div>
+              <p className="text-slate-500 text-xs font-semibold leading-relaxed">
+                As a premier unitary university, OUTR fosters research-driven education, multidisciplinary programs, and startup incubation to address real-world challenges.
+              </p>
+            </div>
+
+            {/* Premium Full-Bleed Rectangular Image Card */}
+            <div className="relative rounded-3xl overflow-hidden shadow-xl flex-grow group min-h-[340px]">
+              {/* Full-bleed image fills entire card */}
+              <img
+                src="/OUTR website/images/statue.png"
+                alt="OUTR Techno Campus Statue"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 select-none"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&fit=crop&q=85";
+                }}
+              />
+              {/* Gradient overlay for text legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent" />
+              {/* Corner accents */}
+              <div className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-accent/60 rounded-tl-lg" />
+              <div className="absolute top-4 right-4 w-10 h-10 border-t-2 border-r-2 border-accent/60 rounded-tr-lg" />
+              {/* Text overlay at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
+                <h3 className="font-serif font-black text-xl text-white leading-tight">Techno Campus Statue</h3>
+                <div className="w-10 h-0.5 bg-accent my-2" />
+                <p className="text-blue-100 text-[11px] font-semibold leading-relaxed">
+                  Symbol of wisdom, perseverance &amp; technical excellence — Kalinga Nagar, Bhubaneswar.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 6. VISION & MISSION PAGE
+export function VisionMissionPage() {
+  return (
+    <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
+      {/* Page Hero */}
+      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
+          Vision &amp; <span className="text-accent">Mission</span>
+        </h1>
+        <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed">
+          Guiding principles driving the educational ecosystem and academic pursuits at OUTR.
+        </p>
+        <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
+        {/* Vision Card */}
+        <div className="bg-white border border-slate-200 p-8 md:p-10 rounded-3xl shadow-sm flex flex-col md:flex-row gap-8 items-center">
+          <div className="w-24 h-24 rounded-2xl bg-amber-50 text-accent flex items-center justify-center flex-shrink-0 text-5xl shadow-inner border border-amber-100/50">
+            👁️
+          </div>
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl font-black text-primary">Our Vision</h2>
+            <p className="text-slate-600 text-sm md:text-base leading-relaxed font-semibold max-w-3xl">
+              To be a leading University that fosters knowledge, provides transformative education, and promotes extraordinary research while creating technocrats and innovators to solve real-world challenges.
+            </p>
+          </div>
+        </div>
+
+        {/* Mission Card */}
+        <div className="bg-white border border-slate-200 p-8 md:p-10 rounded-3xl shadow-sm flex flex-col md:flex-row gap-8 items-start">
+          <div className="w-24 h-24 rounded-2xl bg-blue-50 text-primary flex items-center justify-center flex-shrink-0 text-5xl shadow-inner border border-blue-100/50">
+            🎯
+          </div>
+          <div className="space-y-6 flex-grow">
+            <h2 className="font-serif text-2xl font-black text-primary">Our Mission Milestones</h2>
+            <ul className="space-y-4">
+              {[
+                "To create ideators and leaders to develop human resources equipped with creativity, technology and passion for the betterment of humankind by providing an appropriate and conducive ambience.",
+                "To provide an education that transforms students through innovative, relevant, and appropriate coursework and makes them future-ready.",
+                "To address problems faced by the society through nurturing talent and carrying out purposeful, original research.",
+                "To collaborate with other academic institutes, research organizations, and industries across the globe to strengthen the education and research ecosystem.",
+                "To encourage teamwork through the development of harmony, tolerance, and active co-operation."
+              ].map((milestone, idx) => (
+                <li key={idx} className="flex gap-3 text-slate-600 text-sm font-semibold leading-relaxed">
+                  <span className="w-2 h-2 rounded-full bg-accent shrink-0 mt-2"></span>
+                  <span>{milestone}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 7. LOCATION PAGE
+export function LocationPage() {
+  return (
+    <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
+      {/* Page Hero */}
+      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
+          Reach <span className="text-accent">OUTR</span>
+        </h1>
+        <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed">
+          Techno Campus geographic parameters, accessibility routes, and connectivity guides.
+        </p>
+        <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        {/* Intro Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch text-left">
+          <div className="bg-white border border-slate-200 p-8 rounded-3xl shadow-sm flex flex-col justify-between border-l-4 border-l-accent">
+            <div className="space-y-4">
+              <h2 className="font-serif text-2xl font-bold text-primary mb-2">Campus Location Overview</h2>
+              <p className="text-slate-600 text-sm leading-relaxed font-semibold">
+                Odisha University of Technology and Research (OUTR), Bhubaneswar, is one of Odisha’s leading technical institutions. The campus is well-connected by road, rail, and air transport, ensuring easy accessibility for students, researchers, parents, and global delegates.
+              </p>
+              <p className="text-slate-600 text-sm leading-relaxed font-semibold">
+                Situated in the sprawling educational hub of Ghatikia (Kalinga Nagar), Bhubaneswar, the campus spreads over 100 acres of meticulously nurtured lush green fields. It offers a state-of-the-art secure techno atmosphere.
+              </p>
+            </div>
+            
+            <div className="bg-slate-50 border border-slate-200/50 p-4 rounded-2xl mt-6 flex items-center gap-3">
+              <span className="text-2xl">📍</span>
+              <p className="text-xs text-slate-500 font-bold">
+                Techno Campus, Ghatikia, Mahalaxmi Vihar, Bhubaneswar, Odisha - 751029
+              </p>
+            </div>
+          </div>
+
+          {/* Campus Map Graphic */}
+          <div className="relative rounded-3xl overflow-hidden shadow-xl group min-h-[360px] bg-slate-100">
+            {/* Full-bleed Odisha map image */}
+            <img
+              src="/OUTR website/images/MAPf.jpg"
+              alt="Odisha State Map showing OUTR location"
+              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 select-none"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&fit=crop&q=80";
+              }}
+            />
+            {/* Subtle gradient overlay to anchor the label */}
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
+            {/* Corner accent */}
+            <div className="absolute top-4 right-4 w-10 h-10 border-t-2 border-r-2 border-accent/70 rounded-tr-lg" />
+            <div className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-accent/70 rounded-tl-lg" />
+            {/* Location pin badge */}
+            <div className="absolute bottom-5 left-5 right-5 flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-3">
+              <span className="text-2xl shrink-0">📍</span>
+              <div>
+                <p className="text-white font-black text-xs leading-tight">OUTR — Bhubaneswar</p>
+                <p className="text-blue-100 text-[10px] font-semibold mt-0.5">Techno Campus, Kalinga Nagar, Odisha</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Access methods */}
+        <div className="space-y-6 text-left">
+          <h2 className="font-serif text-2xl font-bold text-primary">Connectivity Vectors</h2>
+          <div className="w-12 h-1 bg-accent rounded"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-primary flex items-center justify-center text-xl">🚌</div>
+              <h3 className="font-serif text-lg font-bold text-primary">Nearest Bus Stand</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+                Baramunda Bus Stand is approximately 5 km from the campus, providing regular intrastate and interstate connectivity. 
+              </p>
+            </div>
+            <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-accent flex items-center justify-center text-xl">🚂</div>
+              <h3 className="font-serif text-lg font-bold text-primary">Nearest Railway Station</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+                Bhubaneswar Railway Station (Master Canteen) is around 10 to 12 km away, connecting BBSR with all major national lines.
+              </p>
+            </div>
+            <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl">✈️</div>
+              <h3 className="font-serif text-lg font-bold text-primary">Nearest Airport</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+                Biju Patnaik International Airport (BBI) is approximately 8 km from the campus, serving direct daily domestic and international flights.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
+// 8. AR COMMITTEE (ACADEMIC COUNCIL)
+export function ARCommittee() {
+  const members = [
+    { name: "Dr. Aruna Tripathy", role: "Professor, Department of Electronics & Instrumentation Engineering and PIC, Accreditation and Ranking", tag: "Chairperson", photo: "/administration/admin_Arcommitee_photo/image.png" },
+    { name: "Mr. Bishnu Narayan Mahapatra", role: "Assistant Professor, Department of Mechanical Engineering", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy.png" },
+    { name: "Mr. Santanu Sen", role: "Assistant Professor & Head, Department of EE", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" },
+    { name: "Mrs Ananya Dastidar", role: "Assistant Professor, Department of Electronics & Instrumentation Engineering", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" },
+    { name: "Mrs. Rosalin Dalai", role: "Assistant Professor, Department of Civil Engg.", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" },
+    { name: "Mrs. Swapna Sarita Swain", role: "Assistant Professor & Head, Department of Planning", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" }
+  ]
+
+  return (
+    <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
+      {/* Header */}
+      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
+          Accreditation &amp; Ranking Committee
+        </h1>
+        <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed font-sans">
+          The Accreditation and Ranking (A&amp;R) Committee deals with comprehensive assessment, governance tracking, and standard validations of the University as a whole.
+        </p>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
+        <h2 className="font-serif text-2xl font-bold text-primary">Committee Members</h2>
+        <div className="w-12 h-1 bg-accent rounded"></div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {members.map((m, idx) => (
+            <div key={idx} className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-md flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-xl hover:border-accent/40 transition-all duration-300">
+              <div className={`h-1.5 ${m.tag === 'Chairperson' ? 'bg-accent' : 'bg-primary'}`}></div>
+              <div className="h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center">
+                {m.tag === 'Chairperson' && <span className="absolute top-3 right-3 bg-accent text-primary text-[9px] font-black tracking-widest px-2.5 py-1 rounded-md uppercase z-10 shadow-sm">Chairperson</span>}
+                <img 
+                  src={m.photo} 
+                  alt={m.name} 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&fit=crop&q=80";
+                  }}
+                />
+              </div>
+              <div className="p-6 text-center flex flex-col justify-between flex-grow">
+                <div>
+                  <h3 className="font-serif font-bold text-primary text-base leading-snug mb-2">{m.name}</h3>
+                  <p className="text-slate-500 text-[10px] uppercase font-bold tracking-wider leading-relaxed">{m.role}</p>
+                </div>
+                <div className="w-8 h-0.5 bg-accent/40 mx-auto mt-4"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 9. LEGAL & GRIEVANCE COMMITTEE
+export function LegalCommittee() {
+  const members = [
+    { name: "Registrar", role: "OUTR University Administration", tag: "Chairman", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" },
+    { name: "Dr. Pramod Kumar Parida", role: "Professor, ME", tag: "Member", photo: "/administration/admin_Lcommitee_photo/image.png" },
+    { name: "Dr. Ranjan Kumar Jana", role: "Professor, EE", tag: "Member", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" },
+    { name: "Dr. Tapas Kumar Patra", role: "Professor, I & E", tag: "Member", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" },
+    { name: "Mr. Neelakantha Guru", role: "Asst. Professor, EE", tag: "Coordinator", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" }
+  ]
+
+  return (
+    <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
+      {/* Header */}
+      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
+          Legal &amp; Grievance Committee
+        </h1>
+        <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed font-sans">
+          Formed to ensure smooth management of legal cases, student grievance resolutions, and official legal counsel for the University.
+        </p>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
+        <h2 className="font-serif text-2xl font-bold text-primary">Committee Members</h2>
+        <div className="w-12 h-1 bg-accent rounded"></div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {members.map((m, idx) => (
+            <div key={idx} className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-md flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-xl hover:border-accent/40 transition-all duration-300">
+              <div className={`h-1.5 ${m.tag === 'Chairman' ? 'bg-accent' : 'bg-primary'}`}></div>
+              <div className="h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center">
+                {m.tag === 'Chairman' && <span className="absolute top-3 right-3 bg-accent text-primary text-[9px] font-black tracking-widest px-2.5 py-1 rounded-md uppercase z-10 shadow-sm">Chairman</span>}
+                <img 
+                  src={m.photo} 
+                  alt={m.name} 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&fit=crop&q=80";
+                  }}
+                />
+              </div>
+              <div className="p-6 text-center flex flex-col justify-between flex-grow">
+                <div>
+                  <h3 className="font-serif font-bold text-primary text-base leading-snug mb-2">{m.name}</h3>
+                  <p className="text-slate-500 text-[10px] uppercase font-bold tracking-wider leading-relaxed">{m.role}</p>
+                </div>
+                <div className="w-8 h-0.5 bg-accent/40 mx-auto mt-4"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

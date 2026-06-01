@@ -117,8 +117,8 @@ export default function Footer() {
           </h4>
           <ul className="space-y-3.5 p-0 m-0 list-none text-xs text-[#8ca8c0]">
             <li><a href="/home.html" className="hover:text-white transition-colors no-underline">Home Desk</a></li>
-            <li><a href="/OUTR website/about.html" className="hover:text-white transition-colors no-underline">About OUTR</a></li>
-            <li><a href="/OUTR website/mission&vission.html" className="hover:text-white transition-colors no-underline">Vision &amp; Mission</a></li>
+            <li><a href="/about" className="hover:text-white transition-colors no-underline">About OUTR</a></li>
+            <li><a href="/vision-mission" className="hover:text-white transition-colors no-underline">Vision &amp; Mission</a></li>
             <li><a href="/social.html" className="hover:text-white transition-colors no-underline">Social Media Hub</a></li>
           </ul>
         </div>
@@ -130,7 +130,7 @@ export default function Footer() {
           </h4>
           <ul className="space-y-3.5 p-0 m-0 list-none text-xs text-[#8ca8c0]">
             <li><a href="/OUTR website/schools.html" className="hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
-            <li><a href="/OUTR website/courses/scs/UGcourses.html" className="hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
+            <li><a href="/syllabus" className="hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
             <li><a href="/?view=coe-desk" className="hover:text-white transition-colors no-underline">Controller of Exam</a></li>
             <li><a href="/Student and Event/Hostel/hostel.html" className="hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
           </ul>

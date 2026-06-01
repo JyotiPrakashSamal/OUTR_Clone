@@ -1,10 +1,124 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function SyllabusDesk() {
   const [selectedSchool, setSelectedSchool] = useState('scs')
   const [selectedLevel, setSelectedLevel] = useState('all') // 'all', 'ug', 'pg'
   const [searchQuery, setSearchQuery] = useState('')
   const [activeModalId, setActiveModalId] = useState(null)
+  const [lang, setLang] = useState(() => localStorage.getItem('selectedLanguage') || 'en')
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setLang(localStorage.getItem('selectedLanguage') || 'en')
+    }
+    window.addEventListener('storage', handleStorageChange)
+    const interval = setInterval(handleStorageChange, 1000)
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
+
+  const t = {
+    en: {
+      title: "Explore Syllabus & Programs",
+      subtitle: "Detailed academic curricula, program scopes, and course duration details for all schools.",
+      selectSchool: "Select Your School",
+      searchPlaceholder: "Search course code or name...",
+      activeCurriculum: "Active Academic Curriculum",
+      viewDetails: "View Details & Scope",
+      noPrograms: "No Programs Listed",
+      noProgramsDesc: "We couldn't find any courses matching your active program levels or search queries.",
+      courseDescription: "Course Description & Scope",
+      curriculumHighlights: "Curriculum Highlights & Outcomes",
+      closeCourse: "Close Course Details",
+      duration: "Duration",
+      level: "Level",
+      syllabusCode: "OUTR Syllabus Code",
+      ugDetail: "Undergraduate Program Detail",
+      pgDetail: "Postgraduate Program Detail",
+      undergraduate: "Undergraduate",
+      postgraduate: "Postgraduate",
+      
+      // Schools mapping
+      scs: "Computer Sciences",
+      sElectrical: "Electrical Sciences",
+      sElectronic: "Electronic Sciences",
+      sip: "Infrastructure & Planning",
+      sms: "Mechanical Sciences",
+      
+      // Levels mapping
+      all: "All Programs",
+      ug: "Undergraduate (UG)",
+      pg: "Postgraduate (PG)"
+    },
+    hi: {
+      title: "पाठ्यक्रम और कार्यक्रमों का पता लगाएं",
+      subtitle: "सभी स्कूलों के लिए विस्तृत शैक्षणिक पाठ्यक्रम, कार्यक्रम क्षेत्र और पाठ्यक्रम अवधि विवरण।",
+      selectSchool: "अपने स्कूल का चयन करें",
+      searchPlaceholder: "पाठ्यक्रम कोड या नाम खोजें...",
+      activeCurriculum: "सक्रिय शैक्षणिक पाठ्यक्रम",
+      viewDetails: "विवरण और कार्यक्षेत्र देखें",
+      noPrograms: "कोई कार्यक्रम सूचीबद्ध नहीं",
+      noProgramsDesc: "हमें आपके सक्रिय कार्यक्रम स्तरों या खोज प्रश्नों से मेल खाने वाला कोई पाठ्यक्रम नहीं मिला।",
+      courseDescription: "पाठ्यक्रम विवरण और क्षेत्र",
+      curriculumHighlights: "पाठ्यक्रम की मुख्य विशेषताएं और परिणाम",
+      closeCourse: "पाठ्यक्रम विवरण बंद करें",
+      duration: "अवधि",
+      level: "स्तर",
+      syllabusCode: "ओयूटीआर पाठ्यक्रम कोड",
+      ugDetail: "स्नातक कार्यक्रम विवरण",
+      pgDetail: "स्नातकोत्तर कार्यक्रम विवरण",
+      undergraduate: "स्नातक",
+      postgraduate: "स्नातकोत्तर",
+      
+      // Schools mapping
+      scs: "कंप्यूटर विज्ञान",
+      sElectrical: "इलेक्ट्रिकल विज्ञान",
+      sElectronic: "इलेक्ट्रॉनिक्स विज्ञान",
+      sip: "बुनियादी ढांचा और योजना",
+      sms: "मैकेनिकल विज्ञान",
+      
+      // Levels mapping
+      all: "सभी कार्यक्रम",
+      ug: "स्नातक (UG)",
+      pg: "स्नातकोत्तर (PG)"
+    },
+    od: {
+      title: "ପାଠ୍ୟକ୍ରମ ଓ ଶିକ୍ଷାଗତ କାର୍ଯ୍ୟକ୍ରମ",
+      subtitle: "ସମସ୍ତ ସ୍କୁଲ ପାଇଁ ସମ୍ପୂର୍ଣ୍ଣ ଏକାଡେମିକ୍ ପାଠ୍ୟକ୍ରମ, କାର୍ଯ୍ୟକ୍ରମ ପରିସର ଏବଂ କୋର୍ସ ଅବଧି ବିବରଣୀ |",
+      selectSchool: "ଆପଣଙ୍କର ସ୍କୁଲ୍ ଚୟନ କରନ୍ତୁ",
+      searchPlaceholder: "କୋର୍ସ କୋଡ୍ କିମ୍ବା ନାମ ଖୋଜନ୍ତୁ...",
+      activeCurriculum: "ସକ୍ରିୟ ଏକାଡେମିକ୍ ପାଠ୍ୟକ୍ରମ",
+      viewDetails: "ବିବରଣୀ ଏବଂ ସ୍କୋପ୍ ଦେଖନ୍ତୁ",
+      noPrograms: "କୌଣସି କାର୍ଯ୍ୟକ୍ରମ ତାଲିକାଭୁକ୍ତ ହୋଇନାହିଁ",
+      noProgramsDesc: "ଆପଣଙ୍କର ସକ୍ରିୟ ପ୍ରୋଗ୍ରାମ ସ୍ତର କିମ୍ବା ସର୍ଚ୍ଚ କ୍ଵେରୀ ସହିତ ମେଳ ଖାଉଥିବା କୌଣସି କୋର୍ସ ମିଳିଲା ନାହିଁ ।",
+      courseDescription: "କୋର୍ସ ବିବରଣୀ ଏବଂ ପରିସର",
+      curriculumHighlights: "ପାଠ୍ୟକ୍ରମର ମୁଖ୍ୟ ଆକର୍ଷଣ ଏବଂ ଫଳାଫଳ",
+      closeCourse: "କୋର୍ସ ବିବରଣୀ ବନ୍ଦ କରନ୍ତୁ",
+      duration: "ଅବଧି",
+      level: "ସ୍ତର",
+      syllabusCode: "ଓୟୁଟିଆର୍ ସିଲାବସ୍ କୋଡ୍",
+      ugDetail: "ସ୍ନାତକ ପ୍ରୋଗ୍ରାମ୍ ବିବରଣୀ",
+      pgDetail: "ସ୍ନାତକୋତ୍ତର ପ୍ରୋଗ୍ରାମ୍ ବିବରଣୀ",
+      undergraduate: "ସ୍ନାତକ (UG)",
+      postgraduate: "ସ୍ନାତକୋତ୍ତର (PG)",
+      
+      // Schools mapping
+      scs: "କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ",
+      sElectrical: "ଇଲେକ୍ଟ୍ରିକାଲ୍ ସାଇନ୍ସ",
+      sElectronic: "ଇଲେକ୍ଟ୍ରୋନିକ୍ସ ସାଇନ୍ସ",
+      sip: "ଇନଫ୍ରାଷ୍ଟ୍ରକଚର୍ ଓ ପ୍ଲାନିଂ",
+      sms: "ମେକାନିକାଲ୍ ସାଇନ୍ସ",
+      
+      // Levels mapping
+      all: "ସମସ୍ତ କାର୍ଯ୍ୟକ୍ରମ",
+      ug: "ସ୍ନାତକ (UG)",
+      pg: "ସ୍ନାତକୋତ୍ତର (PG)"
+    }
+  }
+
+  const localized = t[lang] || t.en
 
   const schools = [
     { id: 'scs', name: 'Computer Sciences' },
@@ -498,10 +612,10 @@ export default function SyllabusDesk() {
       {/* Page Hero */}
       <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
-          Explore Syllabus &amp; Programs
+          {localized.title}
         </h1>
         <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed">
-          Detailed academic curricula, program scopes, and course duration details for all schools.
+          {localized.subtitle}
         </p>
         <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded"></div>
       </div>
@@ -511,7 +625,9 @@ export default function SyllabusDesk() {
         
         {/* Academic School Selection Grid */}
         <div className="bg-white border border-slate-200 p-5 rounded-3xl shadow-sm text-left">
-          <p className="text-[10px] font-black text-secondary tracking-widest uppercase mb-3.5 px-1 border-b border-slate-100 pb-2">Select Your School</p>
+          <p className="text-[10px] font-black text-secondary tracking-widest uppercase mb-3.5 px-1 border-b border-slate-100 pb-2">
+            {localized.selectSchool}
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {schools.map(s => (
               <button
@@ -526,7 +642,7 @@ export default function SyllabusDesk() {
                     : 'bg-slate-50 text-slate-600 border-slate-200/60 hover:bg-slate-100 hover:text-primary'
                 }`}
               >
-                {s.name}
+                {localized[s.id] || s.name}
               </button>
             ))}
           </div>
@@ -546,7 +662,7 @@ export default function SyllabusDesk() {
                     : 'text-slate-500 hover:text-primary'
                 }`}
               >
-                {l.name}
+                {localized[l.id] || l.name}
               </button>
             ))}
           </div>
@@ -558,7 +674,7 @@ export default function SyllabusDesk() {
             </span>
             <input
               type="text"
-              placeholder="Search course code or name..."
+              placeholder={localized.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm text-slate-800 placeholder:text-slate-400"
@@ -568,8 +684,8 @@ export default function SyllabusDesk() {
 
         {/* Active Title Banner */}
         <div className="text-left border-l-4 border-accent pl-4 py-1">
-          <h2 className="font-serif text-xl font-bold text-primary">{activeSchoolName}</h2>
-          <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mt-0.5">Active Academic Curriculum</p>
+          <h2 className="font-serif text-xl font-bold text-primary">{localized[selectedSchool] || activeSchoolName}</h2>
+          <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mt-0.5">{localized.activeCurriculum}</p>
         </div>
 
         {/* Courses Cards Grid */}
@@ -586,7 +702,7 @@ export default function SyllabusDesk() {
                       ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' 
                       : 'bg-indigo-50 text-indigo-700 border border-indigo-100'
                   }`}>
-                    {c.level === 'ug' ? 'Undergraduate' : 'Postgraduate'}
+                    {c.level === 'ug' ? localized.undergraduate : localized.postgraduate}
                   </span>
                   <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> {c.duration}
@@ -602,13 +718,13 @@ export default function SyllabusDesk() {
 
               <div className="border-t border-slate-100 mt-6 pt-4 flex justify-between items-center">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1 font-bold">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-secondary shrink-0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> OUTR Syllabus Code
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-secondary shrink-0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> {localized.syllabusCode}
                 </span>
                 <button 
                   onClick={() => setActiveModalId(c.id)}
                   className="bg-primary hover:bg-secondary text-white text-xs font-bold py-2 px-5 rounded-xl transition-all cursor-pointer"
                 >
-                  View Details &amp; Scope
+                  {localized.viewDetails}
                 </button>
               </div>
             </div>
@@ -617,8 +733,8 @@ export default function SyllabusDesk() {
           {filteredCourses.length === 0 && (
             <div className="col-span-full bg-white border border-slate-200 rounded-3xl p-16 text-center space-y-3">
               <span className="text-4xl block">📚</span>
-              <h3 className="font-serif font-bold text-primary text-lg">No Programs Listed</h3>
-              <p className="text-slate-400 text-xs max-w-xs mx-auto">We couldn't find any courses matching your active program levels or search queries.</p>
+              <h3 className="font-serif font-bold text-primary text-lg">{localized.noPrograms}</h3>
+              <p className="text-slate-400 text-xs max-w-xs mx-auto">{localized.noProgramsDesc}</p>
             </div>
           )}
         </div>
@@ -639,7 +755,7 @@ export default function SyllabusDesk() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
               <span className="text-accent text-[9px] font-black tracking-widest uppercase block mb-1">
-                {activeModalData.level === 'ug' ? 'Undergraduate Program Detail' : 'Postgraduate Program Detail'}
+                {activeModalData.level === 'ug' ? localized.ugDetail : localized.pgDetail}
               </span>
               <h2 className="font-serif text-2xl font-black">{activeModalData.name}</h2>
               <p className="text-blue-100 text-xs font-bold mt-1 uppercase tracking-wider">{activeModalData.fullName}</p>
@@ -651,22 +767,22 @@ export default function SyllabusDesk() {
               {/* About section */}
               <div className="space-y-2">
                 <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Course Description &amp; Scope
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> {localized.courseDescription}
                 </h4>
                 <p className="text-slate-600 text-xs leading-relaxed font-semibold">{activeModalData.description}</p>
               </div>
 
               {/* Course Info */}
               <div className="bg-slate-50 border border-slate-200/50 p-4 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-600">
-                <p className="flex items-center gap-2">Duration: <span className="text-primary">{activeModalData.duration}</span></p>
-                <p className="flex items-center gap-2">Level: <span className="text-primary uppercase">{activeModalData.level}</span></p>
+                <p className="flex items-center gap-2">{localized.duration}: <span className="text-primary">{activeModalData.duration}</span></p>
+                <p className="flex items-center gap-2">{localized.level}: <span className="text-primary uppercase">{activeModalData.level === 'ug' ? localized.undergraduate : localized.postgraduate}</span></p>
               </div>
 
               {/* Core Features */}
               {activeModalData.features && (
                 <div className="space-y-3">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Curriculum Highlights &amp; Outcomes
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> {localized.curriculumHighlights}
                   </h4>
                   <ul className="space-y-2.5">
                     {activeModalData.features.map((feat, idx) => (
@@ -687,7 +803,7 @@ export default function SyllabusDesk() {
                 onClick={() => setActiveModalId(null)}
                 className="bg-primary hover:bg-secondary text-white text-xs font-bold py-2.5 px-6 rounded-xl transition-all cursor-pointer"
               >
-                Close Course Details
+                {localized.closeCourse}
               </button>
             </div>
 

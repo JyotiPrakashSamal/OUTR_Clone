@@ -1,4 +1,79 @@
+import { useState, useEffect } from 'react'
+
 export default function DeanDesk() {
+  const [lang, setLang] = useState(() => localStorage.getItem('selectedLanguage') || 'en')
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setLang(localStorage.getItem('selectedLanguage') || 'en')
+    }
+    window.addEventListener('storage', handleStorageChange)
+    const interval = setInterval(handleStorageChange, 1000)
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
+
+  const t = {
+    en: {
+      title: "Deans of Faculties & Schools",
+      subtitle: "Academic leadership driving excellence and innovation at OUTR, Bhubaneswar.",
+      breadcrumbHome: "Home",
+      breadcrumbAdmin: "Administration",
+      breadcrumbDeans: "Deans",
+      emailLabel: "Email Address",
+      "Dean, Faculty and Planning": "Dean, Faculty and Planning",
+      "Dean, Sponsored Research & Industrial Consultancy": "Dean, Sponsored Research & Industrial Consultancy",
+      "Dean, Post Graduate Studies & Research": "Dean, Post Graduate Studies & Research",
+      "Dean, Students Welfare": "Dean, Students Welfare",
+      "Dean, Centre for Distance & Continuing Education": "Dean, Centre for Distance & Continuing Education",
+      "Dean, Academic Affairs": "Dean, Academic Affairs",
+      "Professor, Mechanical Engineering": "Professor, Mechanical Engineering",
+      "Professor, Electrical Engineering": "Professor, Electrical Engineering",
+      "Professor, Electronics & Instrumentation Engineering": "Professor, Electronics & Instrumentation Engineering",
+      "Professor, Computer Science & Application": "Professor, Computer Science & Application"
+    },
+    hi: {
+      title: "संकायों और स्कूलों के डीन",
+      subtitle: "ओयूटीआर, भुवनेश्वर में अकादमिक नेतृत्व उत्कृष्टता और नवाचार को बढ़ावा देता है।",
+      breadcrumbHome: "मुख्य पृष्ठ",
+      breadcrumbAdmin: "प्रशासन",
+      breadcrumbDeans: "डीन",
+      emailLabel: "ईमेल पता",
+      "Dean, Faculty and Planning": "डीन, संकाय और योजना",
+      "Dean, Sponsored Research & Industrial Consultancy": "डीन, प्रायोजित अनुसंधान और औद्योगिक परामर्श",
+      "Dean, Post Graduate Studies & Research": "डीन, स्नातकोत्तर अध्ययन और अनुसंधान",
+      "Dean, Students Welfare": "डीन, छात्र कल्याण",
+      "Dean, Centre for Distance & Continuing Education": "डीन, दूरस्थ और सतत शिक्षा केंद्र",
+      "Dean, Academic Affairs": "डीन, शैक्षणिक मामले",
+      "Professor, Mechanical Engineering": "प्रोफेसर, मैकेनिकल इंजीनियरिंग",
+      "Professor, Electrical Engineering": "प्रोफेसर, इलेक्ट्रिकल इंजीनियरिंग",
+      "Professor, Electronics & Instrumentation Engineering": "प्रोफेसर, इलेक्ट्रॉनिक्स और इंस्ट्रूमेंटेशन इंजीनियरिंग",
+      "Professor, Computer Science & Application": "प्रोफेसर, कंप्यूटर विज्ञान और अनुप्रयोग"
+    },
+    od: {
+      title: "ଫ୍ୟାକଲ୍ଟି ଏବଂ ସ୍କୁଲର ଡିନ୍‌",
+      subtitle: "ଓୟୁଟିଆର୍, ଭୁବନେଶ୍ୱରରେ ଉତ୍କୃଷ୍ଟତା ଏବଂ ନୂତନତ୍ୱକୁ ଆଗେଇ ନେଉଥିବା ଏକାଡେମିକ୍ ନେତୃତ୍ୱ |",
+      breadcrumbHome: "ମୁଖ୍ୟ ପୃଷ୍ଠା",
+      breadcrumbAdmin: "ପ୍ରଶାସନ",
+      breadcrumbDeans: "ଡିନ୍",
+      emailLabel: "ଇମେଲ୍ ଠିକଣା",
+      "Dean, Faculty and Planning": "ଡିନ୍, ଫ୍ୟାକଲ୍ଟି ଏବଂ ଯୋଜନା",
+      "Dean, Sponsored Research & Industrial Consultancy": "ଡିନ୍, ପ୍ରାୟୋଜିତ ଅନୁସନ୍ଧାନ ଏବଂ ଶିଳ୍ପ ପରାମର୍ଶ",
+      "Dean, Post Graduate Studies & Research": "ଡିନ୍, ସ୍ନାତକୋତ୍ତର ଅଧ୍ୟୟନ ଏବଂ ଅନୁସନ୍ଧାନ",
+      "Dean, Students Welfare": "ଡିନ୍, ଛାତ୍ର କଲ୍ୟାଣ",
+      "Dean, Centre for Distance & Continuing Education": "ଡିନ୍, ଦୂରନିରନ୍ତର ଶିକ୍ଷା କେନ୍ଦ୍ର",
+      "Dean, Academic Affairs": "ଡିନ୍, ଶିକ୍ଷାଗତ ବ୍ୟାପାର",
+      "Professor, Mechanical Engineering": "ପ୍ରଫେସର, ମେକାନିକାଲ୍ ଇଞ୍ଜିନିୟରିଂ",
+      "Professor, Electrical Engineering": "ପ୍ରଫେସର, ଇଲେକ୍ଟ୍ରିକାଲ୍ ଇଞ୍ଜିନିୟରିଂ",
+      "Professor, Electronics & Instrumentation Engineering": "ପ୍ରଫେସର, ଇଲେକ୍ଟ୍ରୋନିକ୍ସ ଏବଂ ଇନଷ୍ଟ୍ରୁମେଣ୍ଟେସନ ଇଞ୍ଜିନିୟରିଂ",
+      "Professor, Computer Science & Application": "ପ୍ରଫେସର, କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ ଏବଂ ପ୍ରୟୋଗ"
+    }
+  }
+
+  const localized = t[lang] || t.en
+
   const deans = [
     {
       name: "Dr. Pramod K. Parida",
@@ -55,21 +130,21 @@ export default function DeanDesk() {
       {/* Page Hero */}
       <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
-          Deans of Faculties &amp; Schools
+          {localized.title}
         </h1>
         <p className="text-white/85 text-xs sm:text-sm font-medium max-w-2xl mx-auto mt-4 leading-relaxed">
-          Academic leadership driving excellence and innovation at OUTR, Bhubaneswar.
+          {localized.subtitle}
         </p>
         <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded"></div>
       </div>
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 mb-8 text-xs font-semibold text-slate-400 flex gap-2 items-center">
-        <span className="text-secondary cursor-pointer hover:underline">Home</span>
+        <span className="text-secondary cursor-pointer hover:underline">{localized.breadcrumbHome}</span>
         <span>&gt;</span>
-        <span className="text-secondary cursor-pointer hover:underline">Administration</span>
+        <span className="text-secondary cursor-pointer hover:underline">{localized.breadcrumbAdmin}</span>
         <span>&gt;</span>
-        <span className="text-slate-600 font-bold">Deans</span>
+        <span className="text-slate-600 font-bold">{localized.breadcrumbDeans}</span>
       </div>
 
       {/* Deans Grid */}
@@ -94,10 +169,12 @@ export default function DeanDesk() {
               <div className="p-6 text-left flex flex-col justify-between flex-grow">
                 <div>
                   <span className="inline-block text-[9px] font-bold tracking-wider px-2.5 py-1 bg-primary/10 text-primary border-l-2 border-accent rounded-md uppercase mb-3">
-                    {d.role}
+                    {localized[d.role] || d.role}
                   </span>
                   <h3 className="font-serif font-bold text-primary text-xl mb-1.5">{d.name}</h3>
-                  <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">{d.dept}</p>
+                  <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                    {localized[d.dept] || d.dept}
+                  </p>
                 </div>
                 
                 <div className="border-t border-slate-100 mt-6 pt-4">

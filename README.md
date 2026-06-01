@@ -1,134 +1,137 @@
 # OUTR_Clone
 
-A collaborative college team project to build a frontend clone of the official **Odisha University of Technology and Research (OUTR)** website (formerly CET Bhubaneswar). This repository consolidates our team's integration work, providing a clean, responsive web interface that matches the original university site's layout, information structure, and features.
+A collaborative college team project to build a modern frontend clone of the official **Odisha University of Technology and Research (OUTR)** website. Upgraded from static HTML to a full React SPA with Supabase-powered dashboards, multi-language support, and Netlify deployment.
 
 ---
 
 ## 🏛️ Project Overview
 
-This project recreates the digital presence of OUTR. It is built as a collaborative effort using standard frontend web technologies without heavy compilation or build pipelines, ensuring it is easy to run, test, and host.
+This project recreates the digital presence of OUTR with a hybrid architecture — a polished static marketing homepage alongside a React-powered services portal for students, faculty, and administrators.
 
 ### Key Features
 
-- **Detailed Homepage** — Dynamic sliders, news tickers, notice boards, and events listing.
-- **Academics & Schools** — Dedicated sections for various departments, schools, and courses (both UG and PG).
-- **Administration Portal** — Pages for governance bodies, the VC's Desk, HODs, Deans, and university committees.
-- **Student Life** — Campus facilities, hostel accommodation details, and activity portals.
-- **Exam & Results Management** — Sample mock interfaces for admit cards and student results search.
-- **Multi-language Support (i18n)** — Localization features supporting English, Hindi, and Odia.
+- **University Homepage** — Dynamic sliders, live AQI widget, news tickers, notice boards, event listings, and tri-lingual i18n (English, Hindi, Odia).
+- **React SPA Portal** — Role-based dashboards for 8 user types (Student, Warden, Faculty Advisor, HoS, Dean Academic, Dean PGA, Controller, Super Admin).
+- **File Tracking System** — Multi-step student clearance routing with PDF uploads, realtime push notifications, and 7-stage approval chain.
+- **Exam Management** — Grade sheets, admit card generation, and result publication dashboards.
+- **Academics & Schools** — Department pages, UG/PG course listings, faculty profiles with research publications.
+- **Administration** — VC Desk, Board of Governors, Dean directory, and 6+ committee pages.
+- **Social Media Hub** — Integrated platform dashboards for Facebook, Instagram, LinkedIn, and YouTube.
+- **Deployment-Ready** — `netlify.toml` configured with SPA fallback routing, CI/CD via GitHub Actions.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **HTML5** — Page structure and semantic markup.
-- **TailwindCSS (CDN)** — Utility-first styling injected via CDN script.
-- **Vanilla CSS** — Custom styling overrides and local component tweaks.
-- **Vanilla JavaScript** — Language translation loading, search filters, and basic DOM interactivity.
-- **JSON** — Structured data for localizing site content, events, and announcements.
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 19 + React Router v7 |
+| Build Tool | Vite 8 |
+| Styling | Tailwind CSS 4 + Vanilla CSS |
+| Database & Auth | Supabase (PostgreSQL + Auth + Storage + Realtime) |
+| Static Pages | HTML5 + Vanilla JS (homepage, schools, faculty profiles) |
+| Testing | Vitest + React Testing Library |
+| CI/CD | GitHub Actions |
+| Hosting | Netlify (static + SPA) |
 
 ---
 
 ## 📁 Repository Structure
 
-The core source files are organized inside the `Phase-1 Integration` directory:
-
 ```
 OUTR_Clone/
-├── Phase-1 Integration/              # Main website source folder
-│   ├── index.html                    # Main landing page
-│   ├── style.css                     # Global custom styles
-│   ├── home.js                       # Core website logic and language switching
-│   ├── social.html                   # Social media hub
-│   ├── social.js                     # Social page interactive logic
+├── frontend/                          # Main application source
+│   ├── index.html                     # Vite entry point (React SPA)
+│   ├── vite.config.js                 # Vite build configuration
+│   ├── netlify.toml                   # Netlify build + redirect rules
+│   ├── package.json                   # Dependencies and scripts
+│   ├── supabase_schema.sql            # Full database schema (run in Supabase)
+│   ├── DEPLOYMENT.md                  # Netlify deployment guide
+│   ├── .env.example                   # Environment variable template
 │   │
-│   ├── OUTR website/                 # University information pages
-│   │   ├── about.html                # About the university
-│   │   ├── location.html             # Campus location and Google map integration
-│   │   ├── mission&vission.html      # University vision and objectives
-│   │   ├── schools.html              # List of academic departments
-│   │   ├── courses/                  # Individual UG & PG course sheets
-│   │   ├── faculties/                # Department-wise faculty lists
-│   │   └── profiles/                 # Faculty member profile cards
+│   ├── src/                           # React application source
+│   │   ├── App.jsx                    # Root component with routing
+│   │   ├── supabaseClient.js          # Supabase SDK initialization
+│   │   ├── index.css                  # Design system tokens
+│   │   ├── components/                # Shared UI (Navbar, Footer, ErrorBoundary)
+│   │   ├── lib/api.js                 # Centralized API abstraction layer
+│   │   └── pages/                     # All page components
+│   │       ├── AuthPortal.jsx         # Login portal (8 role cards)
+│   │       ├── AdminDashboard.jsx     # Super admin account provisioning
+│   │       ├── WardenDashboard.jsx    # Hostel warden roster management
+│   │       ├── FileTrackingDashboard.jsx  # Student clearance file system
+│   │       ├── InstitutionalPages.jsx # About, Location, Vision & Mission
+│   │       └── file-tracking/         # Decomposed FTD sub-components
 │   │
-│   ├── Student and Event/            # Student life pages
-│   │   ├── Campus_Facilities/        # Campus library, labs, and amenities
-│   │   ├── Hostel/                   # Hostels list and warden contacts
-│   │   └── Image/                    # Image assets for student sections
-│   │
-│   ├── administration/               # University governance and administration
-│   │   ├── Vcdesk.html               # Vice Chancellor's desk
-│   │   ├── HOD.html                  # Heads of Departments list
-│   │   ├── Dean.html                 # Deans directory
-│   │   ├── BOM.html                  # Board of Management listing
-│   │   ├── COE.html                  # Controller of Examinations panel
-│   │   ├── Antiragging.html          # Anti-ragging committee page
-│   │   ├── *_commitee.html           # Various active board and committee pages
-│   │   ├── Admitcard_Management.html # Mock student admit card generation
-│   │   ├── Admin_result_Management.html # Mock student results query interface
-│   │   └── admin_*_photo/            # Committee members photos
-│   │
-│   └── public/
-│       └── data/                     # Dynamic translations and mock JSON data
-│           ├── home.json             # Announcements and slider contents
-│           └── i18n/                 # Localization dictionaries (en, hi, od)
+│   └── public/                        # Static assets (copied to dist/)
+│       ├── home.html                  # University marketing homepage
+│       ├── home.js                    # Homepage logic + i18n switching
+│       ├── social.html                # Social Media Hub page
+│       ├── style.css                  # Global styles for static pages
+│       ├── navbar-footer-loader.js    # Unified nav/footer injector for sub-pages
+│       ├── data/                      # JSON content (home, footer, i18n locales)
+│       ├── OUTR website/              # School pages, courses, faculty, images
+│       ├── Student and Event/         # Campus facilities, hostel pages
+│       └── administration/            # Committee pages + member photos
 │
-├── docs/                             # Project setup and overview notes
-│   ├── architecture.md
-│   └── setup-guide.md
-│
-├── CODEOWNERS                        # Team file ownership mapping
-├── CONTRIBUTING.md                   # Team collaboration guidelines
-└── README.md                         # This file
+├── .github/workflows/ci.yml          # CI pipeline (lint + test + build)
+├── docs/                              # Architecture notes
+├── CODEOWNERS                         # Team file ownership
+├── CONTRIBUTING.md                    # Collaboration guidelines
+└── README.md                          # This file
 ```
 
 ---
 
 ## 🚀 How to Run Locally
 
-Since this is a client-side frontend project, you do not need to install `npm` modules or run a local compilation.
+### Prerequisites
+- Node.js 18+ and npm
 
-### Option A: Open Directly in Browser
-
-You can open `Phase-1 Integration/index.html` directly in any web browser to view the site structure.
-_Note: Due to browser security restrictions on the `fetch()` API for local files (CORS), the multi-language switching feature requires a local server to run correctly._
-
-### Option B: Using VS Code Live Server (Recommended)
-
-1. Open the project in VS Code.
-2. Install the **Live Server** extension.
-3. Right-click `Phase-1 Integration/index.html` and select **"Open with Live Server"**.
-4. The site will run locally at `http://127.0.0.1:5500/Phase-1 Integration/index.html`.
-
-### Option C: Using Python
-
-If you have Python installed, navigate to the project directory in your terminal and run:
+### Setup
 
 ```bash
-cd "Phase-1 Integration"
-python -m http.server 8000
+cd frontend
+cp .env.example .env.local
+# Edit .env.local with your Supabase URL and anon key
+npm install
+npm run dev
 ```
 
-Open [http://localhost:8000](http://localhost:8000) in your web browser.
+| URL | What it shows |
+|-----|---------------|
+| `http://localhost:5173/home.html` | University homepage |
+| `http://localhost:5173/portal` | Login portal |
+| `http://localhost:5173/about` | About OUTR (React) |
+
+### Build & Test
+
+```bash
+npm run build    # Production bundle → dist/
+npm run test     # Vitest automated tests
+npm run lint     # ESLint checks
+```
+
+---
+
+## 🌐 Deployment (Netlify)
+
+See [`frontend/DEPLOYMENT.md`](frontend/DEPLOYMENT.md) for the full step-by-step guide.
+
+**Quick version:**
+1. Connect GitHub repo to Netlify → Set **Base directory = `frontend`**
+2. Add env vars: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+3. Run `supabase_schema.sql` in your Supabase SQL Editor (one-time)
+4. Deploy — homepage works immediately, dashboards need Supabase credentials
 
 ---
 
 ## 👥 The Development Team
 
-We split the responsibilities of the website clone as follows:
-
-- **Jyoti Prakash Samal** ([@JyotiPrakashSamal](https://github.com/JyotiPrakashSamal))
-  - **Role**:Repository Owner
-  - **Ownership**: Project setup, homepage layout, global search and translation mechanisms, and core configuration files.
-- **Amrita Sahu** ([@AmritaSahu25](https://github.com/AmritaSahu25))
-  - **Role**: Core Contributor
-  - **Ownership**: The entire `OUTR website/` module, including department listings, UG/PG course details, location guides, and faculty profiles.
-- **Rama** ([@Rama-Desk](https://github.com/Rama-Desk))
-  - **Role**: Core Contributor
-  - **Ownership**: The entire `administration/` module, including governance desks (VC, Deans, HODs), student admit card, results system, and committee pages.
-- **Sonali Gupta** ([@sonaligupta-04047](https://github.com/sonaligupta-04047))
-  - **Role**: Core Contributor
-  - **Ownership**: The entire `Student and Event/` module, campus facility galleries, hostel administration info, and relevant assets.
+- **Jyoti Prakash Samal** ([@JyotiPrakashSamal](https://github.com/JyotiPrakashSamal)) — Repository Owner. Homepage, global search, i18n, React SPA architecture, CI/CD, and deployment.
+- **Amrita Sahu** ([@AmritaSahu25](https://github.com/AmritaSahu25)) — Core Contributor. `OUTR website/` module: departments, courses, location, and faculty profiles.
+- **Rama** ([@Rama-Desk](https://github.com/Rama-Desk)) — Core Contributor. `administration/` module: governance desks, committees, admit cards, and results.
+- **Sonali Gupta** ([@sonaligupta-04047](https://github.com/sonaligupta-04047)) — Core Contributor. `Student and Event/` module: campus facilities, hostels, and student life.
 
 ---
 

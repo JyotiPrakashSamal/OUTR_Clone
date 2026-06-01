@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Navbar({ onNavigate }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const navigate = useNavigate()
 
   // Listen to window scroll to trigger top-bar display identically to static sub-pages
   useEffect(() => {
@@ -21,7 +23,35 @@ export default function Navbar({ onNavigate }) {
   }, [])
 
   const handleNavigation = (view) => {
-    if (onNavigate) {
+    if (view === 'home') {
+      window.location.href = '/home.html'
+    } else if (view === 'vc-desk') {
+      navigate('/vc-desk')
+    } else if (view === 'bom') {
+      navigate('/bom')
+    } else if (view === 'deans') {
+      navigate('/deans')
+    } else if (view === 'hods') {
+      navigate('/hods')
+    } else if (view === 'antiragging') {
+      navigate('/antiragging')
+    } else if (view === 'coe-desk') {
+      navigate('/coe-desk')
+    } else if (view === 'syllabus') {
+      navigate('/syllabus')
+    } else if (view === 'about') {
+      navigate('/about')
+    } else if (view === 'vision-mission') {
+      navigate('/vision-mission')
+    } else if (view === 'location') {
+      navigate('/location')
+    } else if (view === 'academic-council') {
+      navigate('/academic-council')
+    } else if (view === 'students-grievance') {
+      navigate('/students-grievance')
+    } else if (view === 'auth' || view === 'portal') {
+      navigate('/portal')
+    } else if (onNavigate) {
       onNavigate(view)
     }
     setMobileMenuOpen(false)
@@ -33,9 +63,9 @@ export default function Navbar({ onNavigate }) {
       <div id="top-bar" className={scrolled ? 'hide' : ''}>
         <div className="max-w-7xl mx-auto px-5 w-full flex justify-between items-center select-none font-sans">
           <div className="flex gap-5">
-            <a href="#" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Careers</a>
-            <a href="#" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
-            <a href="/administration/pic_officers.html" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">PIC Officers</a>
+            <a href="/coming-soon.html?title=Careers" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Careers</a>
+            <a href="https://rti.gov.in/" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
+            <a href="/coming-soon.html?title=PIC%20Officers" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">PIC Officers</a>
             <a href="http://placement.cet.edu.in/" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Placement</a>
           </div>
           <div className="flex gap-5">
@@ -74,20 +104,20 @@ export default function Navbar({ onNavigate }) {
                 </button>
                 <div className="dropdown">
                   <div className="flex flex-col gap-2">
-                    <a href="/OUTR website/about.html" className="dd-card">
+                    <button onClick={() => handleNavigation('about')} className="dd-card bg-transparent border-none text-left w-full cursor-pointer font-sans">
                       <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
                       <div>
                         <div className="dd-title">About OUTR</div>
                         <div className="dd-sub">History &amp; overview</div>
                       </div>
-                    </a>
-                    <a href="/OUTR website/mission&vission.html" className="dd-card">
+                    </button>
+                    <button onClick={() => handleNavigation('vision-mission')} className="dd-card bg-transparent border-none text-left w-full cursor-pointer font-sans">
                       <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-3"></use></svg></div>
                       <div>
                         <div className="dd-title">Vision and Mission</div>
                         <div className="dd-sub">Core values &amp; goals</div>
                       </div>
-                    </a>
+                    </button>
                     <a href="/OUTR website/schools.html" className="dd-card">
                       <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-4"></use></svg></div>
                       <div>
@@ -146,13 +176,13 @@ export default function Navbar({ onNavigate }) {
                     <div className="border-l border-slate-100 pl-4 text-left">
                       <p className="text-[10.5px] font-semibold text-[#94a3b8] tracking-widest uppercase mb-2.5 px-1">Other Academic Boards</p>
                       <div className="flex flex-col gap-2">
-                        <a href="/administration/SA_commitee.html" className="dd-card">
+                        <button onClick={() => handleNavigation('academic-council')} className="dd-card bg-transparent border-none text-left w-full cursor-pointer font-sans">
                           <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-6"></use></svg></div>
                           <div>
                             <div className="dd-title">Committees</div>
                             <div className="dd-sub">Academic boards &amp; groups</div>
                           </div>
-                        </a>
+                        </button>
                         <button onClick={() => handleNavigation('syllabus')} className="dd-card bg-transparent border-none text-left w-full font-sans cursor-pointer">
                           <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-7"></use></svg></div>
                           <div>
@@ -160,7 +190,7 @@ export default function Navbar({ onNavigate }) {
                             <div className="dd-sub">UG and PG course syllabi</div>
                           </div>
                         </button>
-                        <a href="#" className="dd-card">
+                        <a href="/coming-soon.html?title=Academic%20Calendar" className="dd-card">
                           <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-2"></use></svg></div>
                           <div>
                             <div className="dd-title">Academic Calendar</div>
@@ -201,14 +231,14 @@ export default function Navbar({ onNavigate }) {
                       <div className="dd-icon bg-[#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-6"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Anti-Ragging</div>
                     </button>
-                    <a href="/administration/AR_commitee.html" className="dd-card">
+                    <button onClick={() => handleNavigation('academic-council')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans cursor-pointer">
                       <div className="dd-icon bg-[#f5f3ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-7"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Academic Council</div>
-                    </a>
-                    <a href="/administration/L_commitee.html" className="dd-card">
+                    </button>
+                    <button onClick={() => handleNavigation('students-grievance')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans cursor-pointer">
                       <div className="dd-icon bg-[#ecfdf5]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-16"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Students Grievance</div>
-                    </a>
+                    </button>
                     <button onClick={() => handleNavigation('coe-desk')} className="dd-card bg-transparent border border-[#e8eef4] w-full text-left font-sans">
                       <div className="dd-icon bg-[#fff0f6]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-17"></use></svg></div>
                       <div className="dd-title text-[12.5px]">Controller of Exam</div>
@@ -263,13 +293,13 @@ export default function Navbar({ onNavigate }) {
                 </button>
                 <div className="dropdown">
                   <div className="flex flex-col gap-2">
-                    <a href="/OUTR website/location.html" className="dd-card">
+                    <button onClick={() => handleNavigation('location')} className="dd-card bg-transparent border-none text-left w-full cursor-pointer font-sans">
                       <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-16"></use></svg></div>
                       <div>
                         <div className="dd-title">Address &amp; Map</div>
                         <div className="dd-sub">Techno Campus, Ghatikia, BBSR</div>
                       </div>
-                    </a>
+                    </button>
                     <a href="#footer" className="dd-card">
                       <div className="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" strokeWidth="2"><use href="#icon-17"></use></svg></div>
                       <div>
@@ -359,8 +389,8 @@ export default function Navbar({ onNavigate }) {
                   <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
                 </summary>
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-                  <a href="/OUTR website/about.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">About OUTR</a>
-                  <a href="/OUTR website/mission&vission.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Vision and Mission</a>
+                  <button onClick={() => { handleNavigation('about'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">About OUTR</button>
+                  <button onClick={() => { handleNavigation('vision-mission'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Vision and Mission</button>
                   <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Accreditation</a>
                 </div>
               </details>
@@ -373,7 +403,7 @@ export default function Navbar({ onNavigate }) {
                 </summary>
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
                   <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
-                  <a href="/administration/SA_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Committees</a>
+                  <button onClick={() => { handleNavigation('academic-council'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Committees</button>
                   <button onClick={() => { handleNavigation('syllabus'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Syllabus</button>
                 </div>
               </details>
@@ -390,8 +420,8 @@ export default function Navbar({ onNavigate }) {
                   <button onClick={() => { handleNavigation('deans'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Dean</button>
                   <button onClick={() => { handleNavigation('hods'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">HODs</button>
                   <button onClick={() => { handleNavigation('antiragging'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Anti-Ragging</button>
-                  <a href="/administration/AR_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Academic Council</a>
-                  <a href="/administration/L_commitee.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Students Grievance</a>
+                  <button onClick={() => { handleNavigation('academic-council'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Academic Council</button>
+                  <button onClick={() => { handleNavigation('students-grievance'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Students Grievance</button>
                   <button onClick={() => { handleNavigation('coe-desk'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Controller of Exam</button>
                 </div>
               </details>
@@ -417,7 +447,7 @@ export default function Navbar({ onNavigate }) {
                   <svg className="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><use href="#icon-1"></use></svg>
                 </summary>
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-                  <a href="/OUTR website/location.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Address &amp; Map</a>
+                  <button onClick={() => { handleNavigation('location'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Address &amp; Map</button>
                   <a href="#footer" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Phone &amp; Email</a>
                   <a href="/social.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Social Media Hub</a>
                 </div>

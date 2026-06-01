@@ -193,7 +193,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                       'e.g. Name'
                     }
                     value={name} onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary transition-colors"
+                    className="input-standard text-xs"
                   />
                 </div>
 
@@ -202,7 +202,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                   <input 
                     type="email" required placeholder="e.g. registrar@outr.ac.in"
                     value={email} onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary transition-colors"
+                    className="input-standard text-xs"
                   />
                 </div>
 
@@ -212,7 +212,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                     <input 
                       type={showPassword ? "text" : "password"} required placeholder="••••••••" minLength="6"
                       value={password} onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-4 pr-12 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary transition-colors"
+                      className="input-standard pl-4 pr-12 text-xs"
                     />
                     <button
                       type="button"
@@ -239,7 +239,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                     <label className="block text-[10px] font-bold text-primary uppercase mb-1">System Role</label>
                     <select 
                       value={selectedRole} onChange={(e) => handleRoleChange(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                      className="input-standard text-xs font-semibold text-primary"
                     >
                       <option value="student">Student</option>
                       <option value="warden">Hostel Warden</option>
@@ -257,7 +257,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                       <label className="block text-[10px] font-bold text-primary uppercase mb-1">Assigned Hostel</label>
                       <select 
                         value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                        className="input-standard text-xs font-semibold text-primary"
                       >
                         <option value="APJKHR">APJKHR (Kalam Hall)</option>
                         <option value="KHR">KHR (Kharavela Hall)</option>
@@ -270,7 +270,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                       <label className="block text-[10px] font-bold text-primary uppercase mb-1">School ID</label>
                       <select 
                         value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                        className="input-standard text-xs font-semibold text-primary"
                       >
                         <option value="SCS">SCS (Computer Sci)</option>
                         <option value="SMS">SMS (Mechanical)</option>
@@ -286,7 +286,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                       <label className="block text-[10px] font-bold text-primary uppercase mb-1">Affiliation ID</label>
                       <select 
                         value={schoolId} onChange={(e) => setSchoolId(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary bg-white font-semibold text-primary"
+                        className="input-standard text-xs font-semibold text-primary"
                       >
                         <option value="">Global / All</option>
                         <option value="SCS">SCS (Computer Sci)</option>
@@ -307,14 +307,14 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                     <input 
                       type="text" required placeholder="e.g. 25240012"
                       value={regdNo} onChange={(e) => handleRegdNoChange(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-secondary transition-colors font-semibold"
+                      className="input-standard text-xs font-semibold"
                     />
                   </div>
                 )}
 
                 <button
                   type="submit" disabled={provisioning}
-                  className="w-full py-3 rounded-xl bg-primary hover:bg-secondary text-white font-bold text-xs transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                  className="w-full btn-brand-primary py-3 text-xs disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                 >
                   {provisioning ? 'Syncing with Supabase...' : 'Create Account & Sync Database'}
                 </button>
@@ -333,7 +333,7 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                 <input 
                   type="text" placeholder="Search registry..."
                   value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                  className="px-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-secondary w-full sm:w-48 transition-colors"
+                  className="input-standard py-2 text-xs w-full sm:w-48"
                 />
               </div>
 
@@ -349,19 +349,19 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
                   <span className="text-xs text-muted mt-1">Try expanding your search query or provision a new one.</span>
                 </div>
               ) : (
-                <div className="flex-grow overflow-x-auto">
-                  <table className="w-full text-xs">
+                <div className="flex-grow table-container-responsive">
+                  <table className="table-brand text-xs">
                     <thead>
-                      <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px] text-left">
+                      <tr className="table-brand-header text-[10px]">
                         <th className="pb-3 pl-2">Name</th>
                         <th className="pb-3">Role</th>
                         <th className="pb-3">Affiliation</th>
                         <th className="pb-3 pr-2 text-right">Created At</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-50">
+                    <tbody>
                       {filteredProfiles.map((p) => (
-                        <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                        <tr key={p.id} className="table-brand-row">
                           <td className="py-3 pl-2 font-bold text-[#0b3c5d]">{capitalizeName(p.name) || 'Anonymous User'}</td>
                           <td className="py-3 font-semibold">
                             <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
