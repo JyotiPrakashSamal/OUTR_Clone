@@ -88,6 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render initially
   renderBulletins(allBulletins);
 
+  // Handle async Lucide loading race conditions
+  document.addEventListener("outr-unified-loader-ready", () => {
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  });
+
   // States
   let activeFilter = "all";
   let searchQuery = "";
@@ -196,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function createBulletinCardHtml(post) {
     // Determine visual style according to category
     let colorClasses = "bg-slate-50 border-slate-200/60";
-    let icon = `<i data-lucide="volume2" class="w-4 h-4 text-slate-600"></i>`;
+    let icon = `<i data-lucide="volume-2" class="w-4 h-4 text-slate-600"></i>`;
     let badgeLabel = "General";
     let badgeColor = "bg-slate-100 text-slate-700 border-slate-200";
 

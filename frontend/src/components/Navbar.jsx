@@ -27,6 +27,9 @@ export default function Navbar({ onNavigate }) {
   }, [])
 
   const handleNavigation = (view) => {
+    if (document.activeElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur()
+    }
     if (view === 'home') {
       window.location.href = '/home.html'
     } else if (view === 'vc-desk') {
