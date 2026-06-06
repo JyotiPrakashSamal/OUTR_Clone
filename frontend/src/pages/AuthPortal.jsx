@@ -1,6 +1,10 @@
 /* eslint-disable no-empty */
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
+import { 
+  GraduationCap, Key, FileText, Landmark, BookOpen, Scale, Settings, 
+  Zap, AlertTriangle, Check, Eye, EyeOff, Lock, UserCheck, ShieldAlert 
+} from 'lucide-react'
 
 const capitalizeName = (name) => {
   if (!name) return ''
@@ -30,16 +34,16 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
     }
   }
 
-  // University Roles list (NO PUBLIC SIGNUP - ALL CREATED BY SUPER ADMIN)
+  // University Roles list using Lucide icons
   const roles = [
-    { id: 'student', title: 'Student Result Portal', icon: '🎓', desc: 'View academic grades & track clearance files.' },
-    { id: 'warden', title: 'Hostel Warden Portal', icon: '🔑', desc: 'Allocate rooms & register checked-in students.' },
-    { id: 'adviser', title: 'Faculty Advisor Desk', icon: '📄', desc: 'First level department review of student clearances.' },
-    { id: 'hos', title: 'Head of School (HoS)', icon: '🏛️', desc: 'Verify reviews & choose clearance forwarding route.' },
-    { id: 'dean_academic', title: 'Dean Academic Desk', icon: '🏫', desc: 'Review & approve academic syllabus clearances.' },
-    { id: 'dean_pga', title: 'Dean PGA Desk', icon: '📜', desc: 'Review & approve post-graduate clearances.' },
-    { id: 'controller', title: 'Exam Controller Desk', icon: '⚖️', desc: 'Verify clearance certificates & release clearings.' },
-    { id: 'admin', title: 'Super Admin Control', icon: '⚙️', desc: 'System administrator account provisioning desk.' },
+    { id: 'student', title: 'Student Result Portal', icon: GraduationCap, desc: 'View academic grades & track clearance files.' },
+    { id: 'warden', title: 'Hostel Warden Portal', icon: Key, desc: 'Allocate rooms & register checked-in students.' },
+    { id: 'adviser', title: 'Faculty Advisor Desk', icon: FileText, desc: 'First level department review of student clearances.' },
+    { id: 'hos', title: 'Head of School (HoS)', icon: Landmark, desc: 'Verify reviews & choose clearance forwarding route.' },
+    { id: 'dean_academic', title: 'Dean Academic Desk', icon: BookOpen, desc: 'Review & approve academic syllabus clearances.' },
+    { id: 'dean_pga', title: 'Dean PGA Desk', icon: GraduationCap, desc: 'Review & approve post-graduate clearances.' },
+    { id: 'controller', title: 'Exam Controller Desk', icon: Scale, desc: 'Verify clearance certificates & release clearings.' },
+    { id: 'admin', title: 'Super Admin Control', icon: Settings, desc: 'System administrator account provisioning desk.' },
   ]
 
   const handleBack = () => {
@@ -148,9 +152,9 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
     <div className="min-h-screen bg-bg font-sans flex flex-col justify-between select-none animate-fade-in">
       {/* Top Utility Banner */}
       <div className="bg-primary text-[11px] text-white/80 py-2.5 px-6 flex justify-between items-center border-b border-white/10 shadow-sm">
-        <div>Odisha University of Technology and Research — Academic Portal</div>
-        <div className="flex gap-4">
-          <span>🔒 SSL Encrypted Access</span>
+        <div>Odisha University of Technology and Research - Academic Portal</div>
+        <div className="flex gap-4 items-center">
+          <span className="flex items-center gap-1"><Lock className="w-3 h-3 text-[#d4af37]" /> SSL Encrypted Access</span>
           <span>Bhubaneswar</span>
         </div>
       </div>
@@ -187,17 +191,19 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
             </div>
 
             {showDevShortcuts && (
-              <div className="relative z-10 p-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] space-y-1 animate-fade-in">
-                <div className="font-bold text-accent uppercase tracking-wider mb-1">⚡ Developer Quick Seed Logins</div>
+              <div className="relative z-10 p-3.5 bg-slate-900/40 border border-white/10 rounded-2xl text-[9px] space-y-1.5 animate-fade-in">
+                <div className="font-bold text-accent uppercase tracking-wider mb-1 flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-[#d4af37]" /> Developer Quick Seed Logins
+                </div>
                 <div className="grid grid-cols-2 gap-1.5">
-                  <button onClick={() => handleQuickSeed('student')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🎓 Student Desk</button>
-                  <button onClick={() => handleQuickSeed('admin')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">⚙️ Super Admin</button>
-                  <button onClick={() => handleQuickSeed('warden')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🔑 Warden Desk</button>
-                  <button onClick={() => handleQuickSeed('adviser')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📄 Advisor Desk</button>
-                  <button onClick={() => handleQuickSeed('hos')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🏛️ HoS Desk</button>
-                  <button onClick={() => handleQuickSeed('dean_academic')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">🏫 Dean Academic</button>
-                  <button onClick={() => handleQuickSeed('dean_pga')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">📜 Dean PGA</button>
-                  <button onClick={() => handleQuickSeed('controller')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer">⚖️ Controller</button>
+                  <button onClick={() => handleQuickSeed('student')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Student Desk</button>
+                  <button onClick={() => handleQuickSeed('admin')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Super Admin</button>
+                  <button onClick={() => handleQuickSeed('warden')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Warden Desk</button>
+                  <button onClick={() => handleQuickSeed('adviser')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Advisor Desk</button>
+                  <button onClick={() => handleQuickSeed('hos')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">HoS Desk</button>
+                  <button onClick={() => handleQuickSeed('dean_academic')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Dean Academic</button>
+                  <button onClick={() => handleQuickSeed('dean_pga')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Dean PGA</button>
+                  <button onClick={() => handleQuickSeed('controller')} className="p-1 rounded bg-white/10 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37]/30 transition-all font-semibold cursor-pointer text-[9px] text-white">Controller</button>
                 </div>
                 <div className="text-white/40 text-[8px] pt-1">Bypasses Supabase cloud blocks for fast local testing.</div>
               </div>
@@ -214,20 +220,25 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                 <p className="text-muted text-sm mb-6">Choose your authorized role to access the portal dashboard.</p>
                 
                 <div className="space-y-2.5 max-h-[350px] overflow-y-auto pr-1">
-                  {roles.map((role) => (
-                    <button
-                      key={role.id}
-                      onClick={() => setSelectedRole(role.id)}
-                      className="w-full text-left p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-accent/40 hover:shadow-md hover:shadow-slate-100 flex items-center gap-4 transition-all duration-300 group cursor-pointer"
-                    >
-                      <span className="text-xl group-hover:scale-110 transition-transform duration-300">{role.icon}</span>
-                      <div className="flex-grow">
-                        <h4 className="font-semibold text-primary text-xs group-hover:text-secondary transition-colors leading-none">{role.title}</h4>
-                        <p className="text-[10.5px] text-muted mt-1 leading-normal">{role.desc}</p>
-                      </div>
-                      <span className="text-slate-300 group-hover:text-accent font-semibold text-sm transition-all duration-300">→</span>
-                    </button>
-                  ))}
+                  {roles.map((role) => {
+                    const IconComponent = role.icon;
+                    return (
+                      <button
+                        key={role.id}
+                        onClick={() => setSelectedRole(role.id)}
+                        className="w-full text-left p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-[#d4af37]/45 hover:shadow-md hover:shadow-slate-100 flex items-center gap-4 transition-all duration-300 group cursor-pointer"
+                      >
+                        <span className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-[#0b3c5d]/5 transition-all duration-300">
+                          <IconComponent className="w-5 h-5 text-[#0b3c5d] group-hover:text-[#d4af37] transition-colors" />
+                        </span>
+                        <div className="flex-grow">
+                          <h4 className="font-semibold text-primary text-xs group-hover:text-[#d4af37] transition-colors leading-none">{role.title}</h4>
+                          <p className="text-[10.5px] text-muted mt-1 leading-normal">{role.desc}</p>
+                        </div>
+                        <span className="text-slate-300 group-hover:text-[#d4af37] font-semibold text-sm transition-all duration-300">→</span>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             ) : (
@@ -243,7 +254,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
 
                 <div className="mb-6">
                   <span className="text-[10px] uppercase font-bold text-accent tracking-widest pl-0.5">
-                    {selectedRole.toUpperCase()} DESK
+                    {selectedRole.replace('_', ' ').toUpperCase()} DESK
                   </span>
                   <h3 className="font-serif text-2xl font-bold text-primary mt-0.5">
                     Secure Authenticate
@@ -255,15 +266,17 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
 
                 {/* Error Banner */}
                 {errorMsg && (
-                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs leading-normal mb-5">
-                    ⚠️ {errorMsg}
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs leading-normal mb-5 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>{errorMsg}</span>
                   </div>
                 )}
 
                 {/* Success Banner */}
                 {successMsg && (
-                  <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs leading-normal mb-5 animate-pulse">
-                    ✅ {successMsg}
+                  <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs leading-normal mb-5 animate-pulse flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>{successMsg}</span>
                   </div>
                 )}
 
@@ -298,14 +311,9 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                         aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                          </svg>
+                          <EyeOff className="w-4 h-4" />
                         ) : (
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                          </svg>
+                          <Eye className="w-4 h-4" />
                         )}
                       </button>
                     </div>
@@ -314,16 +322,19 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-brand-primary w-full py-3.5"
+                    className="btn-brand-primary w-full py-3.5 flex items-center justify-center"
                   >
                     {loading ? (
                       <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                    ) : 'Authenticate Securely'}
+                    ) : (
+                      <span className="flex items-center gap-1.5"><UserCheck className="w-4 h-4" /> Authenticate Securely</span>
+                    )}
                   </button>
                 </form>
 
-                <div className="mt-6 text-center text-[10px] text-slate-400 font-medium">
-                  🔒 Notice: Public registrations have been disabled. If you do not have credentials, please contact the Super Admin Console.
+                <div className="mt-6 text-center text-[10px] text-slate-400 font-medium flex items-center justify-center gap-1">
+                  <ShieldAlert className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Notice: Public registrations are disabled. For credentials, contact the Super Admin.</span>
                 </div>
               </div>
             )}

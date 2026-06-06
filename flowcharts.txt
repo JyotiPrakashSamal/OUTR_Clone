@@ -1,0 +1,142 @@
+================================================================================
+1. AMRITA'S FLOWCHART (ACADEMIC CATALOG)
+================================================================================
+flowchart TD
+    Start([Start: User accesses website]) --> Load_Home[Load /home.html Homepage]
+    Load_Home --> Inject_Nav[Run navbar-footer-loader.js: Inject shared Header/Footer]
+    
+    Inject_Nav --> User_Click{Navigation Target?}
+    
+    User_Click -- "Static Catalog" --> Click_Schools[User clicks 'Schools' in Navbar]
+    Click_Schools --> Load_Schools[Load /OUTR website/schools.html Directory]
+    Load_Schools --> View_Schools[Render School Cards: SCS, SEE, SEEC, etc.]
+    
+    View_Schools --> Select_SCS[User clicks 'School of Computer Sciences']
+    Select_SCS --> Load_SCS[Load /OUTR website/schools/scs.html department portal]
+    Load_SCS --> Apply_SCS_CSS[Apply scs.css styling layout rules]
+    
+    Apply_SCS_CSS --> Click_Faculty[Click Faculty Profiles link]
+    Click_Faculty --> Load_Faculty_List[Load /OUTR website/faculties/scs.html roster sheet]
+    Load_Faculty_List --> Click_Profile[Click individual profile: Dr. Jibitesh Mishra]
+    Click_Profile --> Load_Bio[Load /OUTR website/profiles/dr-jibitesh-mishra.html profile bio]
+    
+    Apply_SCS_CSS --> Click_Courses[Click UG/PG Curriculum details]
+    Click_Courses --> Load_Courses[Load courses.css styled syllabus guides]
+    
+    User_Click -- "React Syllabus Desk" --> Click_Syllabus_Menu[User clicks 'Syllabus' in Navbar]
+    Click_Syllabus_Menu --> Load_Syllabus_Desk[Load SyllabusDesk.jsx React component on route /syllabus]
+    Load_Syllabus_Desk --> Query_Course[Input search query & filter by Program Level UG/PG]
+    Query_Course --> Show_Details_Modal[Click 'View Details' to trigger local description modal overlay]
+    
+    Load_Bio --> End([End: Navigation Complete])
+    Load_Courses --> End
+    Show_Details_Modal --> End
+
+
+================================================================================
+2. SONALI'S FLOWCHART (HOSTELS & WARDEN UI)
+================================================================================
+flowchart TD
+    Start([Start: User visits Residential section]) --> Load_Hostel[Load /Student and Event/Hostel/hostel.html]
+    Load_Hostel --> Inject_Layout[Run navbar-footer-loader.js: Inject shared Header/Footer]
+    
+    Inject_Layout --> User_Action{User Role?}
+    
+    User_Action -- "Student" --> View_Hostels[Browse Boys/Girls Hostel info cards]
+    View_Hostels --> Scroll_Mess[Scroll to weekly Mess Menu table]
+    Scroll_Mess --> View_Contacts[Review Administration Contacts details]
+    View_Contacts --> End([End Process])
+    
+    User_Action -- "Warden" --> Click_Portal[Click 'Warden Portal' redirect button]
+    Click_Portal --> Load_Warden_Dashboard[Load WardenDashboard.jsx on route /warden-dashboard]
+    Load_Warden_Dashboard --> Display_Grid[Render Student Roster table & Allocation forms]
+    
+    Display_Grid --> Input_Form[Input Student Regd No, Hostel Name, and Room No]
+    Input_Form --> Click_Submit[Click 'Allocate Room' submit button]
+    
+    Click_Submit --> Check_Validation{Are form inputs valid?}
+    Check_Validation -- "No: Empty Fields" --> Show_Input_Error[Highlight empty inputs with red border alerts]
+    Show_Input_Error --> Input_Form
+    
+    Check_Validation -- "Yes: Complete" --> Forward_Request[Submit data payload to system API listener]
+    Forward_Request --> Show_Success_Card[Render visual success message confirmation card]
+    Show_Success_Card --> End
+
+
+================================================================================
+3. RAMAKANTA'S FLOWCHART (CLEARANCE STEP-WIZARD)
+================================================================================
+flowchart TD
+    Start([Start: Student accesses Clearance panel]) --> Load_Dashboard[Load FileTrackingDashboard.jsx on route /student-clearance]
+    Load_Dashboard --> Display_Step_Wizard[Render 7-Stage clearance step progression line]
+    
+    Display_Step_Wizard --> Step_1_Pending[Set Step 1 Adviser Review to 'Pending' visual state]
+    Step_1_Pending --> Interact_Upload[Click upload area & select local clearance PDF form]
+    Interact_Upload --> Show_File_Card[Display selected file name card with upload details]
+    
+    Show_File_Card --> Click_Submit[Click 'Submit File' button]
+    Click_Submit --> Show_Loading_Spinner[Render visual spinning loading overlay]
+    
+    Show_Loading_Spinner --> Listen_Status{Approval status updated?}
+    
+    Listen_Status -- "Rejected" --> Render_Red_Alert[Set step status card to Red Alert state with feedback]
+    Render_Red_Alert --> Interact_Upload
+    
+    Listen_Status -- "Approved" --> Render_Green_Step_1[Update Step 1 to Green Success state]
+    
+    Render_Green_Step_1 --> Step_2_Active[Set Step 2 HOD Review to active state]
+    Step_2_Active --> Check_HOD_Status{HOD approval status?}
+    Check_HOD_Status -- "HOD Rejected" --> Render_Red_Alert
+    Check_HOD_Status -- "HOD Approved" --> Render_Green_Step_2[Update Step 2 to Green Success state]
+    
+    Render_Green_Step_2 --> Step_3_Active[Set Step 3 Dean/Controller card to active state]
+    Step_3_Active --> Check_Final_Status{Final approval status?}
+    Check_Final_Status -- "Final Approved" --> Render_Green_Final[Update Final approval to Green Success badge]
+    Check_Final_Status -- "Final Rejected" --> Render_Red_Alert
+    
+    Render_Green_Final --> End([End: UI state complete])
+
+
+================================================================================
+4. JYOTI'S FLOWCHART (CORE SYSTEM ENGINE & DB ADMIN)
+================================================================================
+flowchart TD
+    Start([Start: Browser opens application]) --> Platform_Boot[Initialize Router Engine & load Session configuration]
+    
+    subgraph "Client Utilities (i18n & Live API widgets)"
+        Platform_Boot --> Check_i18n[Read localStorage UI translation key]
+        Check_i18n --> Fetch_Locale[Fetch public/data/i18n JSON files & update DOM elements]
+        
+        Platform_Boot --> Check_AQI_Cache{Is local AQI cache < 15 min old?}
+        Check_AQI_Cache -- "Yes" --> Read_Cache[Retrieve cached Open-Meteo AQI payload]
+        Check_AQI_Cache -- "No" --> Fetch_API[Execute HTTP GET call to Open-Meteo air quality API]
+        Fetch_API --> Store_Cache[Save fresh AQI measurements to browser localStorage]
+        Read_Cache --> Render_AQI_Bar[Display colored AQI dashboard index in footer]
+        Store_Cache --> Render_AQI_Bar
+    end
+    
+    subgraph "Authentication & Security RLS Gateway"
+        Platform_Boot --> Route_Dashboard[User navigates to React Dashboard SPA]
+        Route_Dashboard --> Auth_Check{Is session user active in memory?}
+        Auth_Check -- "No" --> Load_Auth_Portal[Render AuthPortal.jsx on route /portal]
+        
+        Load_Auth_Portal --> User_Login[Supabase Auth validation check]
+        User_Login --> Auth_Trigger[Database Trigger: Run public.handle_new_user sync on profiles]
+        Auth_Trigger --> Auth_Check
+        
+        Auth_Check -- "Yes" --> Query_Profiles[(Query public.profiles database table)]
+        Query_Profiles --> Redirect_Dashboard[Redirect to role dashboard: admin/warden/student/etc]
+    end
+    
+    subgraph "Database Transactions & Storage Sync"
+        Redirect_Dashboard --> Execute_SQL[Execute SQL command: Select, Update, Insert]
+        Execute_SQL --> Check_RLS_Policy{Match Postgres Row-Level Security rules?}
+        Check_RLS_Policy -- "Deny Access" --> Return_DB_Error[Trigger database access control error exception]
+        
+        Check_RLS_Policy -- "Allow Access" --> Write_Postgres[(Perform SQL operations in Postgres database)]
+        Write_Postgres --> Broadcast_Channel[Trigger dynamic update notifications via Supabase channel]
+    end
+    
+    Render_AQI_Bar --> End([End: Application initialized])
+    Return_DB_Error --> End
+    Broadcast_Channel --> End

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import Layout from '../components/Layout'
+import { Key, LogOut, Search, Building, DoorOpen, Activity, Mail, Phone, ClipboardList, BarChart3, Users, Home } from 'lucide-react'
 
 const capitalizeName = (name) => {
   if (!name) return ''
@@ -336,7 +337,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
         <div className="bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center border border-accent/20">
-              <span className="text-3xl">🔑</span>
+              <Key className="w-6 h-6 text-primary" />
             </div>
             <div className="text-left">
               <span className="text-xs font-bold text-accent uppercase tracking-wider">OUTR Hostels Portal</span>
@@ -358,7 +359,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
               onClick={handleSignOut}
               className="w-full sm:w-auto btn-brand-secondary text-xs flex items-center justify-center gap-2"
             >
-              🚪 Sign Out
+              <LogOut className="w-4 h-4" /> Sign Out
             </button>
           </div>
         </div>
@@ -465,7 +466,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
         {/* Search Bar Section */}
         <section className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 mb-8 shadow-sm text-left">
           <h3 className="font-serif text-lg font-bold text-primary mb-4 flex items-center gap-2">
-            <span>🔍</span> Student Records Search
+            <Search className="w-5 h-5 text-primary shrink-0" /> Student Records Search
           </h3>
           
           <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-3 relative">
@@ -477,7 +478,9 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                 onChange={e => setSearchQuery(e.target.value)}
                 className="input-standard pl-11 pr-10 py-3"
               />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                <Search className="w-4 h-4" />
+              </span>
               {searchQuery && (
                 <button
                   type="button"
@@ -552,17 +555,16 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                     </div>
                   </div>
 
-                  {/* CRUD Toggle Action */}
                   <div className="flex gap-2 w-full sm:w-auto">
                     <button
-                      onClick={() => handleToggleStatus(searchedStudent.id, searchedStudent.status)}
+                       onClick={() => handleToggleStatus(searchedStudent.id, searchedStudent.status)}
                       className={`w-full sm:w-auto font-semibold py-2 px-5 rounded-xl text-xs transition-colors ${
                         searchedStudent.status === 'Active' 
                           ? 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
                           : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
                       }`}
                     >
-                      {searchedStudent.status === 'Active' ? '🔴 Mark Checkout' : '🟢 Mark Check-in'}
+                      {searchedStudent.status === 'Active' ? 'Mark Checkout' : 'Mark Check-in'}
                     </button>
                   </div>
                 </div>
@@ -571,7 +573,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Item 1 */}
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center gap-3">
-                    <span className="text-xl">🏢</span>
+                    <Building className="w-5 h-5 text-slate-500" />
                     <div>
                       <div className="text-[10px] text-muted font-bold uppercase tracking-wider">Hostel block</div>
                       <div className="text-xs font-bold text-primary mt-0.5">{searchedStudent.hostel}</div>
@@ -579,7 +581,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   </div>
                   {/* Item 2 */}
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center gap-3">
-                    <span className="text-xl">🚪</span>
+                    <DoorOpen className="w-5 h-5 text-slate-500" />
                     <div>
                       <div className="text-[10px] text-muted font-bold uppercase tracking-wider">Room Allocation</div>
                       <div className="text-xs font-bold text-primary mt-0.5">{searchedStudent.room || 'Not Assigned'}</div>
@@ -587,7 +589,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   </div>
                   {/* Item 3 */}
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center gap-3">
-                    <span className="text-xl">🚦</span>
+                    <Activity className="w-5 h-5 text-slate-500" />
                     <div>
                       <div className="text-[10px] text-muted font-bold uppercase tracking-wider">Status</div>
                       <div className="text-xs font-bold text-primary mt-0.5">
@@ -601,7 +603,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   </div>
                   {/* Item 4 */}
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center gap-3">
-                    <span className="text-xl">✉️</span>
+                    <Mail className="w-5 h-5 text-slate-500" />
                     <div>
                       <div className="text-[10px] text-muted font-bold uppercase tracking-wider">University Email</div>
                       <div className="text-xs font-bold text-primary mt-0.5 break-all">{searchedStudent.email || 'N/A'}</div>
@@ -609,7 +611,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                   </div>
                   {/* Item 5 */}
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center gap-3">
-                    <span className="text-xl">📞</span>
+                    <Phone className="w-5 h-5 text-slate-500" />
                     <div>
                       <div className="text-[10px] text-muted font-bold uppercase tracking-wider">Contact Number</div>
                       <div className="text-xs font-bold text-primary mt-0.5">{searchedStudent.phone || 'N/A'}</div>
@@ -632,7 +634,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
         <section className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 mb-8 shadow-sm text-left animate-fade-in">
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2">
-              <span>📋</span> Registered Student Roster
+              <ClipboardList className="w-5 h-5 text-primary shrink-0" /> Registered Student Roster
             </h3>
             <span className="bg-primary/5 text-primary text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-primary/10">
               {students.length} Verified {students.length === 1 ? 'Record' : 'Records'}
@@ -663,7 +665,12 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                     <tr key={s.id} className="table-brand-row">
                       <td className="py-3.5 pl-2 font-bold text-[#0b3c5d]">{capitalizeName(s.name)}</td>
                       <td className="py-3.5 font-mono text-[11px] font-semibold text-slate-500">#{s.regd_no}</td>
-                      <td className="py-3.5 font-bold text-slate-600">🚪 {s.room || 'N/A'}</td>
+                      <td className="py-3.5 font-bold text-slate-600">
+                        <div className="flex items-center gap-1">
+                          <DoorOpen className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>{s.room || 'N/A'}</span>
+                        </div>
+                      </td>
                       <td className="py-3.5 text-slate-500">
                         <div className="font-semibold">{s.email || 'N/A'}</div>
                         <div className="text-[10px] text-slate-400 mt-0.5">{s.phone || 'N/A'}</div>
@@ -686,7 +693,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
                               : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
                           }`}
                         >
-                          {s.status === 'Active' ? '🔴 Checkout' : '🟢 Check-in'}
+                          {s.status === 'Active' ? 'Checkout' : 'Check-in'}
                         </button>
                       </td>
                     </tr>
@@ -700,13 +707,13 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
         {/* Dynamic Statistics Grid */}
         <section className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm text-left">
           <h3 className="font-serif text-lg font-bold text-primary mb-6 flex items-center gap-2">
-            <span>📊</span> Hostel Occupancy Statistics
+            <BarChart3 className="w-5 h-5 text-primary shrink-0" /> Hostel Occupancy Statistics
           </h3>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {/* Stat 1 */}
             <div className="p-5 rounded-2xl bg-sky-50/50 border border-sky-100 flex items-center gap-4">
-              <span className="text-2xl">👥</span>
+              <Users className="w-6 h-6 text-sky-700 shrink-0" />
               <div>
                 <div className="text-2xl font-serif font-black text-sky-800">{stats.totalStudents}</div>
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Total Students</div>
@@ -715,7 +722,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
 
             {/* Stat 2 */}
             <div className="p-5 rounded-2xl bg-amber-50/50 border border-amber-100 flex items-center gap-4">
-              <span className="text-2xl">🚪</span>
+              <DoorOpen className="w-6 h-6 text-amber-700 shrink-0" />
               <div>
                 <div className="text-2xl font-serif font-black text-amber-800">{stats.occupiedRooms}</div>
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Occupied Rooms</div>
@@ -724,7 +731,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
 
             {/* Stat 3 */}
             <div className="p-5 rounded-2xl bg-rose-50/50 border border-rose-100 flex items-center gap-4">
-              <span className="text-2xl">🔑</span>
+              <Key className="w-6 h-6 text-rose-700 shrink-0" />
               <div>
                 <div className="text-2xl font-serif font-black text-rose-800">{stats.vacantRooms}</div>
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Vacant Rooms</div>
@@ -733,7 +740,7 @@ export default function WardenDashboard({ onSignOut, onNavigate, sessionUser }) 
 
             {/* Stat 4 */}
             <div className="p-5 rounded-2xl bg-emerald-50/50 border border-emerald-100 flex items-center gap-4">
-              <span className="text-2xl">🏛️</span>
+              <Home className="w-6 h-6 text-emerald-700 shrink-0" />
               <div>
                 <div className="text-2xl font-serif font-black text-emerald-800">{stats.capacity}</div>
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Total Capacity</div>

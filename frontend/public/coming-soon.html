@@ -3,16 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon — OUTR</title>
+  <title>Coming Soon - OUTR</title>
   <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
   <script src="/navbar-footer-loader.js" defer></script>
   <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
     main {
       max-width: 32rem;
       margin: 0 auto;
       padding: 3rem 1.5rem 5rem;
       text-align: center;
       font-family: 'DM Sans', sans-serif;
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
     h1 {
       font-family: 'Playfair Display', serif;
@@ -49,6 +55,13 @@
   </style>
 </head>
 <body>
+  <!-- Inline-styled page loader to prevent unstyled flash -->
+  <div id="page-loader" style="position: fixed; inset: 0; background: #0b3c5d; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; transition: opacity 0.4s ease, visibility 0.4s ease; font-family: sans-serif;">
+    <div style="width: 44px; height: 44px; border: 3px solid rgba(212, 175, 55, 0.15); border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+    <div style="color: #ffffff; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; text-align: center; padding: 0 20px;">Odisha University of Technology & Research</div>
+    <div style="color: #d4af37; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-align: center;">Preparing page...</div>
+  </div>
+
   <main>
     <div class="badge">Coming soon</div>
     <h1 id="page-title">This section</h1>
@@ -60,12 +73,41 @@
       <a href="/portal" class="btn btn-secondary">Services portal</a>
     </div>
   </main>
+  
   <script>
     (function () {
       const params = new URLSearchParams(window.location.search);
       const title = params.get('title') || params.get('page') || 'This section';
       document.getElementById('page-title').textContent = title;
-      document.title = title + ' — Coming Soon | OUTR';
+      document.title = title + ' - Coming Soon | OUTR';
+
+      let loaderRemoved = false;
+      function removeLoader() {
+        if (loaderRemoved) return;
+        loaderRemoved = true;
+        
+        const loader = document.getElementById('page-loader');
+        const main = document.querySelector('main');
+        if (loader) {
+          loader.style.opacity = '0';
+          loader.style.visibility = 'hidden';
+          setTimeout(() => loader.remove(), 500);
+        }
+        if (main) {
+          main.style.opacity = '1';
+        }
+      }
+
+      // Hide loader with a 350ms paint & font buffer when the unified loader signals readiness
+      document.addEventListener('outr-unified-loader-ready', () => {
+        setTimeout(removeLoader, 350);
+      });
+
+      // Fallback handlers
+      window.addEventListener('load', () => {
+        setTimeout(removeLoader, 500);
+      });
+      setTimeout(removeLoader, 2000); // hard limit
     })();
   </script>
 </body>

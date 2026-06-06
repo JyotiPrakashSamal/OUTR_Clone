@@ -284,6 +284,17 @@ function renderTicker() {
   }
   const itemsHtml = recent.map(n => `<a href="#notices" class="text-white hover:underline whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-white rounded px-1">${n.title}</a>`).join('');
   track.innerHTML = itemsHtml + itemsHtml;
+
+  // Add click listener to close button
+  const closeBtn = document.getElementById("close-ticker");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      const bar = document.getElementById("ticker-bar");
+      if (bar) {
+        bar.style.display = "none";
+      }
+    });
+  }
 }
 
 function renderNotices() {
@@ -314,8 +325,8 @@ function renderEvents() {
   root.innerHTML = contentData.events
     .map(
       (e) => `
-      <div class="bg-white rounded-xl [padding:16px] flex [gap:14px] [border:1px_solid_#e8eef4] [transition:all_0.2s] hover:[box-shadow:0_8px_28px_rgba(11,60,93,0.1)] hover:[border-color:#bdd4eb]">
-        <div class="text-center rounded-lg [padding:10px_14px] [min-width:56px]" style="background:${e.color}">
+      <a href="${e.href || '#'}" ${e.href ? 'target="_blank" rel="noopener noreferrer"' : ''} class="block bg-white rounded-xl [padding:16px] flex [gap:14px] [border:1px_solid_#e8eef4] [transition:all_0.2s] hover:[box-shadow:0_8px_28px_rgba(11,60,93,0.1)] hover:[border-color:#bdd4eb] no-underline">
+        <div class="text-center rounded-lg [padding:10px_14px] [min-width:56px] flex-shrink-0" style="background:${e.color}">
           <div class="text-white font-bold [font-size:1.2rem] [line-height:1]">${e.day}</div>
           <div class="[color:rgba(255,255,255,0.65)] [font-size:10px] [margin-top:2px]">${e.month}</div>
         </div>
@@ -323,7 +334,7 @@ function renderEvents() {
           <div class="font-semibold [font-size:13.5px] [color:var(--text)]">${e.title}</div>
           <div class="[font-size:12px] [color:var(--muted)] [margin-top:4px]">${e.location}</div>
         </div>
-      </div>`,
+      </a>`,
     )
     .join("");
 }
@@ -458,7 +469,7 @@ function initGalleryLightbox() {
     const allPhotos = [];
     contentData.gallery.forEach(album => {
       (album.photos || []).forEach(p => {
-        allPhotos.push({ image: p.image, label: `${p.label} — ${album.group}` });
+        allPhotos.push({ image: p.image, label: `${p.label} - ${album.group}` });
       });
     });
     if (!allPhotos.length) return;
@@ -666,13 +677,13 @@ function setupSearch() {
     { title: "OUTR Campus Map", subtitle: "Map · Open Google Maps location", href: "https://maps.google.com/?q=Odisha+University+of+Technology+and+Research", category: "contact", weight: 96, external: true },
     { title: "Social Media Hub", subtitle: "Connect · Official handles", href: "social.html", category: "contact", weight: 72 },
     // --- NAV: About ---
-    { title: "About OUTR", subtitle: "Nav · About → Overview & history", href: "/?view=about", category: "sections", weight: 95 },
-    { title: "Vision and Mission", subtitle: "Nav · About → Core values & goals", href: "/?view=mission", category: "sections", weight: 80 },
-    { title: "Accreditation", subtitle: "Nav · About → NAAC, NBA, UGC recognition", href: "/?view=about#accreditation", category: "sections", weight: 78 },
+    { title: "About OUTR", subtitle: "Nav · About → Overview & history", href: "/portal?view=about", category: "sections", weight: 95 },
+    { title: "Vision and Mission", subtitle: "Nav · About → Core values & goals", href: "/portal?view=mission", category: "sections", weight: 80 },
+    { title: "Accreditation", subtitle: "Nav · About → NAAC, NBA, UGC recognition", href: "/portal?view=about#accreditation", category: "sections", weight: 78 },
     // --- NAV: Academic ---
     { title: "Academic", subtitle: "Nav · Academic section", href: departmentsSectionVisible ? "#departments" : "#about", category: "sections", weight: 85 },
-    { title: "Committees", subtitle: "Nav · Academic → Academic boards & groups", href: "/?view=academic-council", category: "sections", weight: 70 },
-    { title: "Syllabus", subtitle: "Nav · Academic → UG and PG course syllabi", href: "/?view=syllabus", category: "sections", weight: 72 },
+    { title: "Committees", subtitle: "Nav · Academic → Academic boards & groups", href: "/portal?view=academic-council", category: "sections", weight: 70 },
+    { title: "Syllabus", subtitle: "Nav · Academic → UG and PG course syllabi", href: "/portal?view=syllabus", category: "sections", weight: 72 },
     { title: "Academic Calendar", subtitle: "Nav · Academic → Schedule & important dates", href: "#", category: "sections", weight: 74 },
     // --- NAV: Academic → Departments (Schools) ---
     ...(departmentsSectionVisible
@@ -688,27 +699,27 @@ function setupSearch() {
         ]
       : []),
     // --- NAV: Administration ---
-    { title: "VC Desk", subtitle: "Nav · Administration → Vice-Chancellor's message", href: "/?view=vc-desk", category: "sections", weight: 88 },
-    { title: "Board of Management", subtitle: "Nav · Administration → Governance board", href: "/?view=bom", category: "sections", weight: 82 },
-    { title: "Dean", subtitle: "Nav · Administration → Dean of the university", href: "/?view=deans", category: "sections", weight: 80 },
-    { title: "HODs", subtitle: "Nav · Administration → Heads of Departments", href: "/?view=hods", category: "sections", weight: 78 },
-    { title: "Anti-Ragging", subtitle: "Nav · Administration → Anti-ragging committee", href: "/?view=antiragging", category: "sections", weight: 76 },
-    { title: "Academic Council", subtitle: "Nav · Administration → Academic council members", href: "/?view=academic-council", category: "sections", weight: 74 },
-    { title: "Students Grievance", subtitle: "Nav · Administration → Grievance redressal", href: "/?view=students-grievance", category: "sections", weight: 74 },
-    { title: "Controller of Exam", subtitle: "Nav · Administration → Examination controller", href: "/?view=coe-desk", category: "sections", weight: 72 },
-    { title: "Students Committee", subtitle: "Nav · Administration → Student representation", href: "/?view=academic-council", category: "sections", weight: 70 },
-    { title: "SC/ST Committee", subtitle: "Nav · Administration → SC/ST welfare committee", href: "/?view=academic-council", category: "sections", weight: 70 },
+    { title: "VC Desk", subtitle: "Nav · Administration → Vice-Chancellor's message", href: "/portal?view=vc-desk", category: "sections", weight: 88 },
+    { title: "Board of Management", subtitle: "Nav · Administration → Governance board", href: "/portal?view=bom", category: "sections", weight: 82 },
+    { title: "Dean", subtitle: "Nav · Administration → Dean of the university", href: "/portal?view=deans", category: "sections", weight: 80 },
+    { title: "HODs", subtitle: "Nav · Administration → Heads of Departments", href: "/portal?view=hods", category: "sections", weight: 78 },
+    { title: "Anti-Ragging", subtitle: "Nav · Administration → Anti-ragging committee", href: "/portal?view=antiragging", category: "sections", weight: 76 },
+    { title: "Academic Council", subtitle: "Nav · Administration → Academic council members", href: "/portal?view=academic-council", category: "sections", weight: 74 },
+    { title: "Students Grievance", subtitle: "Nav · Administration → Grievance redressal", href: "/portal?view=students-grievance", category: "sections", weight: 74 },
+    { title: "Controller of Exam", subtitle: "Nav · Administration → Examination controller", href: "/portal?view=coe-desk", category: "sections", weight: 72 },
+    { title: "Students Committee", subtitle: "Nav · Administration → Student representation", href: "/portal?view=academic-council", category: "sections", weight: 70 },
+    { title: "SC/ST Committee", subtitle: "Nav · Administration → SC/ST welfare committee", href: "/portal?view=academic-council", category: "sections", weight: 70 },
     // --- NAV: Student ---
     { title: "Event", subtitle: "Nav · Student → Fests & campus activities", href: "#notices", category: "sections", weight: 80 },
-    { title: "Society / Clubs", subtitle: "Nav · Student → Join student organizations", href: "administration/SA_commitee.html", category: "sections", weight: 78 },
+    { title: "Society / Clubs", subtitle: "Nav · Student → Join student organizations", href: "/portal?view=clubs", category: "sections", weight: 78 },
     { title: "Hostels", subtitle: "Nav · Student → Accommodation details", href: "Student and Event/Hostel/hostel.html", category: "sections", weight: 76 },
     { title: "Campus Life", subtitle: "Nav · Student → Experience life at OUTR", href: "Student and Event/Campus_Facilities/CampusLife.html", category: "sections", weight: 74 },
     // --- NAV: Contact ---
-    { title: "Address & Map", subtitle: "Nav · Contact → Techno Campus, Ghatikia, BBSR", href: "/?view=location", category: "contact", weight: 82 },
-    { title: "Phone & Email", subtitle: "Nav · Contact → Get in touch with us", href: "/?view=location", category: "contact", weight: 80 },
+    { title: "Address & Map", subtitle: "Nav · Contact → Techno Campus, Ghatikia, BBSR", href: "/portal?view=location", category: "contact", weight: 82 },
+    { title: "Phone & Email", subtitle: "Nav · Contact → Get in touch with us", href: "/portal?view=location", category: "contact", weight: 80 },
     // --- SERVICES ACADEMIC PORTAL & SUB-DESKS ---
-    { title: "Services Academic Portal Hub", subtitle: "Portal · Access student clearance, warden, admin, and staff dashboards", href: "/?view=portal", category: "portal", weight: 99 },
-    { title: "Warden Portal / Hostel Desk", subtitle: "Portal · Hostel check-ins, allocations, student registers, and warden controls", href: "/?view=warden", category: "portal", weight: 98 },
+    { title: "Services Academic Portal Hub", subtitle: "Portal · Access student clearance, warden, admin, and staff dashboards", href: "/portal?view=portal", category: "portal", weight: 99 },
+    { title: "Warden Portal / Hostel Desk", subtitle: "Portal · Hostel check-ins, allocations, student registers, and warden controls", href: "/portal?view=warden", category: "portal", weight: 98 },
     { title: "Student Clearance Tracker", subtitle: "Portal · Submit clearance requests, view clearance pipeline, and track files", href: "/portal?role=student", category: "portal", weight: 98 },
     { title: "Exam Controller Portal & Grade Cards", subtitle: "Portal · Input and issue student semester results, GPA statistics, and grade cards", href: "/portal?role=controller", category: "portal", weight: 98 },
     { title: "Issue Admit Cards & Tickets", subtitle: "Portal · Issue scheduled exams, print high-fidelity candidate admit cards", href: "/portal?role=controller", category: "portal", weight: 97 },
@@ -1058,13 +1069,13 @@ function setupComingSoonLinks() {
 
 function setupKnownLinks() {
   const linkMap = {
-    "nav.vision.title": "/?view=mission",
-    "nav.accreditation.title": "/?view=about",
-    "nav.committees": "/?view=academic-council",
-    "nav.syllabus.title": "/?view=syllabus",
-    "nav.calendar.title": "/coming-soon.html?title=Academic%20Calendar",
+    "nav.vision.title": "/portal?view=mission",
+    "nav.accreditation.title": "/portal?view=about",
+    "nav.committees": "/portal?view=academic-council",
+    "nav.syllabus.title": "/portal?view=syllabus",
+    "nav.calendar.title": "/documents/academic-calendar-2025-26.pdf",
     "nav.student.event": "#notices",
-    "nav.student.society": "administration/SA_commitee.html",
+    "nav.student.society": "/portal?view=clubs",
     "nav.student.hostels": "Student and Event/Hostel/hostel.html",
     "nav.student.campus": "Student and Event/Campus_Facilities/CampusLife.html",
   };
@@ -1172,6 +1183,88 @@ async function initLanguageSwitcher() {
   const valid = new Set(["en", "hi", "od"]);
   const i18nCache = {};
 
+  const injectGoogleTranslateScript = () => {
+    if (document.getElementById("google-translate-script")) return;
+    const script = document.createElement("script");
+    script.id = "google-translate-script";
+    script.type = "text/javascript";
+    script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.body.appendChild(script);
+  };
+
+  // Expose translation callback for Google Translate widget
+  window.googleTranslateElementInit = function () {
+    new google.translate.TranslateElement(
+      {
+        pageLanguage: "en",
+        includedLanguages: "en,hi,or", // 'or' matches Odia in Google Translate
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false,
+      },
+      "google_translate_element"
+    );
+  };
+
+  const setGoogleTranslateCookie = (lang) => {
+    const domainParts = window.location.hostname.split('.');
+    if (lang === "en") {
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      if (domainParts.length > 1) {
+        const mainDomain = `.${domainParts.slice(-2).join('.')}`;
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${mainDomain};`;
+      }
+      return;
+    }
+    const googleLang = lang === "od" ? "or" : lang;
+    const cookieValue = `/en/${googleLang}`;
+    document.cookie = `googtrans=${cookieValue}; path=/;`;
+    if (domainParts.length > 1) {
+      const mainDomain = `.${domainParts.slice(-2).join('.')}`;
+      document.cookie = `googtrans=${cookieValue}; path=/; domain=${mainDomain};`;
+    }
+  };
+
+  const switchLanguageAndReload = (newLang) => {
+    const loader = document.getElementById("page-loader");
+    if (loader) {
+      loader.style.opacity = "1";
+      loader.style.visibility = "visible";
+      const statusEl = document.getElementById("loader-status");
+      if (statusEl) {
+        statusEl.textContent = "Translating page...";
+      }
+    }
+    localStorage.setItem(STORAGE_KEY, newLang);
+    setGoogleTranslateCookie(newLang);
+    window.location.reload();
+  };
+
+  const triggerGoogleTranslate = (lang) => {
+    const googleLang = lang === "od" ? "or" : lang;
+    const selectEl = document.querySelector(".goog-te-combo");
+    if (selectEl) {
+      if (selectEl.value !== googleLang) {
+        selectEl.value = googleLang;
+        selectEl.dispatchEvent(new Event("change", { bubbles: true, cancelable: true }));
+      }
+    } else {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        const select = document.querySelector(".goog-te-combo");
+        if (select) {
+          if (select.value !== googleLang) {
+            select.value = googleLang;
+            select.dispatchEvent(new Event("change", { bubbles: true, cancelable: true }));
+          }
+          clearInterval(interval);
+        } else if (attempts > 50) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  };
+
   const closeMenu = () => {
     switcher.classList.remove("open");
     btn.setAttribute("aria-expanded", "false");
@@ -1249,6 +1342,11 @@ async function initLanguageSwitcher() {
     renderGallery();
     renderFooter();
     setupSearch(); // Rebuild search index in target language!
+
+    // 4. Synchronize with Google Translate (cookie + widget control)
+    injectGoogleTranslateScript();
+    setGoogleTranslateCookie(finalLang);
+    triggerGoogleTranslate(finalLang);
   };
 
   await setLanguage(localStorage.getItem(STORAGE_KEY) || "en");
@@ -1260,11 +1358,11 @@ async function initLanguageSwitcher() {
   });
 
   options.forEach((option) => {
-    option.addEventListener("click", async () => {
+    option.addEventListener("click", () => {
       const newLang = option.dataset.lang || "en";
       const currentLang = localStorage.getItem(STORAGE_KEY) || "en";
       if (newLang !== currentLang) {
-        await setLanguage(newLang);
+        switchLanguageAndReload(newLang);
       }
       closeMenu();
       btn.focus();
@@ -1272,11 +1370,11 @@ async function initLanguageSwitcher() {
   });
 
   if (mobileSelect) {
-    mobileSelect.addEventListener("change", async (e) => {
+    mobileSelect.addEventListener("change", (e) => {
       const newLang = e.target.value;
       const currentLang = localStorage.getItem(STORAGE_KEY) || "en";
       if (newLang !== currentLang) {
-        await setLanguage(newLang);
+        switchLanguageAndReload(newLang);
       }
     });
   }
@@ -1498,6 +1596,83 @@ async function initHome() {
       searchInput.dispatchEvent(new Event('input'));
     }
   }
+
+  setupExternalAndPdfLinkTargets();
+  
+  // Fade out/remove loader once page is ready and translated
+  removeHomeLoader();
+}
+
+function removeHomeLoader() {
+  const loader = document.getElementById("page-loader");
+  if (!loader) return;
+
+  const currentLang = localStorage.getItem("outr_ui_language_v1") || "en";
+
+  const fadeOutLoader = () => {
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.visibility = "hidden";
+    }, 400); // matches the 0.4s CSS transition
+  };
+
+  if (currentLang === "en") {
+    // English content renders instantly, remove loader after a tiny transition buffer
+    setTimeout(fadeOutLoader, 300);
+  } else {
+    // Wait until Google Translate elements/iframe apply translation successfully (signaled by .translated-ltr/rtl)
+    let checks = 0;
+    const maxChecks = 80; // 80 * 50ms = 4000ms safety timeout
+    const interval = setInterval(() => {
+      checks++;
+      const isTranslated = document.documentElement.classList.contains("translated-ltr") || 
+                           document.documentElement.classList.contains("translated-rtl") ||
+                           document.body.classList.contains("translated-ltr") ||
+                           document.body.classList.contains("translated-rtl");
+      if (isTranslated || checks >= maxChecks) {
+        clearInterval(interval);
+        setTimeout(fadeOutLoader, 200);
+      }
+    }, 50);
+  }
+}
+
+function setupExternalAndPdfLinkTargets() {
+  const anchors = document.querySelectorAll("a");
+  anchors.forEach((a) => {
+    const href = a.getAttribute("href");
+    if (!href) return;
+
+    const lowerHref = href.toLowerCase().trim();
+
+    // 1. Check for PDFs
+    const isPdf = lowerHref.endsWith(".pdf") || lowerHref.includes(".pdf?");
+    
+    // 2. Check for external websites (e.g. outr.ac.in, cet.edu.in, placement.cet.edu.in, or any http/https link that doesn't point to local relative pages)
+    const isHttp = lowerHref.startsWith("http://") || lowerHref.startsWith("https://");
+    let isExternal = false;
+    if (isHttp) {
+      const currentHost = window.location.hostname;
+      try {
+        const urlObj = new URL(href);
+        if (urlObj.hostname !== currentHost || urlObj.hostname.includes("outr.ac.in") || urlObj.hostname.includes("cet.edu.in")) {
+          isExternal = true;
+        }
+      } catch (e) {
+        if (lowerHref.includes("outr.ac.in") || lowerHref.includes("cet.edu.in")) {
+          isExternal = true;
+        }
+      }
+    }
+
+    if (isPdf || isExternal) {
+      a.setAttribute("target", "_blank");
+      const currentRel = a.getAttribute("rel") || "";
+      if (!currentRel.includes("noopener")) {
+        a.setAttribute("rel", (currentRel + " noopener noreferrer").trim());
+      }
+    }
+  });
 }
 
 initHome();

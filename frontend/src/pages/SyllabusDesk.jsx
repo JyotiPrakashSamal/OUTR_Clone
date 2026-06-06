@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Search, Calendar, BookOpen, FileText, CheckCircle2, X, Download } from 'lucide-react'
 
 export default function SyllabusDesk() {
   const [selectedSchool, setSelectedSchool] = useState('scs')
@@ -610,7 +611,7 @@ export default function SyllabusDesk() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Page Hero */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           {localized.title}
         </h1>
@@ -670,7 +671,7 @@ export default function SyllabusDesk() {
           {/* Search */}
           <div className="relative w-full md:w-80">
             <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <Search className="w-4 h-4" />
             </span>
             <input
               type="text"
@@ -705,7 +706,7 @@ export default function SyllabusDesk() {
                     {c.level === 'ug' ? localized.undergraduate : localized.postgraduate}
                   </span>
                   <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> {c.duration}
+                    <Calendar className="w-3.5 h-3.5 text-accent shrink-0" /> {c.duration}
                   </span>
                 </div>
                 
@@ -718,7 +719,7 @@ export default function SyllabusDesk() {
 
               <div className="border-t border-slate-100 mt-6 pt-4 flex justify-between items-center">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1 font-bold">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-secondary shrink-0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> {localized.syllabusCode}
+                  <BookOpen className="w-3.5 h-3.5 text-secondary shrink-0" /> {localized.syllabusCode}
                 </span>
                 <button 
                   onClick={() => setActiveModalId(c.id)}
@@ -752,7 +753,7 @@ export default function SyllabusDesk() {
                 onClick={() => setActiveModalId(null)}
                 className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors p-1"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <X className="w-5 h-5" />
               </button>
               <span className="text-accent text-[9px] font-black tracking-widest uppercase block mb-1">
                 {activeModalData.level === 'ug' ? localized.ugDetail : localized.pgDetail}
@@ -767,7 +768,7 @@ export default function SyllabusDesk() {
               {/* About section */}
               <div className="space-y-2">
                 <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> {localized.courseDescription}
+                  <FileText className="w-3.5 h-3.5 text-accent shrink-0" /> {localized.courseDescription}
                 </h4>
                 <p className="text-slate-600 text-xs leading-relaxed font-semibold">{activeModalData.description}</p>
               </div>
@@ -782,7 +783,7 @@ export default function SyllabusDesk() {
               {activeModalData.features && (
                 <div className="space-y-3">
                   <h4 className="text-[10px] font-black text-secondary tracking-widest uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 font-bold">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> {localized.curriculumHighlights}
+                    <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" /> {localized.curriculumHighlights}
                   </h4>
                   <ul className="space-y-2.5">
                     {activeModalData.features.map((feat, idx) => (
@@ -794,6 +795,19 @@ export default function SyllabusDesk() {
                   </ul>
                 </div>
               )}
+
+              {/* Syllabus PDF download link */}
+              <div className="pt-2">
+                <a 
+                  href={`/documents/syllabus-${activeModalData.schoolId}.pdf`}
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="w-full flex items-center justify-center gap-2 bg-[#0b3c5d] hover:bg-[#07253a] text-white text-xs font-bold py-3 px-6 rounded-2xl shadow-sm transition-all text-center"
+                >
+                  <Download className="w-4 h-4 shrink-0" />
+                  Download Official Syllabus PDF
+                </a>
+              </div>
 
             </div>
 

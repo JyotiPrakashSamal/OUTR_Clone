@@ -1,6 +1,22 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../../supabaseClient'
 import { capitalizeName, handlePrintAdmitCardFromModal } from '../utils/fileTrackingHelpers'
+import { 
+  FileText, 
+  Ticket, 
+  Printer, 
+  Trash2, 
+  Edit3, 
+  Plus, 
+  Check, 
+  X, 
+  Search, 
+  Calendar, 
+  BarChart3, 
+  GraduationCap, 
+  ClipboardList, 
+  AlertTriangle 
+} from 'lucide-react'
 
 export default function ExamManagementDesk({ role, sessionUser, applications = [] }) {
   const isAdmin = role === 'controller' || role === 'admin'
@@ -281,7 +297,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
             <div><strong>Registration Number:</strong> ${grade.regd_no}</div>
             <div><strong>Programme / Branch:</strong> ${grade.class_name}</div>
             <div><strong>Academic Year:</strong> 2025-2026</div>
-            <div><strong>Semester Evaluation:</strong> ${grade.semester || '—'}</div>
+            <div><strong>Semester Evaluation:</strong> ${grade.semester || '-'}</div>
             <div><strong>Examination Category:</strong> ${grade.exam_type} Records</div>
           </div>
 
@@ -337,19 +353,19 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
       <div className="flex border-b border-slate-200">
         <button
           onClick={() => setActiveTab('grades')}
-          className={`py-3 px-6 font-serif text-sm font-bold border-b-2 cursor-pointer transition-colors ${
+          className={`py-3 px-6 font-serif text-sm font-bold border-b-2 cursor-pointer transition-colors flex items-center gap-1.5 ${
             activeTab === 'grades' ? 'border-[#d4af37] text-[#0b3c5d]' : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
-          📁 Semester Grade Sheets
+          <FileText className="w-4 h-4" /> Semester Grade Sheets
         </button>
         <button
           onClick={() => setActiveTab('admit_cards')}
-          className={`py-3 px-6 font-serif text-sm font-bold border-b-2 cursor-pointer transition-colors ${
+          className={`py-3 px-6 font-serif text-sm font-bold border-b-2 cursor-pointer transition-colors flex items-center gap-1.5 ${
             activeTab === 'admit_cards' ? 'border-[#d4af37] text-[#0b3c5d]' : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
-          🎟️ Exam Admit Cards
+          <Ticket className="w-4 h-4" /> Exam Admit Cards
         </button>
       </div>
 
@@ -426,9 +442,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                     <button
                       type="button"
                       onClick={() => setGradeSubjects([...gradeSubjects, { subName: '', subCode: '', credits: 4, secured: 9, total: 10 }])}
-                      className="text-secondary hover:underline lowercase font-bold"
+                      className="text-secondary hover:underline lowercase font-bold flex items-center gap-0.5 cursor-pointer"
                     >
-                      + Add Subject
+                      <Plus className="w-3 h-3" /> Add Subject
                     </button>
                   </label>
 
@@ -438,9 +454,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                         <button
                           type="button"
                           onClick={() => setGradeSubjects(gradeSubjects.filter((_, i) => i !== idx))}
-                          className="absolute top-1 right-2 text-rose-500 hover:text-rose-700 text-sm font-bold"
+                          className="absolute top-1.5 right-2 text-rose-500 hover:text-rose-700 border-none bg-transparent cursor-pointer"
                         >
-                          ×
+                          <X className="w-4 h-4" />
                         </button>
                         <div className="grid grid-cols-2 gap-2">
                           <input
@@ -585,9 +601,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                           <button
                             type="button"
                             onClick={() => handleDeleteGrade(g.id)}
-                            className="text-rose-500 hover:text-rose-700 text-sm font-bold p-1 hover:bg-rose-50 rounded-lg cursor-pointer"
+                            className="text-rose-500 hover:text-rose-700 p-1 hover:bg-rose-50 rounded-lg cursor-pointer border-none bg-transparent"
                           >
-                            🗑
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </td>
                       </tr>
@@ -622,9 +638,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                     setAdmitSubjects([{ code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])
                     setShowAdmitModal(true)
                   }}
-                  className="btn-brand-primary text-xs"
+                  className="btn-brand-primary text-xs flex items-center gap-1 cursor-pointer"
                 >
-                  + Create Admit Card
+                  <Plus className="w-3.5 h-3.5" /> Create Admit Card
                 </button>
               </div>
             </div>
@@ -684,9 +700,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                         <td className="p-3 text-center flex items-center justify-center gap-2">
                           <button
                             onClick={() => handlePrintAdmitCardFromModal(c, applications)}
-                            className="bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold p-1 px-2.5 rounded-lg text-[10px]"
+                            className="bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold p-1 px-2.5 rounded-lg text-[10px] inline-flex items-center gap-0.5 cursor-pointer border-none"
                           >
-                            🖨️ Print
+                            <Printer className="w-3 h-3" /> Print
                           </button>
                           <button
                             onClick={() => {
@@ -703,15 +719,15 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                               setAdmitSubjects(c.subjects || [])
                               setShowAdmitModal(true)
                             }}
-                            className="bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold p-1 px-2.5 rounded-lg text-[10px]"
+                            className="bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold p-1 px-2.5 rounded-lg text-[10px] inline-flex items-center gap-0.5 cursor-pointer border-none"
                           >
-                            ✏️ Edit
+                            <Edit3 className="w-3 h-3" /> Edit
                           </button>
                           <button
                             onClick={() => handleDeleteAdmitCard(c.id)}
-                            className="bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold p-1 px-2 rounded-lg text-[10px]"
+                            className="bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold p-1 px-2 rounded-lg text-[10px] inline-flex items-center cursor-pointer border-none"
                           >
-                            🗑
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </td>
                       </tr>
@@ -727,9 +743,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                 <div className="bg-white rounded-3xl border border-slate-200 max-w-xl w-full p-6 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
                   <button
                     onClick={() => setShowAdmitModal(false)}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold"
+                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
                   >
-                    ×
+                    <X className="w-5 h-5" />
                   </button>
                   <div>
                     <h3 className="font-serif text-lg font-bold text-primary">
@@ -820,9 +836,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                         <button
                           type="button"
                           onClick={() => setAdmitSubjects([...admitSubjects, { code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])}
-                          className="text-secondary hover:underline lowercase font-bold"
+                          className="text-secondary hover:underline lowercase font-bold flex items-center gap-0.5 cursor-pointer"
                         >
-                          + Add Subject
+                          <Plus className="w-3 h-3" /> Add Subject
                         </button>
                       </label>
                       <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
@@ -831,9 +847,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                             <button
                               type="button"
                               onClick={() => setAdmitSubjects(admitSubjects.filter((_, i) => i !== idx))}
-                              className="absolute -top-1.5 -right-1.5 bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-black"
+                              className="absolute -top-1.5 -right-1.5 bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-black cursor-pointer"
                             >
-                              ×
+                              <X className="w-3.5 h-3.5" />
                             </button>
                             <input
                               type="text" placeholder="Sub Code" required
@@ -909,8 +925,8 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                 </div>
               </div>
             ) : gradesList.length === 0 ? (
-              <div className="bg-slate-50 border border-slate-200 border-dashed rounded-3xl p-16 text-center text-muted">
-                <span className="text-4xl block mb-2">📋</span>
+              <div className="bg-slate-50 border border-slate-200 border-dashed rounded-3xl p-16 text-center text-muted flex flex-col items-center">
+                <ClipboardList className="w-12 h-12 text-slate-400 mb-3" />
                 <h4 className="font-serif text-base font-bold text-primary">No Grade Sheets Found</h4>
                 <p className="text-xs mt-1">No semester grade sheets have been published for your Roll Number.</p>
               </div>
@@ -937,9 +953,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                       </div>
                       <button
                         onClick={() => handlePrintGrade(grade)}
-                        className="btn-brand-primary text-xs"
+                        className="btn-brand-primary text-xs flex items-center gap-1.5 cursor-pointer"
                       >
-                        🖨️ Print Transcript
+                        <Printer className="w-4 h-4" /> Print Transcript
                       </button>
                     </div>
 
@@ -995,8 +1011,8 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                 </div>
               </div>
             ) : admitCardsList.length === 0 ? (
-              <div className="bg-slate-50 border border-slate-200 border-dashed rounded-3xl p-16 text-center text-muted">
-                <span className="text-4xl block mb-2">🎟️</span>
+              <div className="bg-slate-50 border border-slate-200 border-dashed rounded-3xl p-16 text-center text-muted flex flex-col items-center">
+                <Ticket className="w-12 h-12 text-slate-400 mb-3" />
                 <h4 className="font-serif text-base font-bold text-primary">No Admit Cards Published</h4>
                 <p className="text-xs mt-1">No exam admit cards have been published for your Roll Number. Please clear pending fees or hostel clearances.</p>
               </div>
@@ -1011,9 +1027,9 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                     </div>
                     <button
                       onClick={() => handlePrintAdmitCardFromModal(card, applications)}
-                      className="btn-brand-primary text-xs"
+                      className="btn-brand-primary text-xs flex items-center gap-1.5 cursor-pointer"
                     >
-                      🖨️ Print Admit Card
+                      <Printer className="w-4 h-4" /> Print Admit Card
                     </button>
                   </div>
 
@@ -1021,7 +1037,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                     <div><strong>Student Name:</strong> <span className="text-slate-800 font-bold">{capitalizeName(card.name)}</span></div>
                     <div><strong>Registration Roll:</strong> <span className="text-slate-800 font-mono">#{card.regd_no}</span></div>
                     <div><strong>Branch:</strong> <span className="text-slate-800">{card.branch}</span></div>
-                    <div><strong>Date of Birth:</strong> <span className="text-slate-800 font-mono">{card.dob || '—'}</span></div>
+                    <div><strong>Date of Birth:</strong> <span className="text-slate-800 font-mono">{card.dob || '-'}</span></div>
                   </div>
 
                   <div className="table-container-responsive">
@@ -1037,7 +1053,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                       <tbody>
                         {(card.subjects || []).map((s, idx) => (
                           <tr key={idx} className="table-brand-row font-medium text-xs">
-                            <td className="p-3 pl-4 font-bold text-slate-600">{s.date ? new Date(s.date+'T00:00').toLocaleDateString() : '—'}</td>
+                            <td className="p-3 pl-4 font-bold text-slate-600">{s.date ? new Date(s.date+'T00:00').toLocaleDateString() : '-'}</td>
                             <td className="p-3 font-mono font-bold text-slate-600">{s.code}</td>
                             <td className="p-3 text-slate-800 font-bold">{s.name}</td>
                             <td className="p-3 text-center text-slate-500">{s.time}</td>
