@@ -16,56 +16,56 @@ export const SCHOOLS = [
     id: 'SCS',
     name: 'School of Computer Science',
     short: 'Comp. Science',
-    icon: '💻',
+    icon: '',
     programmes: ['B.Tech CSE', 'B.Tech CSE (AI & ML)', 'B.Tech CSE (Data Science)', 'MCA', 'M.Tech CSE', 'Ph.D CSE']
   },
   {
     id: 'SEE',
     name: 'School of Electrical Science',
     short: 'Electrical Engg.',
-    icon: '⚡',
+    icon: '',
     programmes: ['B.Tech Electrical', 'B.Tech EEE', 'M.Tech Power Systems', 'M.Tech Control Systems', 'Ph.D EE']
   },
   {
     id: 'SME',
     name: 'School of Mechanical Science',
     short: 'Mechanical Engg.',
-    icon: '⚙️',
+    icon: '',
     programmes: ['B.Tech Mechanical', 'B.Tech Automobile', 'M.Tech Thermal', 'M.Tech Manufacturing', 'Ph.D ME']
   },
   {
     id: 'SECE',
     name: 'School of Electronics Science',
     short: 'Electronics & Comm.',
-    icon: '🔌',
+    icon: '',
     programmes: ['B.Tech ECE', 'B.Tech Electronics', 'M.Tech VLSI', 'M.Tech Communication', 'Ph.D ECE']
   },
   {
     id: 'STX',
     name: 'School of Textile Engineering',
     short: 'Textile Technology',
-    icon: '🧵',
+    icon: '',
     programmes: ['B.Tech Textile Technology', 'B.Tech Fashion Technology', 'M.Tech Textile', 'MBA Textile Management', 'Ph.D Textile']
   },
   {
     id: 'SBS',
     name: 'School of Basic Sciences & Humanities',
     short: 'Basic Sciences & Hum.',
-    icon: '🧪',
+    icon: '',
     programmes: ['B.Sc Physics', 'B.Sc Chemistry', 'B.Sc Mathematics', 'M.Sc Physics', 'M.Sc Chemistry', 'M.Sc Mathematics', 'MA English', 'MA Economics', 'Ph.D Sciences']
   },
   {
     id: 'SIP',
     name: 'School of Infrastructure & Planning',
     short: 'Infrastructure & Plan.',
-    icon: '🏛️',
+    icon: '',
     programmes: ['B.Tech Civil', 'B.Tech Architecture', 'M.Tech Structural', 'M.Tech Environmental', 'M.Plan Urban Planning', 'Ph.D Civil']
   },
   {
     id: 'SBM',
     name: 'School of Business Management',
     short: 'Business Management',
-    icon: '📈',
+    icon: '',
     programmes: ['BBA', 'MBA', 'MBA (Finance)', 'MBA (HR)', 'MBA (Marketing)', 'Ph.D Management']
   }
 ]
@@ -92,7 +92,7 @@ export const handlePrintAdmitCardFromModal = (card, applications = []) => {
   const printSection = document.getElementById('print-area')
   if (printSection) {
     const hasCleared = applications.some(app => app.student_regd === card.regd_no && app.status === 'resolved')
-    const fmtDate = (d) => { try { return d ? new Date(d+'T00:00').toLocaleDateString() : '—'; } catch { return d||'—'; } }
+    const fmtDate = (d) => { try { return d ? new Date(d+'T00:00').toLocaleDateString() : '-'; } catch { return d||'-'; } }
     printSection.innerHTML = `
       <div class="print-admit-card" style="font-family:'Times New Roman', serif; color: black; max-width: 800px; margin: 0 auto; padding: 20px; border: 2px solid black;">
         <div style="display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; text-align: center;">
@@ -106,16 +106,16 @@ export const handlePrintAdmitCardFromModal = (card, applications = []) => {
         </div>
 
         <div style="background: #f2f2f2; border: 1px solid black; text-align: center; padding: 5px; font-weight: bold; font-size: 12px; margin-bottom: 15px; text-transform: uppercase;">
-          ${card.branch} &nbsp;|&nbsp; ${card.semester || '—'} &nbsp;|&nbsp; AY: ${card.academic_year || '—'} &nbsp;|&nbsp; ${card.exam_type || '—'}
+          ${card.branch} &nbsp;|&nbsp; ${card.semester || '-'} &nbsp;|&nbsp; AY: ${card.academic_year || '-'} &nbsp;|&nbsp; ${card.exam_type || '-'}
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; font-size: 12px; border: 1px solid black; padding: 10px;">
           <div><strong>Student Name:</strong> ${capitalizeName(card.name)}</div>
           <div><strong>Registration Number:</strong> ${card.regd_no}</div>
           <div><strong>Branch:</strong> ${card.branch}</div>
-          <div><strong>Date of Birth:</strong> ${card.dob || '—'}</div>
+          <div><strong>Date of Birth:</strong> ${card.dob || '-'}</div>
           <div><strong>Clearance Status:</strong> ${hasCleared ? 'APPROVED' : 'PENDING APPROVED'}</div>
-          <div><strong>Issued At:</strong> ${card.issued_at ? new Date(card.issued_at).toLocaleString() : '—'}</div>
+          <div><strong>Issued At:</strong> ${card.issued_at ? new Date(card.issued_at).toLocaleString() : '-'}</div>
         </div>
 
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">

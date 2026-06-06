@@ -11,7 +11,9 @@ import DeanDesk from './pages/DeanDesk'
 import HODDesk from './pages/HODDesk'
 import SyllabusDesk from './pages/SyllabusDesk'
 import ComingSoonPage from './pages/ComingSoonPage'
+import ClubsSocieties from './pages/ClubsSocieties'
 import ErrorBoundary from './components/ErrorBoundary'
+
 
 function HomeRedirect() {
   useEffect(() => {
@@ -138,7 +140,9 @@ function AppContent() {
       else if (viewParam === 'academic-council') navigate('/academic-council', { replace: true })
       else if (viewParam === 'students-grievance') navigate('/students-grievance', { replace: true })
       else if (viewParam === 'student-clearance') navigate('/student-clearance', { replace: true })
+      else if (viewParam === 'clubs' || viewParam === 'societies') navigate('/clubs-societies', { replace: true })
       else if (viewParam === 'warden') navigate('/portal?role=warden', { replace: true })
+
       else if (viewParam === 'portal') navigate('/portal', { replace: true })
       else if (viewParam === 'auth') {
         const role = params.get('role')
@@ -193,6 +197,8 @@ function AppContent() {
   const handleDashboardNavigation = (view) => {
     if (view === 'home') {
       window.location.href = '/home.html'
+    } else if (view === 'auth' || view === 'portal') {
+      navigate('/portal')
     } else {
       navigate(`/${view}`)
     }
@@ -227,6 +233,8 @@ function AppContent() {
       <Route path="/location" element={<Layout><LocationPage /></Layout>} />
       <Route path="/academic-council" element={<Layout><ARCommittee /></Layout>} />
       <Route path="/students-grievance" element={<Layout><LegalCommittee /></Layout>} />
+      <Route path="/clubs-societies" element={<Layout><ClubsSocieties /></Layout>} />
+
       
       {/* Unified Login Portal */}
       <Route path="/portal" element={

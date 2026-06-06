@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OUTR — Odisha University of Technology and Research</title>
+  <title>OUTR - Odisha University of Technology and Research</title>
 
   <meta name="description"
     content="Odisha University of Technology and Research (OUTR) - Official Website. Excellence in Engineering, Science, and Technology Education." />
-  <meta property="og:title" content="OUTR — Odisha University of Technology and Research" />
+  <meta property="og:title" content="OUTR - Odisha University of Technology and Research" />
   <meta property="og:description"
     content="Official Website of OUTR. Excellence in Engineering, Science, and Technology Education." />
   <meta property="og:image" content="https://outr.ac.in/public/uploads/logo_4.png" />
@@ -45,17 +45,59 @@
   <link rel="preload" as="image" href="https://outr.ac.in/public/uploads/b1_5.jpg" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* FOUC (Flash of Unstyled Content) Prevention styling */
-    html {
-      opacity: 0;
-      transition: opacity 0.25s ease-in-out;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    html.ready {
-      opacity: 1;
+
+    /* Completely hide Google Translate Widget UI, Banners, and floating icons */
+    body {
+      top: 0 !important;
+      position: static !important;
+    }
+    .skiptranslate,
+    .goog-te-banner-frame,
+    .goog-te-banner,
+    .goog-gt-tt,
+    .goog-te-balloon-frame,
+    .goog-te-balloon,
+    .goog-te-spinner-pos,
+    .goog-tooltip,
+    .goog-logo-link,
+    iframe.goog-te-banner-frame,
+    iframe.skiptranslate,
+    iframe[id*="translate"],
+    #goog-gt-tt,
+    #goog-gt-tt * {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    .goog-te-gadget {
+      font-size: 0 !important;
+      color: transparent !important;
+    }
+    .goog-te-gadget .goog-te-combo {
+      display: none !important;
+    }
+    #google_translate_element {
+      display: none !important;
+      visibility: hidden !important;
+      width: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
   </style>
 </head>
 
 <body>
+  <!-- Inline-styled page loader to prevent unstyled flash & mask translation reloads -->
+  <div id="page-loader" style="position: fixed; inset: 0; background: #0b3c5d; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; transition: opacity 0.4s ease, visibility 0.4s ease; font-family: sans-serif;">
+    <div style="width: 44px; height: 44px; border: 3px solid rgba(212, 175, 55, 0.15); border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+    <div style="color: #ffffff; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; text-align: center; padding: 0 20px;">Odisha University of Technology & Research</div>
+    <div style="color: #d4af37; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-align: center;" id="loader-status">Loading portal...</div>
+  </div>
   <!-- SVG Sprite Sheet -->
   <svg width="0" height="0" class="hidden" style="display:none;">
     <defs>
@@ -191,10 +233,10 @@
         <a href="#" class="text-blue-200 hover:text-white transition-colors">RTI</a>
         <a href="#" target="_blank" rel="noopener noreferrer"
           class="text-blue-200 hover:text-white transition-colors">Tenders / RFQ</a>
-        <a href="http://placement.cet.edu.in/" class="text-blue-200 hover:text-white transition-colors">Placement</a>
+        <a href="http://placement.cet.edu.in/" target="_blank" rel="noopener noreferrer" class="text-blue-200 hover:text-white transition-colors">Placement</a>
       </div>
       <div class="flex gap-5">
-        <a href="https://www.cet.edu.in/" class="text-blue-200 hover:text-white transition-colors">Old Website</a>
+        <a href="https://www.cet.edu.in/" target="_blank" rel="noopener noreferrer" class="text-blue-200 hover:text-white transition-colors">Old Website</a>
         <a href="#" class="text-blue-200 hover:text-white transition-colors">News</a>
       </div>
     </div>
@@ -215,6 +257,9 @@
             <!-- Injected via JS -->
           </div>
         </div>
+        <button id="close-ticker" class="flex-shrink-0 ml-4 hover:bg-white/20 p-1 rounded transition-colors z-10 border-none bg-transparent text-white font-bold text-sm cursor-pointer" aria-label="Close Alert">
+          &times;
+        </button>
       </div>
     </div>
     <div class="nav-bar-inner">
@@ -223,7 +268,7 @@
         <div class="flex items-center gap-3 no-underline cursor-default select-none">
           <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Logo" class="[height:60px] [width:auto]" />
           <div>
-            <span class="logo-text" id="logo-name">Odisha University of Technology and Research</span>
+            <span class="logo-text notranslate" id="logo-name">Odisha University of Technology and Research</span>
             <span class="logo-sub">Bhubaneswar, Odisha</span>
           </div>
         </div>
@@ -241,7 +286,7 @@
             </svg>
             <div class="dropdown">
               <div class="flex flex-col gap-2">
-                <a href="/?view=about" class="dd-card">
+                <a href="/portal?view=about" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-2"></use>
@@ -251,7 +296,7 @@
                     <div class="dd-sub">History & overview</div>
                   </div>
                 </a>
-                <a href="/?view=mission" class="dd-card">
+                <a href="/portal?view=mission" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-3"></use>
@@ -375,7 +420,7 @@
                   </div>
                 </div>
 
-                <a href="/?view=academic-council" class="dd-card">
+                <a href="/portal?view=academic-council" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-6"></use>
@@ -385,7 +430,7 @@
                     <div class="dd-sub">Academic boards & groups</div>
                   </div>
                 </a>
-                <a href="/?view=syllabus" class="dd-card">
+                <a href="/portal?view=syllabus" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-7"></use>
@@ -395,7 +440,7 @@
                     <div class="dd-sub" data-i18n="nav.syllabus.sub">UG and PG course syllabi</div>
                   </div>
                 </a>
-                <a href="#" class="dd-card">
+                <a href="/documents/academic-calendar-2025-26.pdf" target="_blank" rel="noopener noreferrer" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-24"></use>
@@ -420,42 +465,42 @@
               <p class="[font-size:10.5px] font-semibold [color:#94a3b8] [letter-spacing:0.1em] [text-transform:uppercase] [margin-bottom:10px] [padding:0_4px]"
                 data-i18n="nav.admin.title">Administration & Governance</p>
               <div class="grid grid-cols-2 gap-2">
-                <a href="/?view=vc-desk" class="dd-card">
+                <a href="/portal?view=vc-desk" class="dd-card">
                   <div class="dd-icon [background:#eff6ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-2"></use>
                     </svg></div>
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.vc">VC Desk</div>
                 </a>
-                <a href="/?view=bom" class="dd-card">
+                <a href="/portal?view=bom" class="dd-card">
                   <div class="dd-icon [background:#fff7ed]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-13"></use>
                     </svg></div>
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.board">Board of Management</div>
                 </a>
-                <a href="/?view=deans" class="dd-card">
+                <a href="/portal?view=deans" class="dd-card">
                   <div class="dd-icon [background:#f0fdf4]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-4"></use>
                     </svg></div>
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.dean">Dean</div>
                 </a>
-                <a href="/?view=hods" class="dd-card">
+                <a href="/portal?view=hods" class="dd-card">
                   <div class="dd-icon [background:#fff1f2]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-5"></use>
                     </svg></div>
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.hods">HODs</div>
                 </a>
-                <a href="/?view=antiragging" class="dd-card">
+                <a href="/portal?view=antiragging" class="dd-card">
                   <div class="dd-icon [background:#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#A32D2D" stroke-width="2">
                       <use href="#icon-6"></use>
                     </svg></div>
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.antirag">Anti-Ragging</div>
                 </a>
-                <a href="/?view=academic-council" class="dd-card">
+                <a href="/portal?view=academic-council" class="dd-card">
                   <div class="dd-icon [background:#f5f3ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-7"></use>
@@ -463,14 +508,14 @@
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.academic_council">Academic Council /
                     Members</div>
                 </a>
-                <a href="/?view=students-grievance" class="dd-card">
+                <a href="/portal?view=students-grievance" class="dd-card">
                   <div class="dd-icon [background:#ecfdf5]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-16"></use>
                     </svg></div>
                   <div class="dd-title [font-size:12.5px]" data-i18n="nav.admin.grievance">Students Grievance</div>
                 </a>
-                <a href="/?view=coe-desk" class="dd-card">
+                <a href="/portal?view=coe-desk" class="dd-card">
                   <div class="dd-icon [background:#fff0f6]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                       stroke="#0B3C5D" stroke-width="2">
                       <use href="#icon-17"></use>
@@ -515,7 +560,7 @@
                     <div class="dd-sub">Fests & campus activities</div>
                   </div>
                 </a>
-                <a href="administration/SA_commitee.html" class="dd-card">
+                <a href="/portal?view=clubs" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-19"></use>
@@ -525,6 +570,7 @@
                     <div class="dd-sub">Join student organizations</div>
                   </div>
                 </a>
+
                 <a href="Student and Event/Hostel/hostel.html" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
@@ -558,7 +604,7 @@
             </svg>
             <div class="dropdown">
               <div class="flex flex-col gap-2">
-                <a href="/?view=location" class="dd-card">
+                <a href="/portal?view=location" class="dd-card">
                   <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D"
                       stroke-width="2">
                       <use href="#icon-16"></use>
@@ -595,7 +641,7 @@
 
         <!-- Search + Language + hamburger -->
         <div class="flex items-center gap-2 relative">
-          <div id="lang-switcher" class="hidden lg:block relative">
+          <div id="lang-switcher" class="hidden lg:block relative notranslate">
             <button id="lang-btn" class="lang-capsule" title="Change Language" aria-label="Change language"
               aria-expanded="false" aria-haspopup="menu">
               <span class="lang-icon-wrap">
@@ -707,9 +753,9 @@
           </svg>
         </summary>
         <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-          <a href="/?view=about" class="text-[15px] text-slate-600"
+          <a href="/portal?view=about" class="text-[15px] text-slate-600"
             data-i18n="nav.about.dropdown.title">About OUTR</a>
-          <a href="/?view=mission" class="text-[15px] text-slate-600" data-i18n="nav.vision.title">Vision and Mission</a>
+          <a href="/portal?view=mission" class="text-[15px] text-slate-600" data-i18n="nav.vision.title">Vision and Mission</a>
           <a href="#" class="text-[15px] text-slate-600" data-i18n="nav.accreditation.title">Accreditation</a>
         </div>
       </details>
@@ -748,8 +794,8 @@
               <a href="OUTR website/schools/ted.html" class="text-[14px] text-slate-500" data-i18n="dept.textile">Textile Engineering Department</a>
             </div>
           </details>
-          <a href="/?view=academic-council" class="text-[15px] text-slate-600" data-i18n="nav.committees">Committees</a>
-          <a href="/?view=syllabus" class="text-[15px] text-slate-600" data-i18n="nav.syllabus.title">Syllabus</a>
+          <a href="/portal?view=academic-council" class="text-[15px] text-slate-600" data-i18n="nav.committees">Committees</a>
+          <a href="/portal?view=syllabus" class="text-[15px] text-slate-600" data-i18n="nav.syllabus.title">Syllabus</a>
           <a href="#" class="text-[15px] text-slate-600" data-i18n="nav.calendar.title">Academic Calendar</a>
         </div>
       </details>
@@ -765,15 +811,15 @@
           </svg>
         </summary>
         <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-          <a href="/?view=vc-desk" class="text-[15px] text-slate-600" data-i18n="nav.admin.vc">VC Desk</a>
-          <a href="/?view=bom" class="text-[15px] text-slate-600" data-i18n="nav.admin.board">Board of Management</a>
-          <a href="/?view=deans" class="text-[15px] text-slate-600" data-i18n="nav.admin.dean">Dean</a>
-          <a href="/?view=hods" class="text-[15px] text-slate-600" data-i18n="nav.admin.hods">HODs</a>
-          <a href="/?view=antiragging" class="text-[15px] text-slate-600" data-i18n="nav.admin.antirag">Anti-Ragging</a>
-          <a href="/?view=academic-council" class="text-[15px] text-slate-600" data-i18n="nav.admin.academic_council">Academic Council /
+          <a href="/portal?view=vc-desk" class="text-[15px] text-slate-600" data-i18n="nav.admin.vc">VC Desk</a>
+          <a href="/portal?view=bom" class="text-[15px] text-slate-600" data-i18n="nav.admin.board">Board of Management</a>
+          <a href="/portal?view=deans" class="text-[15px] text-slate-600" data-i18n="nav.admin.dean">Dean</a>
+          <a href="/portal?view=hods" class="text-[15px] text-slate-600" data-i18n="nav.admin.hods">HODs</a>
+          <a href="/portal?view=antiragging" class="text-[15px] text-slate-600" data-i18n="nav.admin.antirag">Anti-Ragging</a>
+          <a href="/portal?view=academic-council" class="text-[15px] text-slate-600" data-i18n="nav.admin.academic_council">Academic Council /
             Members</a>
-          <a href="/?view=students-grievance" class="text-[15px] text-slate-600" data-i18n="nav.admin.grievance">Students Grievance</a>
-          <a href="/?view=coe-desk" class="text-[15px] text-slate-600" data-i18n="nav.admin.coe">Controller of Exam</a>
+          <a href="/portal?view=students-grievance" class="text-[15px] text-slate-600" data-i18n="nav.admin.grievance">Students Grievance</a>
+          <a href="/portal?view=coe-desk" class="text-[15px] text-slate-600" data-i18n="nav.admin.coe">Controller of Exam</a>
           <a href="administration/SA_commitee.html" class="text-[15px] text-slate-600" data-i18n="nav.admin.student_committee">Students Committee</a>
           <a href="administration/SA_commitee.html" class="text-[15px] text-slate-600" data-i18n="nav.admin.scst">SC/ST Committee</a>
         </div>
@@ -790,10 +836,11 @@
           </svg>
         </summary>
         <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-          <a href="#notices" class="text-[15px] text-slate-600" data-i18n="nav.student.event">Event</a>
-          <a href="administration/SA_commitee.html" class="text-[15px] text-slate-600" data-i18n="nav.student.society">Society / Clubs</a>
+          <a href="/coming-soon.html?title=Events%20and%20Notices" class="text-[15px] text-slate-600" data-i18n="nav.student.event">Event</a>
+          <a href="/portal?view=clubs" class="text-[15px] text-slate-600" data-i18n="nav.student.society">Society / Clubs</a>
           <a href="Student and Event/Hostel/hostel.html" class="text-[15px] text-slate-600" data-i18n="nav.student.hostels">Hostels</a>
           <a href="Student and Event/Campus_Facilities/CampusLife.html" class="text-[15px] text-slate-600" data-i18n="nav.student.campus">Campus Life</a>
+
         </div>
       </details>
       <div class="h-px w-full bg-slate-200"></div>
@@ -817,7 +864,7 @@
       <div class="h-px w-full bg-slate-200"></div>
       <div class="mt-4 flex flex-col gap-3">
         <!-- Mobile Lang Switcher -->
-        <div class="flex items-center gap-2 mb-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+        <div class="flex items-center gap-2 mb-2 p-2 bg-slate-50 rounded-lg border border-slate-200 notranslate">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2">
             <use href="#icon-19"></use>
           </svg>
@@ -875,7 +922,7 @@
         <p class="[color:rgba(255,255,255,0.8)] [font-size:1.05rem] [font-style:italic] [margin-bottom:28px]">
           "Illuminating Minds, Engineering Tomorrow"
         </p>
-        <a href="/?view=portal" class="group inline-flex items-center justify-center bg-[#D4AF37] hover:bg-[#BCA02B] text-[#0B3C5D] font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none select-none">
+        <a href="/portal" class="group inline-flex items-center justify-center bg-[#D4AF37] hover:bg-[#BCA02B] text-[#0B3C5D] font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none select-none">
           Services Portal
           <svg class="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
@@ -926,7 +973,7 @@
             engineers and researchers who are equipped to address the
             challenges of a rapidly evolving technological world.
           </p>
-          <a href="/?view=about"
+          <a href="/portal?view=about"
             class="[display:inline-flex] items-center [gap:8px] [padding:11px_24px] [background:var(--primary)] text-white rounded-lg [font-size:13.5px] font-semibold no-underline [transition:opacity_0.2s] hover:opacity-[0.85]">
             <span data-i18n="section.about.cta">Learn More About OUTR</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1004,11 +1051,11 @@
         <article
           class="bg-white [border-radius:20px] [padding:34px_30px] flex [gap:24px] [align-items:flex-start] [box-shadow:0_8px_40px_rgba(11,60,93,0.1)]">
           <div class="[flex-shrink:0] text-center">
-            <div
-              class="[width:88px] [height:88px] rounded-full [background:var(--primary)] flex items-center justify-center [border:4px_solid_var(--accent)] [margin:0_auto_8px] [font-size:1.6rem] font-bold text-white">
+            <a href="/portal?view=vc-desk"
+              class="block [width:88px] [height:88px] rounded-full [background:var(--primary)] flex items-center justify-center [border:4px_solid_var(--accent)] [margin:0_auto_8px] hover:scale-105 transition-transform duration-300">
               <img src="https://outr.ac.in/public/uploads/director_1.jpg"
                 alt="Vice-Chancellor Dr. Bibhuti Bhusan Biswal" class="rounded-full w-full h-full [object-fit:cover]">
-            </div>
+            </a>
           </div>
           <div>
             <svg width="30" height="30" viewBox="0 0 24 24"
@@ -1016,7 +1063,7 @@
               <use href="#icon-28"></use>
             </svg>
             <p class="[color:#1e293b] [font-size:15px] [line-height:1.85] [font-style:italic] [margin-bottom:18px]">
-              Welcome to Odisha University of Technology and Research — a place
+              Welcome to Odisha University of Technology and Research - a place
               where knowledge meets innovation and curiosity drives discovery.
               Our commitment is to provide world-class technical education
               rooted in the values of integrity, excellence, and social
@@ -1298,6 +1345,9 @@
     <div id="footer-bottom-bar" class="[background:#071e2e] [border-top:1px_solid_rgba(255,255,255,0.05)]">
     </div>
   </footer>
+
+  <!-- Hidden Google Translate Element Target container -->
+  <div id="google_translate_element" style="display: none; visibility: hidden; width: 0; height: 0; overflow: hidden;"></div>
 
   <!-- Back to top -->
   <button id="btt" aria-label="Back to top">

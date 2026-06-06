@@ -17,7 +17,7 @@ This project recreates the digital presence of OUTR with a hybrid architecture �
 - **Academics & Schools** — Department pages, UG/PG course listings, faculty profiles with research publications.
 - **Administration** — VC Desk, Board of Governors, Dean directory, and 6+ committee pages.
 - **Social Media Hub** — Integrated platform dashboards for Facebook, Instagram, LinkedIn, and YouTube.
-- **Deployment-Ready** — `netlify.toml` configured with SPA fallback routing, CI/CD via GitHub Actions.
+- **Deployment-Ready** — `netlify.toml` configured with SPA fallback routing.
 
 ---
 
@@ -31,7 +31,7 @@ This project recreates the digital presence of OUTR with a hybrid architecture �
 | Database & Auth | Supabase (PostgreSQL + Auth + Storage + Realtime) |
 | Static Pages | HTML5 + Vanilla JS (homepage, schools, faculty profiles) |
 | Testing | Vitest + React Testing Library |
-| CI/CD | GitHub Actions |
+| CI/CD | None |
 | Hosting | Netlify (static + SPA) |
 
 ---
@@ -74,7 +74,6 @@ OUTR_Clone/
 │       ├── Student and Event/         # Campus facilities, hostel pages
 │       └── administration/            # Committee pages + member photos
 │
-├── .github/workflows/ci.yml          # CI pipeline (lint + test + build)
 ├── docs/                              # Architecture notes
 ├── CODEOWNERS                         # Team file ownership
 ├── CONTRIBUTING.md                    # Collaboration guidelines

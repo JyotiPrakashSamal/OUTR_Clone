@@ -32,7 +32,7 @@
     { "label": "ଏବେ ଆବେଦନ କରନ୍ତୁ", "href": "https://ojee.nic.in/" },
     { "label": "ନୋଟିସ୍ ଏବଂ ସର୍କୁଲାର୍", "href": "#notices" },
     { "label": "ପରୀକ୍ଷା ଫଳାଫଳ", "href": "/portal?role=student" },
-    { "label": "ଶିକ୍ଷା ପଞ୍ଜିକା", "href": "/coming-soon.html?title=Academic%20Calendar" },
+    { "label": "ଶିକ୍ଷା ପଞ୍ଜିକା", "href": "/documents/academic-calendar-2025-26.pdf" },
     { "label": "ନାମଲେଖା ୨୦୨୫", "href": "https://ojee.nic.in/" },
     { "label": "ଛାତ୍ର ଇ-ପୋର୍ଟାଲ୍", "href": "/portal?role=student" }
   ],
@@ -41,7 +41,7 @@
       "group": "କ୍ୟାମ୍ପସ",
       "cover": "OUTR website/images/gallery/clg.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg.jpg", "label": "ମୁଖ୍ୟ ଭବନ — ଆକାଶ ମାର୍ଗରୁ ଦୃଶ୍ୟ" },
+        { "image": "OUTR website/images/gallery/clg.jpg", "label": "ମୁଖ୍ୟ ଭବନ - ଆକାଶ ମାର୍ଗରୁ ଦୃଶ୍ୟ" },
         { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "କ୍ୟାମ୍ପସ ପଡ଼ିଆ" }
       ]
     },
@@ -60,7 +60,7 @@
       "group": "କ୍ୟାମ୍ପସ ଜୀବନ",
       "cover": "OUTR website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "କ୍ୟାମ୍ପସ ପଥ — ସନ୍ଧ୍ୟାକାଳୀନ ଦୃଶ୍ୟ" },
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "କ୍ୟାମ୍ପସ ପଥ - ସନ୍ଧ୍ୟାକାଳୀନ ଦୃଶ୍ୟ" },
         { "image": "OUTR website/images/gallery/dance.jpg", "label": "ପାରମ୍ପରିକ ନୃତ୍ୟ ପ୍ରଦର୍ଶନ" },
         { "image": "OUTR website/images/gallery/dj.jpg", "label": "ଡିଜେ ନାଇଟ୍ ଏବଂ ସାଂସ୍କୃତିକ କାର୍ଯ୍ୟକ୍ରମ" }
       ]
@@ -69,9 +69,9 @@
       "group": "ରାତ୍ରି ଜୀବନ",
       "cover": "OUTR website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "କ୍ୟାମ୍ପସ ପଥ — ରାତ୍ରି ଦୃଶ୍ୟ" },
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "କ୍ୟାମ୍ପସ ପଥ - ରାତ୍ରି ଦୃଶ୍ୟ" },
         { "image": "OUTR website/images/gallery/dj.jpg", "label": "ଡିଜେ ନାଇଟ୍ ଏବଂ ଉତ୍ସବ" },
-        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "ବାର୍ଷିକ ଉତ୍ସବ — XTASY ନାଇଟ୍ କନସର୍ଟ" },
+        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "ବାର୍ଷିକ ଉତ୍ସବ - XTASY ନାଇଟ୍ କନସର୍ଟ" },
         { "image": "OUTR website/images/gallery/dance.jpg", "label": "ସାଂସ୍କୃତିକ ରାତ୍ରି ପ୍ରଦର୍ଶନ" }
       ]
     },
@@ -113,7 +113,7 @@
         { "label": "ପାର୍ଥ୍ୟକ୍ରମ ସମୂହ", "href": "OUTR website/schools.html" },
         { "label": "UG ସିଲାବସ୍", "href": "/syllabus" },
         { "label": "PG ସିଲାବସ୍", "href": "/syllabus" },
-        { "label": "ଶିକ୍ଷା ପଞ୍ଜିକା", "href": "/coming-soon.html?title=Academic%20Calendar" },
+        { "label": "ଶିକ୍ଷା ପଞ୍ଜିକା", "href": "/documents/academic-calendar-2025-26.pdf" },
         { "label": "COE - AI & ICT", "href": "/coe-desk" },
         { "label": "ପରୀକ୍ଷା ବିଭାଗ", "href": "/portal?role=controller" }
       ],

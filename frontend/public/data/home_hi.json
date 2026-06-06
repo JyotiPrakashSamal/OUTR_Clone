@@ -41,7 +41,7 @@
       "group": "कैंपस",
       "cover": "OUTR website/images/gallery/clg.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg.jpg", "label": "मुख्य भवन — हवाई दृश्य" },
+        { "image": "OUTR website/images/gallery/clg.jpg", "label": "मुख्य भवन - हवाई दृश्य" },
         { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "कैंपस मैदान" }
       ]
     },
@@ -60,7 +60,7 @@
       "group": "कैंपस जीवन",
       "cover": "OUTR website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग — शाम का दृश्य" },
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग - शाम का दृश्य" },
         { "image": "OUTR website/images/gallery/dance.jpg", "label": "पारंपरिक नृत्य प्रदर्शन" },
         { "image": "OUTR website/images/gallery/dj.jpg", "label": "डीजे नाइट और सांस्कृतिक उत्सव" }
       ]
@@ -69,9 +69,9 @@
       "group": "नाइट लाइफ",
       "cover": "OUTR website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग — रात्रि दृश्य" },
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग - रात्रि दृश्य" },
         { "image": "OUTR website/images/gallery/dj.jpg", "label": "डीजे नाइट और उत्सव" },
-        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "वार्षिक महोत्सव — XTASY नाइट कॉन्सर्ट" },
+        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "वार्षिक महोत्सव - XTASY नाइट कॉन्सर्ट" },
         { "image": "OUTR website/images/gallery/dance.jpg", "label": "सांस्कृतिक रात्रि प्रदर्शन" }
       ]
     },

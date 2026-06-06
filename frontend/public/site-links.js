@@ -15,7 +15,7 @@
     comingSoon: comingSoon,
     academicCouncil: '/academic-council',
     reactView: function (view) {
-      return '/?view=' + encodeURIComponent(view);
+      return '/portal?view=' + encodeURIComponent(view);
     },
   };
 })(typeof window !== 'undefined' ? window : globalThis);

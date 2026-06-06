@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Phone, Mail, Leaf } from 'lucide-react'
 
 export default function Footer() {
   const [aqiValue, setAqiValue] = useState('38')
@@ -82,7 +83,7 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer id="footer" className="w-full bg-[#0a2940] text-[#94a3b8] py-16 px-5 select-none font-sans mt-20">
+    <footer id="footer" className="w-full bg-[#0a2940] text-[#94a3b8] py-16 px-5 select-none font-sans mt-20 font-medium">
       
       {/* Footer Top Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr] gap-12 mb-12 text-left">
@@ -102,12 +103,18 @@ export default function Footer() {
               <span className="font-serif font-bold text-sm tracking-wide leading-none text-[#d4af37] mt-1">Technology and Research</span>
             </div>
           </div>
-          <p className="text-xs text-[#8ca8c0] leading-relaxed mb-4">
-            Techno Campus, Ghatikia, Mahalaxmi Vihar<br/>
-            Bhubaneswar, Odisha - 751029, India<br/>
-            📞 Office Phone: 0674-2386075 | 0674-2386182<br/>
-            ✉️ Email: registrar@outr.ac.in
-          </p>
+          <div className="text-xs text-[#8ca8c0] leading-relaxed mb-4 space-y-2">
+            <p>
+              Techno Campus, Ghatikia, Mahalaxmi Vihar<br/>
+              Bhubaneswar, Odisha - 751029, India
+            </p>
+            <p className="flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-[#d4af37]/75" /> Office Phone: 0674-2386075 | 0674-2386182
+            </p>
+            <p className="flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-[#d4af37]/75" /> Email: registrar@outr.ac.in
+            </p>
+          </div>
         </div>
  
         {/* Column 2: Quick Links */}
@@ -131,7 +138,7 @@ export default function Footer() {
           <ul className="space-y-3.5 p-0 m-0 list-none text-xs text-[#8ca8c0]">
             <li><a href="/OUTR website/schools.html" className="hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
             <li><a href="/syllabus" className="hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
-            <li><a href="/?view=coe-desk" className="hover:text-white transition-colors no-underline">Controller of Exam</a></li>
+            <li><a href="/portal?view=coe-desk" className="hover:text-white transition-colors no-underline">Controller of Exam</a></li>
             <li><a href="/Student and Event/Hostel/hostel.html" className="hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
           </ul>
         </div>
@@ -143,7 +150,7 @@ export default function Footer() {
           </h4>
           <div className="bg-white/5 rounded-xl border border-white/10 p-4">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">🌱</span>
+              <Leaf className="w-6 h-6 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Air Quality (AQI)</div>
                 <div className="text-sm font-bold mt-0.5 transition-colors duration-300"><span className={aqiColor}>{aqiValue} &bull; {aqiStatus}</span></div>
@@ -156,7 +163,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright Bottom */}
-      <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 text-center text-xs text-slate-500">
+      <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 text-center text-xs text-slate-500 font-semibold">
         &copy; {new Date().getFullYear()} Odisha University of Technology and Research. All Rights Reserved. &bull; Bhubaneswar, Odisha
       </div>
 

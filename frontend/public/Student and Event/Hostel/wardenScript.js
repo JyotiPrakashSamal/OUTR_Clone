@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════
-   wardenScript.js  —  OUTR Warden Portal
+   wardenScript.js  -  OUTR Warden Portal
    All features: login, search, autocomplete,
    student display, stats, logout
 ══════════════════════════════════════════ */
@@ -226,7 +226,7 @@ const resultSection    = document.getElementById('resultSection');
 const resultContent    = document.getElementById('resultContent');
 
 /* ─────────────────────────────────────────
-   6. INITIALISATION — check existing session
+   6. INITIALISATION - check existing session
 ───────────────────────────────────────── */
 (function init() {
   const session = getSession();
@@ -307,7 +307,7 @@ function showDashboard(warden) {
   loginScreen.style.display = 'none';
   dashboard.style.display   = 'flex';
   dashboard.style.flexDirection = 'column';
-  loggedWardenName.textContent = warden.name + ' — ' + warden.role;
+  loggedWardenName.textContent = warden.name + ' - ' + warden.role;
   populateStats();
 }
 

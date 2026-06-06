@@ -17,10 +17,10 @@
     { "title": "Mid Semester Examination Results - Even Semester 2024-25", "date": "18 Feb 2025" }
   ],
   "events": [
-    { "day": "22", "month": "MAR", "title": "XTASY 2025 - Annual Technical Fest", "location": "Main Auditorium, OUTR Campus", "color": "var(--primary)" },
-    { "day": "28", "month": "MAR", "title": "National Seminar on Sustainable Engineering", "location": "Conference Hall, Block A", "color": "var(--secondary)" },
-    { "day": "05", "month": "APR", "title": "Campus Placement Drive - TCS, Infosys, Wipro", "location": "Placement Cell, Block C", "color": "#1e293b" },
-    { "day": "10", "month": "APR", "title": "Annual Convocation Ceremony 2025", "location": "University Open Ground, OUTR", "color": "var(--accent)" }
+    { "day": "18", "month": "OCT", "title": "Zairzest 2025 - Robotics & Software Exhibition (by Zairza)", "location": "SAC Seminar Hall, OUTR Campus", "color": "var(--primary)", "href": "https://zairza.in/" },
+    { "day": "05", "month": "NOV", "title": "Spectrum Hackathon - 36-Hour National Coding Challenge", "location": "School of CSE Lab, Block C", "color": "var(--secondary)", "href": "https://spectrumcet.in/" },
+    { "day": "22", "month": "NOV", "title": "WebCraft Bootcamp - Full-Stack Development Workshop (by Zigbee)", "location": "MCA Block Seminar Room", "color": "#1e293b", "href": "https://zigbeeoutr.in/" },
+    { "day": "12", "month": "DEC", "title": "Blue Jay Racing - m-BAJA Motorsports Vehicle Showcase", "location": "Techno Campus Main Ground, OUTR", "color": "var(--accent)", "href": "/Student and Event/Campus_Facilities/CampusLife.html" }
   ],
   "departments": [
     { "icon": "icon-8", "title": "School of Computer Sciences", "subtitle": "CSE - IT - MCA - AI&ML" },
@@ -32,7 +32,7 @@
     { "label": "Apply Now", "href": "https://ojee.nic.in/" },
     { "label": "Notices & Circulars", "href": "#notices" },
     { "label": "Exam Results", "href": "/portal?role=student" },
-    { "label": "Academic Calendar", "href": "/coming-soon.html?title=Academic%20Calendar" },
+    { "label": "Academic Calendar", "href": "/documents/academic-calendar-2025-26.pdf" },
     { "label": "Admissions 2025", "href": "https://ojee.nic.in/" },
     { "label": "Student E-Portal", "href": "/portal?role=student" }
   ],
@@ -41,7 +41,7 @@
       "group": "Campus",
       "cover": "OUTR website/images/gallery/clg.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg.jpg", "label": "Main Building — Aerial View" },
+        { "image": "OUTR website/images/gallery/clg.jpg", "label": "Main Building - Aerial View" },
         { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "Campus Grounds" }
       ]
     },
@@ -60,7 +60,7 @@
       "group": "Campus Life",
       "cover": "OUTR website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway — Evening View" },
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway - Evening View" },
         { "image": "OUTR website/images/gallery/dance.jpg", "label": "Traditional Dance Performance" },
         { "image": "OUTR website/images/gallery/dj.jpg", "label": "DJ Night & Cultural Celebration" }
       ]
@@ -69,9 +69,9 @@
       "group": "Night Life",
       "cover": "OUTR website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway — Night View" },
+        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway - Night View" },
         { "image": "OUTR website/images/gallery/dj.jpg", "label": "DJ Night & Celebration" },
-        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "Annual Fest — XTASY Night Concert" },
+        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "Annual Fest - XTASY Night Concert" },
         { "image": "OUTR website/images/gallery/dance.jpg", "label": "Cultural Night Performance" }
       ]
     },
@@ -113,7 +113,7 @@
         { "label": "Programs Offered", "href": "OUTR website/schools.html" },
         { "label": "UG Syllabus", "href": "/syllabus" },
         { "label": "PG Syllabus", "href": "/syllabus" },
-        { "label": "Academic Calendar", "href": "/coming-soon.html?title=Academic%20Calendar" },
+        { "label": "Academic Calendar", "href": "/documents/academic-calendar-2025-26.pdf" },
         { "label": "COE - AI & ICT", "href": "/coe-desk" },
         { "label": "Examination Cell", "href": "/portal?role=controller" }
       ],

@@ -11,6 +11,30 @@ import {
   handlePrintAdmitCardFromModal
 } from './file-tracking/utils/fileTrackingHelpers'
 import ExamManagementDesk from './file-tracking/components/ExamManagementDesk'
+import { 
+  GraduationCap, 
+  LogOut, 
+  Search, 
+  BarChart3, 
+  Ticket, 
+  CheckCircle2, 
+  AlertTriangle, 
+  FolderOpen, 
+  Upload, 
+  Mail, 
+  Phone, 
+  ClipboardList, 
+  Paperclip, 
+  Printer, 
+  Eye, 
+  FileText, 
+  Check, 
+  X, 
+  Building, 
+  ClipboardCheck, 
+  RotateCcw, 
+  Info 
+} from 'lucide-react'
 
 // Simple, highly effective global cache for secure file URLs
 const fileUrlCache = new Map()
@@ -586,7 +610,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
     const appId = 'APP-' + Math.random().toString(36).substring(2, 10).toUpperCase()
     
     const school = SCHOOL_MAP[school_id]
-    const classStr = program + (semester ? ' — ' + semester : '')
+    const classStr = program + (semester ? ' - ' + semester : '')
     
     const newApp = {
       id: appId,
@@ -978,19 +1002,30 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
       rejected: 'bg-rose-50 border-rose-200 text-rose-700 font-semibold'
     }
 
+    const icons = {
+      pending: <RotateCcw className="w-3 h-3 inline mr-1 text-amber-700" />,
+      adviser_approved: <CheckCircle2 className="w-3 h-3 inline mr-1 text-sky-700" />,
+      adviser_declined: <AlertTriangle className="w-3 h-3 inline mr-1 text-rose-700" />,
+      hos_approved: <CheckCircle2 className="w-3 h-3 inline mr-1 text-indigo-700" />,
+      hos_declined: <AlertTriangle className="w-3 h-3 inline mr-1 text-rose-700" />,
+      resolved: <CheckCircle2 className="w-3 h-3 inline mr-1 text-emerald-700" />,
+      rejected: <AlertTriangle className="w-3 h-3 inline mr-1 text-rose-700" />
+    }
+
     const labels = {
-      pending: '↻ Awaiting Advisor',
-      adviser_approved: '➜ Forwarded to HoS',
-      adviser_declined: '✖ Declined by Advisor',
-      hos_approved: '➜ Forwarded to Cell',
-      hos_declined: '✖ Declined by HoS',
-      resolved: '✔ Resolved / Issued',
-      rejected: '✖ Declined / Closed'
+      pending: 'Awaiting Advisor',
+      adviser_approved: 'Forwarded to HoS',
+      adviser_declined: 'Declined by Advisor',
+      hos_approved: 'Forwarded to Cell',
+      hos_declined: 'Declined by HoS',
+      resolved: 'Resolved / Issued',
+      rejected: 'Declined / Closed'
     }
 
     return (
-      <span className={`inline-block px-3 py-1 rounded-full text-xs border ${badges[status] || ''}`}>
-        {labels[status] || status}
+      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs border ${badges[status] || ''}`}>
+        {icons[status]}
+        <span>{labels[status] || status}</span>
       </span>
     )
   }
@@ -1038,7 +1073,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             <div className="bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 shadow-sm text-left">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center border border-accent/20 bg-white">
-                  <span className="text-3xl">🎓</span>
+                  <GraduationCap className="w-7 h-7 text-primary" />
                 </div>
                 <div className="text-left">
                   <span className="text-xs font-bold text-accent uppercase tracking-wider">OUTR Academics Cell</span>
@@ -1052,7 +1087,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 onClick={onSignOut}
                 className="w-full md:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                🚪 Sign Out
+                <LogOut className="w-4 h-4" /> Sign Out
               </button>
             </div>
 
@@ -1064,9 +1099,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12 font-sans">
               <div 
                 onClick={() => setCurrentSubView('student-form')}
-                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
+                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group flex flex-col"
               >
-                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">🎓</span>
+                <GraduationCap className="w-8 h-8 text-primary mb-4 block group-hover:scale-105 transition-transform duration-300" />
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">Submit Application</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   Draft request transcripts, upload letters, choose departments, and submit to advisors.
@@ -1075,9 +1110,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
               <div 
                 onClick={() => setCurrentSubView('tracking')}
-                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
+                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group flex flex-col"
               >
-                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">🔍</span>
+                <Search className="w-8 h-8 text-primary mb-4 block group-hover:scale-105 transition-transform duration-300" />
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">Track Application</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   Search by your registration ID and monitor live timeline step clearances.
@@ -1086,9 +1121,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
               <div 
                 onClick={() => setCurrentSubView('my-results')}
-                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
+                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group flex flex-col"
               >
-                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">📊</span>
+                <BarChart3 className="w-8 h-8 text-primary mb-4 block group-hover:scale-105 transition-transform duration-300" />
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">My Results &amp; Grades</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   View published semester grade sheets and calculate aggregate GPA records.
@@ -1097,9 +1132,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
               <div 
                 onClick={() => setCurrentSubView('my-admit-card')}
-                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group"
+                className="cursor-pointer bg-white p-6 rounded-2xl border border-slate-200 hover:border-accent/40 hover:shadow-lg transition-all duration-300 text-left group flex flex-col"
               >
-                <span className="text-3xl mb-4 block group-hover:scale-105 transition-transform duration-300">🎟️</span>
+                <Ticket className="w-8 h-8 text-primary mb-4 block group-hover:scale-105 transition-transform duration-300" />
                 <h4 className="font-serif font-bold text-primary text-base mb-1.5">My Admit Cards</h4>
                 <p className="text-muted text-xs leading-relaxed">
                   Print official examination admit cards once clearance pipelines are resolved.
@@ -1128,7 +1163,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
               {studentFormSuccess ? (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center space-y-4 font-sans">
-                  <span className="text-4xl block">🎉</span>
+                  <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
                   <h4 className="text-emerald-800 font-bold text-base">Application Filed Successfully!</h4>
                   <p className="text-xs text-slate-500 leading-relaxed">
                     Your request has been successfully queued and assigned file reference tracking code:
@@ -1137,13 +1172,13 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                   <div className="flex gap-3 justify-center pt-2">
                     <button 
                       onClick={() => { setTrackRegd(studentFormSuccess); setCurrentSubView('tracking'); setStudentFormSuccess(''); }}
-                      className="btn-brand-primary text-xs py-2"
+                      className="btn-brand-primary text-xs py-2 flex items-center justify-center gap-1 cursor-pointer"
                     >
-                      🔍 Track Status Now
+                      <Search className="w-3.5 h-3.5" /> Track Status Now
                     </button>
                     <button 
                       onClick={() => setStudentFormSuccess('')}
-                      className="btn-brand-secondary text-xs py-2"
+                      className="btn-brand-secondary text-xs py-2 cursor-pointer"
                     >
                       Draft Another
                     </button>
@@ -1152,8 +1187,8 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               ) : (
                 <form onSubmit={handleStudentSubmit} className="space-y-4 text-xs font-semibold text-primary font-sans">
                   {studentFormError && (
-                    <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-center font-bold">
-                      ⚠ {studentFormError}
+                    <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-center font-bold flex items-center justify-center gap-2">
+                      <AlertTriangle className="w-4 h-4 shrink-0" /> {studentFormError}
                     </div>
                   )}
 
@@ -1264,10 +1299,10 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                         onChange={handleStudentFileSelect}
                         className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                       />
-                      <span className="text-2xl block mb-1.5 group-hover:scale-110 transition-transform duration-300">📁</span>
+                      <FolderOpen className="w-8 h-8 text-slate-400 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" />
                       {studentFile ? (
-                        <div className="text-primary font-bold text-[10px]">
-                          Selected: <span className="underline">{studentFile.name}</span>
+                        <div className="text-primary font-bold text-[10px] flex items-center justify-center gap-1.5">
+                          <Paperclip className="w-3.5 h-3.5 text-slate-500" /> Selected: <span className="underline">{studentFile.name}</span>
                         </div>
                       ) : (
                         <div>
@@ -1329,7 +1364,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               <div className="space-y-6 font-sans">
                 {trackedApps.length === 0 ? (
                   <div className="bg-white border border-slate-200 rounded-3xl p-10 text-center text-slate-400 font-semibold shadow-sm">
-                    <span className="text-3xl block mb-2">🔍</span>
+                    <Search className="w-10 h-10 text-slate-300 mx-auto mb-3" />
                     No active tracking records match "{trackRegd}". Please verify the credentials.
                   </div>
                 ) : (
@@ -1356,7 +1391,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                         <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block mb-4">Pipeline Stepper Timeline</span>
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                           <div className="text-center">
-                            <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold mx-auto text-xs">✓</div>
+                            <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold mx-auto text-xs"><Check className="w-4 h-4" /></div>
                             <span className="text-[10px] font-bold block mt-2 text-primary">Submitted</span>
                           </div>
                           <div className="text-center">
@@ -1367,7 +1402,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                 ? 'bg-rose-500 text-white'
                                 : 'bg-slate-100 text-slate-400 border border-slate-200'
                             }`}>
-                              {app.status === 'adviser_declined' ? '✖' : '2'}
+                              {app.status === 'adviser_declined' ? <X className="w-4 h-4" /> : '2'}
                             </div>
                             <span className="text-[10px] font-bold block mt-2 text-primary">Advisor</span>
                           </div>
@@ -1379,7 +1414,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                 ? 'bg-rose-500 text-white'
                                 : 'bg-slate-100 text-slate-400 border border-slate-200'
                             }`}>
-                              {app.status === 'hos_declined' ? '✖' : '3'}
+                              {app.status === 'hos_declined' ? <X className="w-4 h-4" /> : '3'}
                             </div>
                             <span className="text-[10px] font-bold block mt-2 text-primary">Head of School</span>
                           </div>
@@ -1391,7 +1426,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                 ? 'bg-rose-500 text-white'
                                 : 'bg-slate-100 text-slate-400 border border-slate-200'
                             }`}>
-                              {app.status === 'rejected' ? '✖' : '4'}
+                              {app.status === 'rejected' ? <X className="w-4 h-4" /> : '4'}
                             </div>
                             <span className="text-[10px] font-bold block mt-2 text-primary">
                               {app.forwarded_to === 'dean_pga' ? 'Dean PGA' : app.forwarded_to === 'dean_academic' ? 'Dean Academic' : 'Exam Controller'}
@@ -1401,7 +1436,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold mx-auto text-xs ${
                               app.status === 'resolved' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400 border border-slate-200'
                             }`}>
-                              {app.status === 'resolved' ? '✓' : '5'}
+                              {app.status === 'resolved' ? <Check className="w-4 h-4" /> : '5'}
                             </div>
                             <span className="text-[10px] font-bold block mt-2 text-primary">Resolved</span>
                           </div>
@@ -1409,29 +1444,50 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       </div>
 
                       {/* Comments strip */}
-                      {app.adviser_comment && <div className="p-3 bg-sky-50 text-sky-800 text-xs font-semibold rounded-xl mb-2.5 border border-sky-100">👨‍🏫 Advisor Remarks: "{app.adviser_comment}"</div>}
-                      {app.hos_comment && <div className="p-3 bg-indigo-50 text-indigo-800 text-xs font-semibold rounded-xl mb-2.5 border border-indigo-100">🏛️ Head of School Remarks: "{app.hos_comment}"</div>}
-                      {app.dean_comment && (
-                        <div className="p-3 bg-purple-50 text-purple-800 text-xs font-semibold rounded-xl mb-2.5 border border-purple-100">
-                          🎓 {app.forwarded_to === 'dean_pga' ? 'Dean PGA' : 'Dean Academic'} Remarks: "{app.dean_comment}"
+                      {app.adviser_comment && (
+                        <div className="p-3 bg-sky-50 text-sky-800 text-xs font-semibold rounded-xl mb-2.5 border border-sky-100 flex items-start gap-2">
+                          <ClipboardList className="w-4 h-4 mt-0.5 shrink-0 text-sky-700" />
+                          <div>Advisor Remarks: "{app.adviser_comment}"</div>
                         </div>
                       )}
-                      {app.controller_comment && <div className="p-3 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-xl mb-2.5 border border-emerald-100">⚖️ Controller Remarks: "{app.controller_comment}"</div>}
+                      {app.hos_comment && (
+                        <div className="p-3 bg-indigo-50 text-indigo-800 text-xs font-semibold rounded-xl mb-2.5 border border-indigo-100 flex items-start gap-2">
+                          <Building className="w-4 h-4 mt-0.5 shrink-0 text-indigo-700" />
+                          <div>Head of School Remarks: "{app.hos_comment}"</div>
+                        </div>
+                      )}
+                      {app.dean_comment && (
+                        <div className="p-3 bg-purple-50 text-purple-800 text-xs font-semibold rounded-xl mb-2.5 border border-purple-100 flex items-start gap-2">
+                          <GraduationCap className="w-4 h-4 mt-0.5 shrink-0 text-purple-700" />
+                          <div>{app.forwarded_to === 'dean_pga' ? 'Dean PGA' : 'Dean Academic'} Remarks: "{app.dean_comment}"</div>
+                        </div>
+                      )}
+                      {app.controller_comment && (
+                        <div className="p-3 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-xl mb-2.5 border border-emerald-100 flex items-start gap-2">
+                          <ClipboardCheck className="w-4 h-4 mt-0.5 shrink-0 text-emerald-700" />
+                          <div>Controller Remarks: "{app.controller_comment}"</div>
+                        </div>
+                      )}
 
                       {/* Controller Attached Documents */}
                       {app.ctrl_attachments && app.ctrl_attachments.length > 0 && (
                         <div className="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                          <span className="text-xs font-bold text-primary block mb-2">📁 Official Attachments from Controller</span>
+                          <span className="text-xs font-bold text-primary flex items-center gap-1.5 mb-2">
+                            <FolderOpen className="w-4 h-4 text-primary" /> Official Attachments from Controller
+                          </span>
                           <div className="space-y-2">
                             {app.ctrl_attachments.map((att, idx) => (
                               <div key={idx} className="flex justify-between items-center p-3 bg-white border border-slate-100 hover:border-accent/40 rounded-xl transition-all shadow-sm">
-                                <div className="flex flex-col min-w-0">
-                                  <span className="text-xs font-semibold text-primary truncate max-w-[250px] md:max-w-[400px]">
-                                    📎 {att.desc || att.name}
-                                  </span>
-                                  <span className="text-[9px] text-muted truncate mt-0.5">
-                                    File: {att.name}
-                                  </span>
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <Paperclip className="w-4 h-4 text-slate-400 shrink-0" />
+                                  <div className="flex flex-col min-w-0">
+                                    <span className="text-xs font-semibold text-primary truncate max-w-[250px] md:max-w-[400px]">
+                                      {att.desc || att.name}
+                                    </span>
+                                    <span className="text-[9px] text-muted truncate mt-0.5">
+                                      File: {att.name}
+                                    </span>
+                                  </div>
                                 </div>
                                 <button
                                   onClick={() => {
@@ -1442,9 +1498,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                     });
                                     setShowFileModal(true);
                                   }}
-                                  className="text-accent hover:text-accent-hover font-bold text-xs flex items-center gap-1 shrink-0 px-3 py-1.5 bg-slate-50 hover:bg-accent/5 rounded-lg transition-all border-none"
+                                  className="text-accent hover:text-accent-hover font-bold text-xs flex items-center gap-1 shrink-0 px-3 py-1.5 bg-slate-50 hover:bg-accent/5 rounded-lg transition-all border-none cursor-pointer"
                                 >
-                                  👁️ View File
+                                  <Eye className="w-3.5 h-3.5" /> View File
                                 </button>
                               </div>
                             ))}
@@ -1461,9 +1517,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                           </div>
                           <button
                             onClick={() => { setDocApp(app); setShowDocModal(true); }}
-                            className="btn-brand-primary text-xs py-2"
+                            className="btn-brand-primary text-xs py-2 flex items-center justify-center gap-1 cursor-pointer"
                           >
-                            📄 View Document
+                            <FileText className="w-3.5 h-3.5" /> View Document
                           </button>
                         </div>
                       )}
@@ -1512,7 +1568,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             <div className="bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-sm">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center border border-accent/20 bg-white">
-                  <span className="text-3xl">⚖️</span>
+                  <Building className="w-7 h-7 text-primary" />
                 </div>
                 <div>
                   <span className="text-xs font-bold text-accent uppercase tracking-wider">Odisha University of Technology and Research</span>
@@ -1532,7 +1588,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 onClick={onSignOut}
                 className="w-full md:w-auto bg-slate-100 hover:bg-slate-200 border border-slate-200 text-primary font-semibold py-2.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                🚪 Sign Out
+                <LogOut className="w-4 h-4" /> Sign Out
               </button>
             </div>
 
@@ -1541,33 +1597,33 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               <div className="flex border-b border-slate-200 mb-6 gap-2">
                 <button
                   onClick={() => setControllerTab('clearance')}
-                  className={`px-6 py-2.5 font-serif font-bold text-xs uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+                  className={`px-6 py-2.5 font-serif font-bold text-xs uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
                     controllerTab === 'clearance'
                       ? 'border-accent text-primary'
                       : 'border-transparent text-slate-400 hover:text-primary hover:border-slate-200'
                   }`}
                 >
-                  📄 Clearance Pipeline
+                  <FileText className="w-4 h-4" /> Clearance Pipeline
                 </button>
                 <button
                   onClick={() => setControllerTab('grades')}
-                  className={`px-6 py-2.5 font-serif font-bold text-xs uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+                  className={`px-6 py-2.5 font-serif font-bold text-xs uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
                     controllerTab === 'grades'
                       ? 'border-accent text-primary'
                       : 'border-transparent text-slate-400 hover:text-primary hover:border-slate-200'
                   }`}
                 >
-                  📊 Grade Cards Desk
+                  <BarChart3 className="w-4 h-4" /> Grade Cards Desk
                 </button>
                 <button
                   onClick={() => setControllerTab('admit_cards')}
-                  className={`px-6 py-2.5 font-serif font-bold text-xs uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+                  className={`px-6 py-2.5 font-serif font-bold text-xs uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
                     controllerTab === 'admit_cards'
                       ? 'border-accent text-primary'
                       : 'border-transparent text-slate-400 hover:text-primary hover:border-slate-200'
                   }`}
                 >
-                  🎟️ Admit Cards Desk
+                  <Ticket className="w-4 h-4" /> Admit Cards Desk
                 </button>
               </div>
             )}
@@ -1578,22 +1634,22 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                 {/* Stats row */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                   <div className="bg-amber-50/50 border border-amber-100 p-5 rounded-2xl text-left">
-                    <span className="text-2xl">↻</span>
+                    <RotateCcw className="w-5 h-5 text-amber-700" />
                     <div className="text-2xl font-serif font-black text-amber-800 mt-2">{pendingCount}</div>
                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Awaiting Actions</div>
                   </div>
                   <div className="bg-emerald-50/50 border border-emerald-100 p-5 rounded-2xl text-left">
-                    <span className="text-2xl">✔</span>
+                    <CheckCircle2 className="w-5 h-5 text-emerald-700" />
                     <div className="text-2xl font-serif font-black text-emerald-800 mt-2">{approvedCount}</div>
                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Approved Decisions</div>
                   </div>
                   <div className="bg-rose-50/50 border border-rose-100 p-5 rounded-2xl text-left">
-                    <span className="text-2xl">✖</span>
+                    <AlertTriangle className="w-5 h-5 text-rose-700" />
                     <div className="text-2xl font-serif font-black text-rose-800 mt-2">{declinedCount}</div>
                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Declined Decisions</div>
                   </div>
                   <div className="bg-sky-50/50 border border-sky-100 p-5 rounded-2xl text-left">
-                    <span className="text-2xl">📂</span>
+                    <FolderOpen className="w-5 h-5 text-sky-700" />
                     <div className="text-2xl font-serif font-black text-sky-800 mt-2">{filteredApps.length}</div>
                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Total Assigned Files</div>
                   </div>
@@ -1653,9 +1709,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                     });
                                     setShowFileModal(true);
                                   }}
-                                  className="bg-slate-50 hover:bg-[#eff6ff] text-[#0b3c5d] font-bold p-1 px-2.5 rounded-lg border-none text-[10px]"
+                                  className="bg-slate-50 hover:bg-[#eff6ff] text-[#0b3c5d] font-bold p-1 px-2.5 rounded-lg border-none text-[10px] inline-flex items-center gap-1 cursor-pointer"
                                 >
-                                  👁️ View File
+                                  <Eye className="w-3 h-3" /> View File
                                 </button>
                               ) : <span className="text-slate-300 font-bold">None</span>}
                             </td>
@@ -1664,15 +1720,15 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                               <div className="flex gap-2 justify-center">
                                 <button 
                                   onClick={() => triggerReviewAction(app, 'approve')}
-                                  className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-1 px-3 rounded-lg text-[10px] border-none transition-colors"
+                                  className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-1 px-3 rounded-lg text-[10px] border-none transition-colors inline-flex items-center gap-1 cursor-pointer"
                                 >
-                                  ✔ Approve
+                                  <Check className="w-3 h-3" /> Approve
                                 </button>
                                 <button 
                                   onClick={() => triggerReviewAction(app, 'decline')}
-                                  className="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-1 px-3 rounded-lg text-[10px] border-none transition-colors"
+                                  className="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-1 px-3 rounded-lg text-[10px] border-none transition-colors inline-flex items-center gap-1 cursor-pointer"
                                 >
-                                  ✖ Decline
+                                  <X className="w-3 h-3" /> Decline
                                 </button>
                               </div>
                             </td>
@@ -1733,9 +1789,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                                     });
                                     setShowFileModal(true);
                                   }}
-                                  className="bg-slate-50 hover:bg-[#eff6ff] text-[#0b3c5d] font-bold p-1 px-2.5 rounded-lg border-none text-[10px]"
+                                  className="bg-slate-50 hover:bg-[#eff6ff] text-[#0b3c5d] font-bold p-1 px-2.5 rounded-lg border-none text-[10px] inline-flex items-center gap-1 cursor-pointer"
                                 >
-                                  👁️ View File
+                                  <Eye className="w-3 h-3" /> View File
                                 </button>
                               ) : <span className="text-slate-300 font-bold">None</span>}
                             </td>
@@ -1744,16 +1800,16 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                               <div className="flex gap-2 justify-center">
                                 <button
                                   onClick={() => { setSelectedApp(app); setShowUploadModal(true); }}
-                                  className="bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-1 px-3 rounded-lg border-none text-[10px]"
+                                  className="bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-1 px-3 rounded-lg border-none text-[10px] inline-flex items-center gap-1 cursor-pointer"
                                 >
-                                  📁 Attachments ({app.ctrl_attachments?.length || 0})
+                                  <Paperclip className="w-3 h-3" /> Attachments ({app.ctrl_attachments?.length || 0})
                                 </button>
                                 {(app.status === 'resolved' || app.status === 'rejected') && (
                                   <button
                                     onClick={() => handlePrintOfficialDoc(app)}
-                                    className="bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold py-1 px-3 rounded-lg border-none text-[10px]"
+                                    className="bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold py-1 px-3 rounded-lg border-none text-[10px] inline-flex items-center gap-1 cursor-pointer"
                                   >
-                                    🖨️ Print Order
+                                    <Printer className="w-3 h-3" /> Print Order
                                   </button>
                                 )}
                               </div>
@@ -1786,9 +1842,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           <div className="bg-white rounded-3xl border border-slate-200 max-w-3xl w-full p-6 shadow-2xl relative space-y-4">
             <button 
               onClick={() => { setShowFileModal(false); setActiveFile(null); }}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold border-none bg-transparent cursor-pointer"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
             >
-              ×
+              <X className="w-5 h-5" />
             </button>
             <h3 className="font-serif text-lg font-bold text-primary">Document Preview Viewer</h3>
             <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">File: {activeFile?.file_name}</p>
@@ -1817,9 +1873,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl relative space-y-6">
             <button 
               onClick={() => setShowReviewModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold border-none bg-transparent cursor-pointer"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
             >
-              ×
+              <X className="w-5 h-5" />
             </button>
             
             <div>
@@ -1831,8 +1887,18 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
             <div className="space-y-4 text-xs font-semibold text-primary">
               <div>
                 <label className="block uppercase tracking-wider text-[10px] mb-1.5">Action Status Decision</label>
-                <div className={`p-3 rounded-xl border text-sm font-bold capitalize ${reviewAction === 'approve' ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-rose-50 border-rose-100 text-rose-800'}`}>
-                  {reviewAction === 'approve' ? '✔ RECOMMENDED &amp; APPROVED' : '✖ REFUSED &amp; DECLINED'}
+                <div className={`p-3 rounded-xl border text-sm font-bold capitalize flex items-center gap-2 ${reviewAction === 'approve' ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-rose-50 border-rose-100 text-rose-800'}`}>
+                  {reviewAction === 'approve' ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-emerald-800 shrink-0" />
+                      <span>RECOMMENDED &amp; APPROVED</span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertTriangle className="w-4 h-4 text-rose-800 shrink-0" />
+                      <span>REFUSED &amp; DECLINED</span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -1878,9 +1944,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           <div className="bg-white rounded-3xl border border-slate-200 max-w-xl w-full p-6 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto text-left">
             <button 
               onClick={() => { setShowDocModal(false); setDocApp(null); }}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold border-none bg-transparent cursor-pointer"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
             >
-              ×
+              <X className="w-5 h-5" />
             </button>
             
             <div className="border border-slate-200 p-6 rounded-2xl bg-white space-y-6">
@@ -1950,9 +2016,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
 
             <button
               onClick={() => handlePrintOfficialDoc(docApp)}
-              className="btn-brand-primary w-full shadow-md py-3.5 uppercase text-xs"
+              className="btn-brand-primary w-full shadow-md py-3.5 uppercase text-xs flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              🖨️ Print Resolution Order
+              <Printer className="w-4 h-4" /> Print Resolution Order
             </button>
           </div>
         </div>
@@ -1964,12 +2030,14 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl relative space-y-6">
             <button 
               onClick={() => setShowUploadModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold border-none bg-transparent cursor-pointer"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
             >
-              ×
+              <X className="w-5 h-5" />
             </button>
             <div>
-              <span className="text-xs font-bold text-accent uppercase tracking-widest">Academics File System</span>
+              <span className="text-xs font-bold text-accent uppercase tracking-widest flex items-center gap-1">
+                <FolderOpen className="w-3.5 h-3.5 text-accent" /> Academics File System
+              </span>
               <h3 className="font-serif text-lg font-bold text-primary mt-1">Official Document Attachments</h3>
               <p className="text-[10px] text-slate-400 mt-1">Attach certified clearance documents or signed transcripts for File ID #{selectedApp?.id}</p>
             </div>
@@ -2018,18 +2086,23 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                   />
                   {uploadFile ? (
-                    <span className="text-primary font-bold text-[10px]">Selected: <span className="underline">{uploadFile.name}</span></span>
+                    <span className="text-primary font-bold text-[10px] flex items-center justify-center gap-1">
+                      <Paperclip className="w-3.5 h-3.5 text-slate-500" /> Selected: <span className="underline">{uploadFile.name}</span>
+                    </span>
                   ) : (
-                    <span className="text-slate-400 font-semibold text-[10px] block">Drag &amp; drop or click to select letter</span>
+                    <span className="text-slate-400 font-semibold text-[10px] block flex flex-col items-center gap-1.5">
+                      <Upload className="w-5 h-5 text-slate-400 animate-bounce" />
+                      <span>Drag &amp; drop or click to select letter</span>
+                    </span>
                   )}
                 </div>
               </div>
 
               <button 
                 onClick={saveControllerAttachment} disabled={actionLoading || !uploadFile}
-                className="btn-brand-primary w-full shadow-md py-3 uppercase text-xs disabled:opacity-50"
+                className="btn-brand-primary w-full shadow-md py-3 uppercase text-xs disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                {actionLoading ? 'Uploading attachment...' : 'Attach document letter'}
+                <Upload className="w-3.5 h-3.5" /> {actionLoading ? 'Uploading attachment...' : 'Attach document letter'}
               </button>
             </div>
           </div>
@@ -2042,7 +2115,7 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           <div className="bg-white rounded-3xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl text-center space-y-4 relative overflow-hidden">
             {customModal.type === 'confirm' ? (
               <>
-                <span className="text-4xl block">❓</span>
+                <Info className="w-12 h-12 text-slate-400 mx-auto animate-pulse" />
                 <h4 className="font-serif text-lg font-bold text-primary mt-2">{customModal.title}</h4>
                 <p className="text-xs text-slate-500 leading-relaxed font-semibold">{customModal.message}</p>
                 <div className="flex gap-3 justify-center pt-2">
@@ -2051,13 +2124,13 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
                       if (customModal.onConfirm) customModal.onConfirm(); 
                       setCustomModal(prev => ({ ...prev, show: false })); 
                     }}
-                    className="btn-brand-primary text-xs py-2 px-5"
+                    className="btn-brand-primary text-xs py-2 px-5 cursor-pointer"
                   >
                     Confirm Action
                   </button>
                   <button 
                     onClick={() => setCustomModal(prev => ({ ...prev, show: false }))}
-                    className="btn-brand-secondary text-xs py-2 px-5"
+                    className="btn-brand-secondary text-xs py-2 px-5 cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -2065,14 +2138,20 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               </>
             ) : (
               <>
-                <span className="text-4xl block">
-                  {customModal.type === 'success' ? '🎉' : customModal.type === 'error' ? '⚠' : 'ℹ️'}
-                </span>
+                <div className="flex justify-center">
+                  {customModal.type === 'success' ? (
+                    <CheckCircle2 className="w-12 h-12 text-emerald-600" />
+                  ) : customModal.type === 'error' ? (
+                    <AlertTriangle className="w-12 h-12 text-rose-600 animate-bounce" />
+                  ) : (
+                    <Info className="w-12 h-12 text-[#0b3c5d]" />
+                  )}
+                </div>
                 <h4 className="font-serif text-lg font-bold text-primary mt-2">{customModal.title}</h4>
                 <p className="text-xs text-slate-500 leading-relaxed font-semibold">{customModal.message}</p>
                 <button 
                   onClick={() => setCustomModal(prev => ({ ...prev, show: false }))}
-                  className="btn-brand-primary w-full text-xs py-2.5 mt-2"
+                  className="btn-brand-primary w-full text-xs py-2.5 mt-2 cursor-pointer"
                 >
                   Close Notice
                 </button>

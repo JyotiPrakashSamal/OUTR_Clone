@@ -1,3 +1,8 @@
+import { 
+  GraduationCap, Mail, Phone, Clock, Scale, FileText, BarChart3, Ticket, 
+  Building, Eye, Target, MapPin, Bus, Train, Plane, ShieldAlert, Laptop, Users, User, Briefcase
+} from 'lucide-react';
+
 // 1. BOARD OF GOVERNORS / MANAGEMENT
 export function BoardOfGovernors() {
   const members = [
@@ -22,7 +27,7 @@ export function BoardOfGovernors() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           Board of Management
         </h1>
@@ -49,7 +54,7 @@ export function BoardOfGovernors() {
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&fit=crop&q=60";
+                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z'/%3E%3C/svg%3E";
                   }}
                 />
               </div>
@@ -90,7 +95,7 @@ export function AntiRaggingCommittee() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-red-800 to-rose-950 py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#7f1d1d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <span className="bg-accent/25 text-accent text-[10px] font-black tracking-widest px-3 py-1.5 rounded-full uppercase border border-accent/20">Safe Campus Initiative</span>
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white mt-4 leading-tight">
           Anti-Ragging Committee
@@ -149,7 +154,7 @@ export function AntiRaggingCommittee() {
         {/* Emergency Contacts */}
         <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm text-left">
           <div className="bg-secondary p-5 flex items-center gap-3 border-b-2 border-accent">
-            <span className="text-xl">📞</span>
+            <Phone className="w-5 h-5 text-white" />
             <h3 className="font-serif text-lg font-bold text-white">Emergency Helplines & Contacts</h3>
           </div>
           <div className="divide-y divide-slate-100 font-semibold text-sm">
@@ -182,25 +187,25 @@ export function AntiRaggingCommittee() {
           <div className="w-12 h-1 bg-accent rounded"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm text-center space-y-4 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-700 flex items-center justify-center mx-auto text-xl font-bold">🚨</div>
+              <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-700 flex items-center justify-center mx-auto"><ShieldAlert className="w-5 h-5" /></div>
               <h4 className="font-serif font-bold text-primary text-base">Call 24/7 Helpline</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">Dial the toll-free national UGC portal hotline for instant protection.</p>
               <a href="tel:18001805522" className="text-xs text-secondary font-bold hover:underline block pt-2">1800-180-5522 →</a>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm text-center space-y-4 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mx-auto text-xl font-bold">✉️</div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mx-auto"><Mail className="w-5 h-5" /></div>
               <h4 className="font-serif font-bold text-primary text-base">Send Email</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">Send a detailed complaint to the committee convenor. Confidentiality guaranteed.</p>
               <a href="mailto:registrar@outr.ac.in" className="text-xs text-secondary font-bold hover:underline block pt-2">registrar@outr.ac.in →</a>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm text-center space-y-4 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center mx-auto text-xl font-bold">💻</div>
+              <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center mx-auto"><Laptop className="w-5 h-5" /></div>
               <h4 className="font-serif font-bold text-primary text-base">Online UGC Portal</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">Register an official case at the national UGC Anti-Ragging website database.</p>
               <a href="https://www.antiragging.in" target="_blank" rel="noreferrer" className="text-xs text-secondary font-bold hover:underline block pt-2">Visit Website →</a>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm text-center space-y-4 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center mx-auto text-xl font-bold">🏢</div>
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center mx-auto"><MapPin className="w-5 h-5" /></div>
               <h4 className="font-serif font-bold text-primary text-base">Visit in Person</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">Visit the Chief Warden or DSW office directly at the administrative block.</p>
               <a href="https://maps.google.com/?q=Odisha+University+of+Technology+and+Research" target="_blank" rel="noreferrer" className="text-xs text-secondary font-bold hover:underline block pt-2">Get Location →</a>
@@ -218,7 +223,7 @@ export function VCDesk() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Title band */}
-      <div className="relative bg-gradient-to-b from-white to-[#F5F3EE] py-12 px-6 text-center border-b border-slate-200 mb-8">
+      <div className="relative bg-[#f8fafc] py-12 px-6 text-center border-b border-slate-200 mb-8">
         <span className="text-[10px] font-black text-secondary tracking-widest uppercase block mb-2">Office of the Vice Chancellor</span>
         <h1 className="font-serif text-3xl md:text-5xl font-black text-primary leading-tight">From the VC's Desk</h1>
         <div className="w-48 h-0.5 bg-accent mx-auto mt-4"></div>
@@ -239,7 +244,7 @@ export function VCDesk() {
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&fit=crop&q=80";
+                  e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z'/%3E%3C/svg%3E";
                 }}
               />
             </div>
@@ -303,8 +308,8 @@ export function COEDesk({ onNavigate }) {
   const notices = [
     { title: "UG 5th Semester Result Published", date: "05 May 2026", type: "Results", isNew: true },
     { title: "Semester Exam Registration - Session now Open", date: "01 May 2026", type: "Registration", isNew: true },
-    { title: "Back Paper Exam Schedule — B.Tech 2026", date: "28 Apr 2026", type: "Schedule" },
-    { title: "Admit Card Issuance Notice — Even Semester 2026", date: "22 Apr 2026", type: "Admit Card" },
+    { title: "Back Paper Exam Schedule - B.Tech 2026", date: "28 Apr 2026", type: "Schedule" },
+    { title: "Admit Card Issuance Notice - Even Semester 2026", date: "22 Apr 2026", type: "Admit Card" },
     { title: "Re-evaluation / Rechecking Application Form 2026", date: "18 Apr 2026", type: "Re-evaluation" }
   ]
 
@@ -324,7 +329,7 @@ export function COEDesk({ onNavigate }) {
             </p>
             <div className="flex flex-wrap gap-4">
               <button 
-                onClick={() => onNavigate('auth')} 
+                onClick={() => onNavigate('portal')} 
                 className="bg-accent hover:bg-[#b8932a] text-[#0b3c5d] font-bold py-3 px-6 rounded-xl text-xs shadow-md transition-all cursor-pointer"
               >
                 Sign In to View Grades / Admit Card
@@ -333,7 +338,7 @@ export function COEDesk({ onNavigate }) {
           </div>
           <div className="hidden lg:flex items-center justify-center">
             <div className="w-full max-w-sm h-64 border border-white/10 bg-white/5 backdrop-blur-md rounded-3xl flex items-center justify-center p-6 shadow-2xl">
-              <span className="text-8xl">⚖️</span>
+              <Scale className="w-24 h-24 text-white" />
             </div>
           </div>
         </div>
@@ -347,22 +352,28 @@ export function COEDesk({ onNavigate }) {
           <p className="text-slate-500 text-xs font-semibold max-w-md mx-auto">Access primary examination services and real-time student verification portals.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto pt-6 text-left">
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col justify-between hover:shadow-md hover:border-accent/40 transition-all duration-300">
-              <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center text-xl mb-4">📄</div>
+              <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center mb-4">
+                <FileText className="w-5 h-5 text-primary" />
+              </div>
               <h4 className="font-serif font-bold text-primary text-base mb-1">Clearance Desk</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold mb-4">Check status timelines and submit department clearance files.</p>
-              <button onClick={() => onNavigate('auth')} className="text-xs text-secondary font-bold hover:underline">Open Clearance →</button>
+              <button onClick={() => onNavigate('portal')} className="text-xs text-secondary font-bold hover:underline">Open Clearance →</button>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col justify-between hover:shadow-md hover:border-accent/40 transition-all duration-300">
-              <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center text-xl mb-4">📊</div>
+              <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center mb-4">
+                <BarChart3 className="w-5 h-5 text-primary" />
+              </div>
               <h4 className="font-serif font-bold text-primary text-base mb-1">Grades &amp; GPA Cards</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold mb-4">Query your public university grade cards and review semester summaries.</p>
-              <button onClick={() => onNavigate('auth')} className="text-xs text-secondary font-bold hover:underline">Check Results →</button>
+              <button onClick={() => onNavigate('portal')} className="text-xs text-secondary font-bold hover:underline">Check Results →</button>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col justify-between hover:shadow-md hover:border-accent/40 transition-all duration-300">
-              <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center text-xl mb-4">🎟️</div>
+              <div className="w-10 h-10 rounded-2xl bg-primary/5 text-primary flex items-center justify-center mb-4">
+                <Ticket className="w-5 h-5 text-primary" />
+              </div>
               <h4 className="font-serif font-bold text-primary text-base mb-1">Admit Card Downloads</h4>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold mb-4">Download and print your official exam admit schedule card after clearing dues.</p>
-              <button onClick={() => onNavigate('auth')} className="text-xs text-secondary font-bold hover:underline">Download Admit →</button>
+              <button onClick={() => onNavigate('portal')} className="text-xs text-secondary font-bold hover:underline">Download Admit →</button>
             </div>
           </div>
         </div>
@@ -410,10 +421,10 @@ export function COEDesk({ onNavigate }) {
               </div>
               <div className="space-y-2 border-t border-slate-100 pt-4">
                 <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black block">Hotlines & Support</span>
-                <p className="text-slate-600 text-xs font-semibold leading-relaxed">
-                  📞 Phone: +91-674-2386075<br />
-                  ✉️ Support: registrar@outr.ac.in<br />
-                  🕐 Timing: Mon - Sat, 10 AM to 5 PM
+                <p className="text-slate-600 text-xs font-semibold leading-relaxed flex flex-col gap-1.5">
+                  <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-primary" /> Phone: +91-674-2386075</span>
+                  <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-primary" /> Support: registrar@outr.ac.in</span>
+                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-primary" /> Timing: Mon - Sat, 10 AM to 5 PM</span>
                 </p>
               </div>
             </div>
@@ -431,7 +442,7 @@ export function AboutPage() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Page Hero */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           About <span className="text-accent">OUTR</span>
         </h1>
@@ -461,8 +472,8 @@ export function AboutPage() {
             </div>
             
             <div className="mt-8 border-t border-slate-100 pt-6">
-              <p className="text-primary text-xs font-bold uppercase tracking-wider">
-                🏛️ SD&amp;TE Department, Govt. of Odisha Approved
+              <p className="text-primary text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <Building className="w-4 h-4" /> SD&amp;TE Department, Govt. of Odisha Approved
               </p>
             </div>
           </div>
@@ -472,7 +483,7 @@ export function AboutPage() {
             {/* Custom Text Card above the Image */}
             <div className="bg-white border border-slate-200 p-5 rounded-3xl shadow-sm text-left border-l-4 border-l-primary">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🏛️</span>
+                <Building className="w-5 h-5 text-primary" />
                 <h3 className="font-serif font-black text-sm text-primary">A Legacy of Innovation</h3>
               </div>
               <p className="text-slate-500 text-xs font-semibold leading-relaxed">
@@ -502,7 +513,7 @@ export function AboutPage() {
                 <h3 className="font-serif font-black text-xl text-white leading-tight">Techno Campus Statue</h3>
                 <div className="w-10 h-0.5 bg-accent my-2" />
                 <p className="text-blue-100 text-[11px] font-semibold leading-relaxed">
-                  Symbol of wisdom, perseverance &amp; technical excellence — Kalinga Nagar, Bhubaneswar.
+                  Symbol of wisdom, perseverance &amp; technical excellence - Kalinga Nagar, Bhubaneswar.
                 </p>
               </div>
             </div>
@@ -518,7 +529,7 @@ export function VisionMissionPage() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Page Hero */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           Vision &amp; <span className="text-accent">Mission</span>
         </h1>
@@ -531,12 +542,12 @@ export function VisionMissionPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
         {/* Vision Card */}
         <div className="bg-white border border-slate-200 p-8 md:p-10 rounded-3xl shadow-sm flex flex-col md:flex-row gap-8 items-center">
-          <div className="w-24 h-24 rounded-2xl bg-amber-50 text-accent flex items-center justify-center flex-shrink-0 text-5xl shadow-inner border border-amber-100/50">
-            👁️
+          <div className="w-24 h-24 rounded-2xl bg-amber-50 text-amber-800 flex items-center justify-center flex-shrink-0 shadow-inner border border-amber-100/50">
+            <Eye className="w-10 h-10 text-amber-800" />
           </div>
           <div className="space-y-3">
             <h2 className="font-serif text-2xl font-black text-primary">Our Vision</h2>
-            <p className="text-slate-600 text-sm md:text-base leading-relaxed font-semibold max-w-3xl">
+            <p className="text-slate-800 text-sm md:text-base leading-relaxed font-semibold max-w-3xl">
               To be a leading University that fosters knowledge, provides transformative education, and promotes extraordinary research while creating technocrats and innovators to solve real-world challenges.
             </p>
           </div>
@@ -544,8 +555,8 @@ export function VisionMissionPage() {
 
         {/* Mission Card */}
         <div className="bg-white border border-slate-200 p-8 md:p-10 rounded-3xl shadow-sm flex flex-col md:flex-row gap-8 items-start">
-          <div className="w-24 h-24 rounded-2xl bg-blue-50 text-primary flex items-center justify-center flex-shrink-0 text-5xl shadow-inner border border-blue-100/50">
-            🎯
+          <div className="w-24 h-24 rounded-2xl bg-blue-50 text-primary flex items-center justify-center flex-shrink-0 shadow-inner border border-blue-100/50">
+            <Target className="w-10 h-10 text-primary" />
           </div>
           <div className="space-y-6 flex-grow">
             <h2 className="font-serif text-2xl font-black text-primary">Our Mission Milestones</h2>
@@ -557,7 +568,7 @@ export function VisionMissionPage() {
                 "To collaborate with other academic institutes, research organizations, and industries across the globe to strengthen the education and research ecosystem.",
                 "To encourage teamwork through the development of harmony, tolerance, and active co-operation."
               ].map((milestone, idx) => (
-                <li key={idx} className="flex gap-3 text-slate-600 text-sm font-semibold leading-relaxed">
+                <li key={idx} className="flex gap-3 text-slate-800 text-sm font-semibold leading-relaxed">
                   <span className="w-2 h-2 rounded-full bg-accent shrink-0 mt-2"></span>
                   <span>{milestone}</span>
                 </li>
@@ -575,7 +586,7 @@ export function LocationPage() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Page Hero */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           Reach <span className="text-accent">OUTR</span>
         </h1>
@@ -601,7 +612,7 @@ export function LocationPage() {
             </div>
             
             <div className="bg-slate-50 border border-slate-200/50 p-4 rounded-2xl mt-6 flex items-center gap-3">
-              <span className="text-2xl">📍</span>
+              <MapPin className="w-5 h-5 text-accent shrink-0" />
               <p className="text-xs text-slate-500 font-bold">
                 Techno Campus, Ghatikia, Mahalaxmi Vihar, Bhubaneswar, Odisha - 751029
               </p>
@@ -627,9 +638,9 @@ export function LocationPage() {
             <div className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-accent/70 rounded-tl-lg" />
             {/* Location pin badge */}
             <div className="absolute bottom-5 left-5 right-5 flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-3">
-              <span className="text-2xl shrink-0">📍</span>
+              <MapPin className="w-6 h-6 text-accent shrink-0" />
               <div>
-                <p className="text-white font-black text-xs leading-tight">OUTR — Bhubaneswar</p>
+                <p className="text-white font-black text-xs leading-tight">OUTR - Bhubaneswar</p>
                 <p className="text-blue-100 text-[10px] font-semibold mt-0.5">Techno Campus, Kalinga Nagar, Odisha</p>
               </div>
             </div>
@@ -642,21 +653,27 @@ export function LocationPage() {
           <div className="w-12 h-1 bg-accent rounded"></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-primary flex items-center justify-center text-xl">🚌</div>
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-primary flex items-center justify-center">
+                <Bus className="w-5 h-5 text-primary" />
+              </div>
               <h3 className="font-serif text-lg font-bold text-primary">Nearest Bus Stand</h3>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold">
                 Baramunda Bus Stand is approximately 5 km from the campus, providing regular intrastate and interstate connectivity. 
               </p>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-accent flex items-center justify-center text-xl">🚂</div>
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-accent flex items-center justify-center">
+                <Train className="w-5 h-5 text-accent" />
+              </div>
               <h3 className="font-serif text-lg font-bold text-primary">Nearest Railway Station</h3>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold">
                 Bhubaneswar Railway Station (Master Canteen) is around 10 to 12 km away, connecting BBSR with all major national lines.
               </p>
             </div>
             <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl">✈️</div>
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <Plane className="w-5 h-5 text-emerald-700" />
+              </div>
               <h3 className="font-serif text-lg font-bold text-primary">Nearest Airport</h3>
               <p className="text-xs text-slate-500 leading-relaxed font-semibold">
                 Biju Patnaik International Airport (BBI) is approximately 8 km from the campus, serving direct daily domestic and international flights.
@@ -684,7 +701,7 @@ export function ARCommittee() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           Accreditation &amp; Ranking Committee
         </h1>
@@ -709,7 +726,7 @@ export function ARCommittee() {
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&fit=crop&q=80";
+                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z'/%3E%3C/svg%3E";
                   }}
                 />
               </div>
@@ -741,7 +758,7 @@ export function LegalCommittee() {
   return (
     <div className="bg-slate-50 min-h-screen py-16 animate-fade-in select-none">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary py-16 px-6 text-center shadow-lg border-b-4 border-accent mb-12">
+      <div className="relative bg-[#0b3c5d] py-16 px-6 text-center shadow-lg border-b-4 border-[#d4af37] mb-12">
         <h1 className="font-serif text-3xl md:text-5xl font-black text-white leading-tight">
           Legal &amp; Grievance Committee
         </h1>
@@ -766,7 +783,7 @@ export function LegalCommittee() {
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&fit=crop&q=80";
+                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z'/%3E%3C/svg%3E";
                   }}
                 />
               </div>

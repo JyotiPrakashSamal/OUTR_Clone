@@ -43,6 +43,31 @@
         }
       }, 30);
     }
+
+    // 8. Initialize Lucide Icons dynamically
+    const initLucide = () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+        document.dispatchEvent(new CustomEvent("outr-unified-loader-ready"));
+      } else {
+        let lucideAttempts = 0;
+        const lucideInterval = setInterval(() => {
+          lucideAttempts++;
+          if (window.lucide) {
+            window.lucide.createIcons();
+            document.dispatchEvent(new CustomEvent("outr-unified-loader-ready"));
+            clearInterval(lucideInterval);
+          } else if (lucideAttempts > 100) {
+            document.dispatchEvent(new CustomEvent("outr-unified-loader-ready"));
+            clearInterval(lucideInterval);
+          }
+        }, 30);
+      }
+    };
+    initLucide();
+
+    // 9. Automatically audit all anchors on the page and force target="_blank" for PDFs/external portals
+    setupExternalAndPdfLinkTargets();
   };
 
   if (document.readyState === "loading") {
@@ -167,12 +192,46 @@
       head.appendChild(fontLink);
     }
 
-    // Absolute link to core stylesheet style.css
-    if (!document.querySelector('link[href$="/style.css"]') && !document.querySelector('link[href="style.css"]')) {
+    // Resolve relative basePath from the loader script src to support file:/// protocol
+    const loaderScript = document.querySelector('script[src*="navbar-footer-loader.js"]');
+    let basePath = "/";
+    if (loaderScript) {
+      const src = loaderScript.getAttribute("src");
+      const idx = src.lastIndexOf("/");
+      if (idx !== -1) {
+        basePath = src.substring(0, idx + 1); // e.g. "/" or "../../"
+      }
+    }
+
+    // Link to core stylesheet style.css
+    if (!document.querySelector('link[href*="style.css"]')) {
       const coreCss = document.createElement("link");
       coreCss.rel = "stylesheet";
-      coreCss.href = "/style.css";
+      coreCss.href = basePath + "style.css";
       head.appendChild(coreCss);
+    }
+
+    // Lucide Icons dynamic load (local file with CDN fallback)
+    if (!document.querySelector('script[src*="lucide.js"]') && !document.querySelector('script[src*="lucide@latest"]')) {
+      const lucideScript = document.createElement("script");
+      lucideScript.src = basePath + "lucide.js";
+      lucideScript.onload = () => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      };
+      lucideScript.onerror = () => {
+        console.warn("Local lucide.js failed to load, falling back to CDN.");
+        const fallbackScript = document.createElement("script");
+        fallbackScript.src = "https://cdn.jsdelivr.net/npm/lucide@0.453.0/dist/umd/lucide.js";
+        fallbackScript.onload = () => {
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
+        };
+        head.appendChild(fallbackScript);
+      };
+      head.appendChild(lucideScript);
     }
   }
 
@@ -240,7 +299,7 @@
           </div>
           <div class="flex gap-5">
             <a href="https://www.cet.edu.in/" target="_blank" rel="noopener noreferrer" class="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Old Website</a>
-            <span class="text-blue-200 text-[11px]">✉️ registrar@outr.ac.in</span>
+            <span class="text-blue-200 text-[11px] flex items-center gap-1"><i data-lucide="mail" class="w-3.5 h-3.5"></i> registrar@outr.ac.in</span>
           </div>
         </div>
       </div>
@@ -271,22 +330,22 @@
                 </button>
                 <div class="dropdown">
                   <div class="flex flex-col gap-2">
-                    <a href="/?view=about" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-2"></use></svg></div>
+                    <a href="/portal?view=about" class="dd-card">
+                      <div class="dd-icon"><i data-lucide="info" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">About OUTR</div>
                         <div class="dd-sub">History &amp; overview</div>
                       </div>
                     </a>
-                    <a href="/?view=mission" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-3"></use></svg></div>
+                    <a href="/portal?view=mission" class="dd-card">
+                      <div class="dd-icon"><i data-lucide="target" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Vision and Mission</div>
                         <div class="dd-sub">Core values &amp; goals</div>
                       </div>
                     </a>
                     <a href="/OUTR website/schools.html" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-4"></use></svg></div>
+                      <div class="dd-icon"><i data-lucide="award" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Accreditation</div>
                         <div class="dd-sub">NAAC, NBA, UGC recognition</div>
@@ -307,35 +366,35 @@
                       <p class="[font-size:10.5px] font-semibold [color:#94a3b8] [letter-spacing:0.1em] [text-transform:uppercase] [margin-bottom:10px] [padding:0_4px]">Schools &amp; Departments</p>
                       <div class="grid grid-cols-1 gap-1 max-h-[280px] overflow-y-auto pr-1">
                         <a href="/OUTR website/schools/scs.html" class="dd-card">
-                          <div class="dd-icon [background:#eff6ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-2"></use></svg></div>
+                          <div class="dd-icon [background:#eff6ff]"><i data-lucide="monitor" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Computer Sciences</div>
                         </a>
                         <a href="/OUTR website/schools/sms.html" class="dd-card">
-                          <div class="dd-icon [background:#fff7ed]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-9"></use></svg></div>
+                          <div class="dd-icon [background:#fff7ed]"><i data-lucide="settings" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Mechanical Sciences</div>
                         </a>
                         <a href="/OUTR website/schools/sIp.html" class="dd-card">
-                          <div class="dd-icon [background:#f0fdf4]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-10"></use></svg></div>
+                          <div class="dd-icon [background:#f0fdf4]"><i data-lucide="building" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Infrastructure &amp; Planning</div>
                         </a>
                         <a href="/OUTR website/schools/sElectronics.html" class="dd-card">
-                          <div class="dd-icon [background:#fff1f2]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-11"></use></svg></div>
+                          <div class="dd-icon [background:#fff1f2]"><i data-lucide="cpu" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Electronic Sciences</div>
                         </a>
                         <a href="/OUTR website/schools/sElectricals.html" class="dd-card">
-                          <div class="dd-icon [background:#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-12"></use></svg></div>
+                          <div class="dd-icon [background:#fffbeb]"><i data-lucide="zap" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Electrical Sciences</div>
                         </a>
                         <a href="/OUTR website/schools/sbsh.html" class="dd-card">
-                          <div class="dd-icon [background:#f5f3ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-13"></use></svg></div>
+                          <div class="dd-icon [background:#f5f3ff]"><i data-lucide="beaker" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Basic Sciences &amp; Humanities</div>
                         </a>
                         <a href="/OUTR website/schools/btd.html" class="dd-card">
-                          <div class="dd-icon [background:#ecfdf5]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-14"></use></svg></div>
+                          <div class="dd-icon [background:#ecfdf5]"><i data-lucide="dna" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">Biotechnology Department</div>
                         </a>
                         <a href="/OUTR website/schools/ted.html" class="dd-card">
-                          <div class="dd-icon [background:#fff0f6]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-15"></use></svg></div>
+                          <div class="dd-icon [background:#fff0f6]"><i data-lucide="scissors" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">Textile Engineering Department</div>
                         </a>
                       </div>
@@ -343,22 +402,22 @@
                     <div class="border-l border-slate-100 pl-4">
                       <p class="[font-size:10.5px] font-semibold [color:#94a3b8] [letter-spacing:0.1em] [text-transform:uppercase] [margin-bottom:10px] [padding:0_4px]">Other Academic Boards</p>
                       <div class="flex flex-col gap-2">
-                        <a href="/?view=academic-council" class="dd-card">
-                          <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-6"></use></svg></div>
+                        <a href="/portal?view=academic-council" class="dd-card">
+                          <div class="dd-icon"><i data-lucide="users" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                           <div>
                             <div class="dd-title">Committees</div>
                             <div class="dd-sub">Academic boards &amp; groups</div>
                           </div>
                         </a>
-                        <a href="/?view=syllabus" class="dd-card">
-                          <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-7"></use></svg></div>
+                        <a href="/portal?view=syllabus" class="dd-card">
+                          <div class="dd-icon"><i data-lucide="book-open" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                           <div>
                             <div class="dd-title">Syllabus</div>
                             <div class="dd-sub">UG and PG course syllabi</div>
                           </div>
                         </a>
-                        <a href="/coming-soon.html?title=Academic%20Calendar" class="dd-card">
-                          <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-2"></use></svg></div>
+                        <a href="/documents/academic-calendar-2025-26.pdf" target="_blank" rel="noopener noreferrer" class="dd-card">
+                          <div class="dd-icon"><i data-lucide="calendar" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                           <div>
                             <div class="dd-title">Academic Calendar</div>
                             <div class="dd-sub">Schedule &amp; important dates</div>
@@ -378,39 +437,44 @@
                 <div class="dropdown wide">
                   <p class="[font-size:10.5px] font-semibold [color:#94a3b8] [letter-spacing:0.1em] [text-transform:uppercase] [margin-bottom:10px] [padding:0_4px]">Administration &amp; Governance</p>
                   <div class="grid grid-cols-2 gap-2">
-                    <a href="/?view=vc-desk" class="dd-card">
-                      <div class="dd-icon [background:#eff6ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-2"></use></svg></div>
+                    <a href="/portal?view=vc-desk" class="dd-card">
+                      <div class="dd-icon [background:#eff6ff]"><i data-lucide="user" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">VC Desk</div>
                     </a>
-                    <a href="/?view=bom" class="dd-card">
-                      <div class="dd-icon [background:#fff7ed]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-13"></use></svg></div>
+                    <a href="/portal?view=bom" class="dd-card">
+                      <div class="dd-icon [background:#fff7ed]"><i data-lucide="briefcase" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Board of Management</div>
                     </a>
-                    <a href="/?view=deans" class="dd-card">
-                      <div class="dd-icon [background:#f0fdf4]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-4"></use></svg></div>
+                    <a href="/portal?view=deans" class="dd-card">
+                      <div class="dd-icon [background:#f0fdf4]"><i data-lucide="graduation-cap" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Dean</div>
                     </a>
-                    <a href="/?view=hods" class="dd-card">
-                      <div class="dd-icon [background:#fff1f2]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-5"></use></svg></div>
+                    <a href="/portal?view=hods" class="dd-card">
+                      <div class="dd-icon [background:#fff1f2]"><i data-lucide="clipboard-list" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">HODs</div>
                     </a>
-                    <a href="/?view=antiragging" class="dd-card">
-                      <div class="dd-icon [background:#fffbeb]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-6"></use></svg></div>
+                    <a href="/portal?view=antiragging" class="dd-card">
+                      <div class="dd-icon [background:#fffbeb]"><i data-lucide="shield-alert" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Anti-Ragging</div>
                     </a>
-                    <a href="/?view=academic-council" class="dd-card">
-                      <div class="dd-icon [background:#f5f3ff]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-7"></use></svg></div>
+                    <a href="/portal?view=academic-council" class="dd-card">
+                      <div class="dd-icon [background:#f5f3ff]"><i data-lucide="scale" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Academic Council</div>
                     </a>
-                    <a href="/?view=students-grievance" class="dd-card">
-                      <div class="dd-icon [background:#ecfdf5]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-16"></use></svg></div>
+                    <a href="/portal?view=students-grievance" class="dd-card">
+                      <div class="dd-icon [background:#ecfdf5]"><i data-lucide="message-square" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Students Grievance</div>
                     </a>
-                    <a href="/?view=coe-desk" class="dd-card">
-                      <div class="dd-icon [background:#fff0f6]"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-17"></use></svg></div>
+                    <a href="/portal?view=coe-desk" class="dd-card">
+                      <div class="dd-icon [background:#fff0f6]"><i data-lucide="file-check" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Controller of Exam</div>
                     </a>
+                    <a href="/administration/SA_commitee.html" class="dd-card">
+                      <div class="dd-icon [background:#eff6ff]"><i data-lucide="users" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
+                      <div class="dd-title [font-size:12.5px]">SAC Committee</div>
+                    </a>
                   </div>
+
                 </div>
               </div>
 
@@ -421,29 +485,29 @@
                 </button>
                 <div class="dropdown">
                   <div class="flex flex-col gap-2">
-                    <a href="#notices" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-2"></use></svg></div>
+                    <a href="/coming-soon.html?title=Events%20and%20Notices" class="dd-card">
+                      <div class="dd-icon"><i data-lucide="sparkles" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Event</div>
                         <div class="dd-sub">Fests &amp; campus activities</div>
                       </div>
                     </a>
-                    <a href="/administration/SA_commitee.html" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-1"></use></svg></div>
+                    <a href="/portal?view=clubs" class="dd-card">
+                      <div class="dd-icon"><i data-lucide="flag" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Society / Clubs</div>
                         <div class="dd-sub">Join student organizations</div>
                       </div>
                     </a>
                     <a href="/Student and Event/Hostel/hostel.html" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-2"></use></svg></div>
+                      <div class="dd-icon"><i data-lucide="bed" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Hostels</div>
                         <div class="dd-sub">Accommodation details</div>
                       </div>
                     </a>
                     <a href="/Student and Event/Campus_Facilities/CampusLife.html" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-3"></use></svg></div>
+                      <div class="dd-icon"><i data-lucide="compass" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Campus Life</div>
                         <div class="dd-sub">Experience life at OUTR</div>
@@ -460,22 +524,22 @@
                 </button>
                 <div class="dropdown">
                   <div class="flex flex-col gap-2">
-                    <a href="/?view=location" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-16"></use></svg></div>
+                    <a href="/portal?view=location" class="dd-card">
+                      <div class="dd-icon"><i data-lucide="map-pin" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Address &amp; Map</div>
                         <div class="dd-sub">Techno Campus, Ghatikia, BBSR</div>
                       </div>
                     </a>
                     <a href="#footer" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-17"></use></svg></div>
+                      <div class="dd-icon"><i data-lucide="phone" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Phone &amp; Email</div>
                         <div class="dd-sub">Get in touch with us</div>
                       </div>
                     </a>
                     <a href="/social.html" class="dd-card">
-                      <div class="dd-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B3C5D" stroke-width="2"><use href="#icon-18"></use></svg></div>
+                      <div class="dd-icon"><i data-lucide="share-2" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Social Media Hub</div>
                         <div class="dd-sub">Follow us on all platforms</div>
@@ -488,31 +552,23 @@
 
             <!-- Header Right: Search + Hamburger -->
             <div class="flex items-center gap-2 relative">
-              <button id="search-btn" class="p-2 rounded-full hover:bg-slate-100 transition-colors" aria-label="Search">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0b3c5d" stroke-width="2">
-                  <use href="#icon-20"></use>
-                </svg>
+              <button id="search-btn" class="p-2 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center" aria-label="Search">
+                <i data-lucide="search" style="width: 17px; height: 17px; color: #0b3c5d;"></i>
               </button>
-              <button id="mobile-btn" class="lg:hidden p-2 text-[#0b3c5d]" aria-label="Open mobile menu">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <use href="#icon-21"></use>
-                </svg>
+              <button id="mobile-btn" class="lg:hidden p-2 text-[#0b3c5d] flex items-center justify-center" aria-label="Open mobile menu">
+                <i data-lucide="menu" style="width: 22px; height: 22px; color: #0b3c5d;"></i>
               </button>
             </div>
           </div>
           <!-- Search bar -->
           <div id="search-bar">
             <form action="#" class="search-shell w-full flex items-center gap-3 relative" id="search-form">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
-                <use href="#icon-20"></use>
-              </svg>
+              <i data-lucide="search" style="width: 16px; height: 16px; color: #94a3b8;"></i>
               <input id="search-input" type="text" placeholder="Search departments, courses, notices, faculty…"
                 class="flex-1 outline-none [font-size:13.5px] [color:#1e293b] bg-transparent" />
               <button id="search-close" type="button" aria-label="Close search"
-                class="[color:#94a3b8] cursor-pointer bg-none border-none">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <use href="#icon-22"></use>
-                </svg>
+                class="[color:#94a3b8] cursor-pointer bg-none border-none flex items-center justify-center">
+                <i data-lucide="x" style="width: 16px; height: 16px; color: #94a3b8;"></i>
               </button>
             </form>
           </div>
@@ -568,8 +624,8 @@
               <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-1"></use></svg>
             </summary>
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-              <a href="/?view=about" class="text-[15px] text-slate-600 no-underline">About OUTR</a>
-              <a href="/?view=mission" class="text-[15px] text-slate-600 no-underline">Vision and Mission</a>
+              <a href="/portal?view=about" class="text-[15px] text-slate-600 no-underline">About OUTR</a>
+              <a href="/portal?view=mission" class="text-[15px] text-slate-600 no-underline">Vision and Mission</a>
               <a href="/OUTR website/schools.html" class="text-[15px] text-slate-600 no-underline">Accreditation</a>
             </div>
           </details>
@@ -582,8 +638,8 @@
             </summary>
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
               <a href="/OUTR website/schools.html" class="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
-              <a href="/?view=academic-council" class="text-[15px] text-slate-600 no-underline">Committees</a>
-              <a href="/?view=syllabus" class="text-[15px] text-slate-600 no-underline">Syllabus</a>
+              <a href="/portal?view=academic-council" class="text-[15px] text-slate-600 no-underline">Committees</a>
+              <a href="/portal?view=syllabus" class="text-[15px] text-slate-600 no-underline">Syllabus</a>
             </div>
           </details>
           <div class="h-px w-full bg-slate-200"></div>
@@ -594,14 +650,16 @@
               <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-1"></use></svg>
             </summary>
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-              <a href="/?view=vc-desk" class="text-[15px] text-slate-600 no-underline">VC Desk</a>
-              <a href="/?view=bom" class="text-[15px] text-slate-600 no-underline">Board of Management</a>
-              <a href="/?view=deans" class="text-[15px] text-slate-600 no-underline">Dean</a>
-              <a href="/?view=hods" class="text-[15px] text-slate-600 no-underline">HODs</a>
-              <a href="/?view=antiragging" class="text-[15px] text-slate-600 no-underline">Anti-Ragging</a>
-              <a href="/?view=academic-council" class="text-[15px] text-slate-600 no-underline">Academic Council</a>
-              <a href="/?view=students-grievance" class="text-[15px] text-slate-600 no-underline">Students Grievance</a>
-              <a href="/?view=coe-desk" class="text-[15px] text-slate-600 no-underline">Controller of Exam</a>
+              <a href="/portal?view=vc-desk" class="text-[15px] text-slate-600 no-underline">VC Desk</a>
+              <a href="/portal?view=bom" class="text-[15px] text-slate-600 no-underline">Board of Management</a>
+              <a href="/portal?view=deans" class="text-[15px] text-slate-600 no-underline">Dean</a>
+              <a href="/portal?view=hods" class="text-[15px] text-slate-600 no-underline">HODs</a>
+              <a href="/portal?view=antiragging" class="text-[15px] text-slate-600 no-underline">Anti-Ragging</a>
+              <a href="/portal?view=academic-council" class="text-[15px] text-slate-600 no-underline">Academic Council</a>
+              <a href="/portal?view=students-grievance" class="text-[15px] text-slate-600 no-underline">Students Grievance</a>
+              <a href="/portal?view=coe-desk" class="text-[15px] text-slate-600 no-underline">Controller of Exam</a>
+              <a href="/administration/SA_commitee.html" class="text-[15px] text-slate-600 no-underline">SAC Committee</a>
+
             </div>
           </details>
           <div class="h-px w-full bg-slate-200"></div>
@@ -612,8 +670,8 @@
               <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-1"></use></svg>
             </summary>
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-              <a href="#notices" class="text-[15px] text-slate-600 no-underline">Event</a>
-              <a href="/administration/SA_commitee.html" class="text-[15px] text-slate-600 no-underline">Society / Clubs</a>
+              <a href="/coming-soon.html?title=Events%20and%20Notices" class="text-[15px] text-slate-600 no-underline">Event</a>
+              <a href="/portal?view=clubs" class="text-[15px] text-slate-600 no-underline">Society / Clubs</a>
               <a href="/Student and Event/Hostel/hostel.html" class="text-[15px] text-slate-600 no-underline">Hostels</a>
               <a href="/Student and Event/Campus_Facilities/CampusLife.html" class="text-[15px] text-slate-600 no-underline">Campus Life</a>
             </div>
@@ -626,7 +684,7 @@
               <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-1"></use></svg>
             </summary>
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-              <a href="/?view=location" class="text-[15px] text-slate-600 no-underline">Address &amp; Map</a>
+              <a href="/portal?view=location" class="text-[15px] text-slate-600 no-underline">Address &amp; Map</a>
               <a href="#footer" class="text-[15px] text-slate-600 no-underline">Phone &amp; Email</a>
               <a href="/social.html" class="text-[15px] text-slate-600 no-underline">Social Media Hub</a>
             </div>
@@ -670,8 +728,8 @@
             <p class="text-xs text-slate-400 leading-relaxed mb-4 text-left">
               Techno Campus, Ghatikia, Mahalaxmi Vihar<br/>
               Bhubaneswar, Odisha - 751029, India<br/>
-              📞 Office Phone: 0674-2386075 | 0674-2386182<br/>
-              ✉️ Email: registrar@outr.ac.in
+              <span class="flex items-center gap-1.5 mt-1"><i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i> Office Phone: 0674-2386075 | 0674-2386182</span>
+              <span class="flex items-center gap-1.5 mt-1"><i data-lucide="mail" class="w-3.5 h-3.5 text-slate-400"></i> Email: registrar@outr.ac.in</span>
             </p>
           </div>
 
@@ -680,8 +738,8 @@
             <h4 class="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">Quick Links</h4>
             <ul class="space-y-3.5 p-0 m-0 list-none">
               <li><a href="/home.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Home Desk</a></li>
-              <li><a href="/?view=about" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">About OUTR</a></li>
-              <li><a href="/?view=mission" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Vision &amp; Mission</a></li>
+              <li><a href="/portal?view=about" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">About OUTR</a></li>
+              <li><a href="/portal?view=mission" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Vision &amp; Mission</a></li>
               <li><a href="/social.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Social Media Hub</a></li>
             </ul>
           </div>
@@ -691,8 +749,8 @@
             <h4 class="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">Academics</h4>
             <ul class="space-y-3.5 p-0 m-0 list-none">
               <li><a href="/OUTR website/schools.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
-              <li><a href="/?view=syllabus" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
-              <li><a href="/?view=coe-desk" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Controller of Exam</a></li>
+              <li><a href="/portal?view=syllabus" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
+              <li><a href="/portal?view=coe-desk" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Controller of Exam</a></li>
               <li><a href="/Student and Event/Hostel/hostel.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
             </ul>
           </div>
@@ -702,7 +760,7 @@
             <h4 class="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">Live Weather & AQI</h4>
             <div class="bg-white/5 rounded-xl border border-white/10 p-4">
               <div class="flex items-center gap-3">
-                <span class="text-2xl">🌱</span>
+                <i data-lucide="leaf" class="w-6 h-6 text-emerald-400"></i>
                 <div>
                   <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Air Quality (AQI)</div>
                   <div id="dynamic-aqi-value" class="text-sm font-bold text-emerald-400 mt-0.5">38 &bull; Good</div>
@@ -975,8 +1033,44 @@
           ln.textContent = langs[li];
           ln.style.opacity = "1";
           ln.style.transform = "translateY(0)";
-        }, 450);
-      }, 4500);
     }
+  }
+
+  function setupExternalAndPdfLinkTargets() {
+    const anchors = document.querySelectorAll("a");
+    anchors.forEach((a) => {
+      const href = a.getAttribute("href");
+      if (!href) return;
+
+      const lowerHref = href.toLowerCase().trim();
+
+      // 1. Check for PDFs
+      const isPdf = lowerHref.endsWith(".pdf") || lowerHref.includes(".pdf?");
+      
+      // 2. Check for external websites (e.g. outr.ac.in, cet.edu.in, placement.cet.edu.in, or any http/https link that doesn't point to local relative pages)
+      const isHttp = lowerHref.startsWith("http://") || lowerHref.startsWith("https://");
+      let isExternal = false;
+      if (isHttp) {
+        const currentHost = window.location.hostname;
+        try {
+          const urlObj = new URL(href);
+          if (urlObj.hostname !== currentHost || urlObj.hostname.includes("outr.ac.in") || urlObj.hostname.includes("cet.edu.in")) {
+            isExternal = true;
+          }
+        } catch (e) {
+          if (lowerHref.includes("outr.ac.in") || lowerHref.includes("cet.edu.in")) {
+            isExternal = true;
+          }
+        }
+      }
+
+      if (isPdf || isExternal) {
+        a.setAttribute("target", "_blank");
+        const currentRel = a.getAttribute("rel") || "";
+        if (!currentRel.includes("noopener")) {
+          a.setAttribute("rel", (currentRel + " noopener noreferrer").trim());
+        }
+      }
+    });
   }
 })();
