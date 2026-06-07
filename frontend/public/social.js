@@ -89,6 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
   renderBulletins(allBulletins);
 
   // Handle async Lucide loading race conditions
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
   document.addEventListener("outr-unified-loader-ready", () => {
     if (window.lucide) {
       window.lucide.createIcons();

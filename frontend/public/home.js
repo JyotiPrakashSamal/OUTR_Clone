@@ -44,7 +44,7 @@ const FALLBACK_CONTENT_DATA = {
     columns: { quickLinks: [], academics: [], contact: [] },
     aqi: { value: "--", status: "Unavailable", location: "Bhubaneswar" },
     map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
-    copyright: "© 2025 Odisha University of Technology and Research. All Rights Reserved.",
+    copyright: "© 2026 Odisha University of Technology and Research. All Rights Reserved. • Made by Amrita, Ramakanta, Sonali and Jyoti",
   },
 };
 let contentData = null;
@@ -618,7 +618,23 @@ function renderFooter() {
   `;
 
   if (bottom) {
-    bottom.innerHTML = `<div class="max-w-7xl mx-auto px-5 py-5 flex [flex-wrap:wrap] justify-between items-center [gap:8px]"><div class="[font-size:13px] [color:#94a3b8]">${f.copyright}</div></div>`;
+    let copyrightText = f.copyright;
+    let madeByText = "";
+    if (f.copyright.includes("•")) {
+      const parts = f.copyright.split("•");
+      copyrightText = parts[0].trim();
+      madeByText = parts[1].trim();
+    } else if (f.copyright.includes("|")) {
+      const parts = f.copyright.split("|");
+      copyrightText = parts[0].trim();
+      madeByText = parts[1].trim();
+    }
+    
+    if (madeByText) {
+      bottom.innerHTML = `<div class="max-w-7xl mx-auto px-5 py-5 flex flex-col sm:flex-row justify-between items-center gap-2"><div class="[font-size:13px] [color:#94a3b8]">${copyrightText}</div><div class="[font-size:11px] [color:#64748b] font-medium">${madeByText}</div></div>`;
+    } else {
+      bottom.innerHTML = `<div class="max-w-7xl mx-auto px-5 py-5 flex flex-col sm:flex-row justify-between items-center gap-2"><div class="[font-size:13px] [color:#94a3b8]">${copyrightText}</div></div>`;
+    }
   }
   if (window.reapplyTranslations) window.reapplyTranslations();
 }
@@ -688,14 +704,14 @@ function setupSearch() {
     // --- NAV: Academic → Departments (Schools) ---
     ...(departmentsSectionVisible
       ? [
-          { title: "School of Computer Sciences", subtitle: "Nav · Departments → CSE · IT · MCA · AI&ML", href: "OUTR website/schools/scs.html", category: "departments", weight: 90 },
-          { title: "School of Mechanical Sciences", subtitle: "Nav · Departments → ME · R&AI · IEM · D&D", href: "OUTR website/schools/sms.html", category: "departments", weight: 88 },
-          { title: "School of Infrastructure & Planning", subtitle: "Nav · Departments → Civil · B.Arch · B.Plan · WRE", href: "OUTR website/schools/sIp.html", category: "departments", weight: 86 },
-          { title: "School of Electronic Sciences", subtitle: "Nav · Departments → ECE · EIE · VLSI · ICE", href: "OUTR website/schools/sElectronics.html", category: "departments", weight: 88 },
-          { title: "School of Electrical Sciences", subtitle: "Nav · Departments → Electrical Engineering", href: "OUTR website/schools/sElectricals.html", category: "departments", weight: 84 },
-          { title: "School of Basic Sciences & Humanities", subtitle: "Nav · Departments → Physics, Chemistry, Maths, English", href: "OUTR website/schools/sbsh.html", category: "departments", weight: 80 },
-          { title: "Biotechnology Department", subtitle: "Nav · Departments → Biotech & Life Sciences", href: "OUTR website/schools/btd.html", category: "departments", weight: 78 },
-          { title: "Textile Engineering Department", subtitle: "Nav · Departments → Textile & Fiber Engineering", href: "OUTR website/schools/ted.html", category: "departments", weight: 76 },
+          { title: "School of Computer Sciences", subtitle: "Nav · Departments → CSE · IT · MCA · AI&ML", href: "outr-website/schools/scs.html", category: "departments", weight: 90 },
+          { title: "School of Mechanical Sciences", subtitle: "Nav · Departments → ME · R&AI · IEM · D&D", href: "outr-website/schools/sms.html", category: "departments", weight: 88 },
+          { title: "School of Infrastructure & Planning", subtitle: "Nav · Departments → Civil · B.Arch · B.Plan · WRE", href: "outr-website/schools/sIp.html", category: "departments", weight: 86 },
+          { title: "School of Electronic Sciences", subtitle: "Nav · Departments → ECE · EIE · VLSI · ICE", href: "outr-website/schools/sElectronics.html", category: "departments", weight: 88 },
+          { title: "School of Electrical Sciences", subtitle: "Nav · Departments → Electrical Engineering", href: "outr-website/schools/sElectricals.html", category: "departments", weight: 84 },
+          { title: "School of Basic Sciences & Humanities", subtitle: "Nav · Departments → Physics, Chemistry, Maths, English", href: "outr-website/schools/sbsh.html", category: "departments", weight: 80 },
+          { title: "Biotechnology Department", subtitle: "Nav · Departments → Biotech & Life Sciences", href: "outr-website/schools/btd.html", category: "departments", weight: 78 },
+          { title: "Textile Engineering Department", subtitle: "Nav · Departments → Textile & Fiber Engineering", href: "outr-website/schools/ted.html", category: "departments", weight: 76 },
         ]
       : []),
     // --- NAV: Administration ---
@@ -712,8 +728,8 @@ function setupSearch() {
     // --- NAV: Student ---
     { title: "Event", subtitle: "Nav · Student → Fests & campus activities", href: "#notices", category: "sections", weight: 80 },
     { title: "Society / Clubs", subtitle: "Nav · Student → Join student organizations", href: "/portal?view=clubs", category: "sections", weight: 78 },
-    { title: "Hostels", subtitle: "Nav · Student → Accommodation details", href: "Student and Event/Hostel/hostel.html", category: "sections", weight: 76 },
-    { title: "Campus Life", subtitle: "Nav · Student → Experience life at OUTR", href: "Student and Event/Campus_Facilities/CampusLife.html", category: "sections", weight: 74 },
+    { title: "Hostels", subtitle: "Nav · Student → Accommodation details", href: "student-and-event/Hostel/hostel.html", category: "sections", weight: 76 },
+    { title: "Campus Life", subtitle: "Nav · Student → Experience life at OUTR", href: "student-and-event/Campus_Facilities/CampusLife.html", category: "sections", weight: 74 },
     // --- NAV: Contact ---
     { title: "Address & Map", subtitle: "Nav · Contact → Techno Campus, Ghatikia, BBSR", href: "/portal?view=location", category: "contact", weight: 82 },
     { title: "Phone & Email", subtitle: "Nav · Contact → Get in touch with us", href: "/portal?view=location", category: "contact", weight: 80 },
@@ -1076,8 +1092,8 @@ function setupKnownLinks() {
     "nav.calendar.title": "/documents/academic-calendar-2025-26.pdf",
     "nav.student.event": "#notices",
     "nav.student.society": "/portal?view=clubs",
-    "nav.student.hostels": "Student and Event/Hostel/hostel.html",
-    "nav.student.campus": "Student and Event/Campus_Facilities/CampusLife.html",
+    "nav.student.hostels": "student-and-event/Hostel/hostel.html",
+    "nav.student.campus": "student-and-event/Campus_Facilities/CampusLife.html",
   };
   Object.entries(linkMap).forEach(([key, href]) => {
     document.querySelectorAll(`a[data-i18n="${key}"]`).forEach((a) => {

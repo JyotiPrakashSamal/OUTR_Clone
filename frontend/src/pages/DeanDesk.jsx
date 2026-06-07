@@ -80,7 +80,7 @@ export default function DeanDesk() {
       role: "Dean, Faculty and Planning",
       dept: "Professor, Mechanical Engineering",
       email: "pkparida@outr.ac.in",
-      photo: "/administration/admin_module_photo/PKP-removebg-preview.jpg",
+      photo: "/administration/admin-module-photo/PKP-removebg-preview.jpg",
       initial: "P"
     },
     {
@@ -88,7 +88,7 @@ export default function DeanDesk() {
       role: "Dean, Sponsored Research & Industrial Consultancy",
       dept: "Professor, Electrical Engineering",
       email: "akbarisal@outr.ac.in",
-      photo: "/administration/admin_module_photo/AKB.jpg",
+      photo: "/administration/admin-module-photo/AKB.jpg",
       initial: "A"
     },
     {
@@ -96,7 +96,7 @@ export default function DeanDesk() {
       role: "Dean, Post Graduate Studies & Research",
       dept: "Professor, Electronics & Instrumentation Engineering",
       email: "atripathy@outr.ac.in",
-      photo: "/administration/admin_module_photo/AT-removebg-preview.png",
+      photo: "/administration/admin-module-photo/AT-removebg-preview.png",
       initial: "A"
     },
     {
@@ -104,7 +104,7 @@ export default function DeanDesk() {
       role: "Dean, Students Welfare",
       dept: "Professor, Computer Science & Application",
       email: "jmishra@outr.ac.in",
-      photo: "/administration/admin_module_photo/J_Mishra-removebg-preview_2.png",
+      photo: "/administration/admin-module-photo/J_Mishra-removebg-preview_2.png",
       initial: "J"
     },
     {
@@ -112,7 +112,7 @@ export default function DeanDesk() {
       role: "Dean, Centre for Distance & Continuing Education",
       dept: "Professor, Electronics & Instrumentation Engineering",
       email: "tkpatra@outr.ac.in",
-      photo: "/administration/admin_module_photo/TKP-removebg-preview.jpg",
+      photo: "/administration/admin-module-photo/TKP-removebg-preview.jpg",
       initial: "T"
     },
     {
@@ -120,7 +120,7 @@ export default function DeanDesk() {
       role: "Dean, Academic Affairs",
       dept: "Professor, Electrical Engineering",
       email: "rkjena@outr.ac.in",
-      photo: "/administration/admin_module_photo/Ranjan Kumar Jena_1.jpg",
+      photo: "/administration/admin-module-photo/Ranjan Kumar Jena_1.jpg",
       initial: "R"
     }
   ]

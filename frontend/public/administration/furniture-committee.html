@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OUTR-Project Monitoring & Evaluation Committee</title>
-     <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
+  <title>OUTR-Furniture Committee</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="https://outr.ac.in/public/uploads/logo_4.png" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+ 
   <style>
 /* base style */
     :root {
@@ -32,7 +33,7 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
     .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 /* page header */
-   .page-header {
+    .page-header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       padding: 4rem 2rem 4rem;
       text-align: center;
@@ -43,19 +44,22 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       position: absolute;
       left: 0; right: 0; bottom: 0;
       height: 4px;
-      background: var(--accent);
+      background: var(--gold);
     }
 .header-title {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 900;
-      color: #f4ebeb;
+      color:#fff;
       margin-bottom: 12px;
-      margin-top:40px ;
+      margin-top: 40px;
     }
-.header-title em { color: var(--accent); font-style: italic; }
+.header-title em {
+      color: var(--accent);
+      font-style: italic;
+    }
 .header-subtitle {
-      color: rgba(240, 230, 230, 0.85);
+      color: rgba(255,255,255,0.85);
       max-width: 700px;
       margin: auto;
       line-height: 1.8;
@@ -77,13 +81,13 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       color: var(--primary);
     }
 .section-intro span { color: var(--secondary); }
-/* board grid */
+/*board grid*/
     .board-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 2rem;
     }
-/* member card */
+/*member card */
     .member-card {
       background: #fff;
       border-radius: 16px;
@@ -180,33 +184,60 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       margin: 0 auto 14px;
       border-radius: 2px;
     }
+/* footer */
+    footer {
+      background: #0a2940;
+      color: #94a3b8;
+    }
+/* responsive design */
+    @media (max-width: 1024px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+    }
+@media (max-width: 768px) {
+main { padding: 3rem 1rem; }
+.board-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.2rem;
+      }
+
+    
+}
+@media (max-width: 480px) {
+.board-grid { grid-template-columns: 1fr 1fr; }
+.member-name { font-size: 0.88rem; }
+.member-role { font-size: 0.62rem; }
+
+    
+}
 </style>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
-<!-- top utility bar -->
+<!-- TOP UTILITY BAR -->
 <!-- MAIN NAVBAR -->
 <!-- MOBILE MENU OVERLAY -->
 <!--page body header -->
 <header class="page-header">
-  <h4 class="header-title">
-   <em>Project Monitoring Evaluation Committee</em>
-  </h4>
+  <h1 class="header-title">
+   <em> Furniture Committee</em>
+  </h1>
   <p class="header-subtitle">
-    The Project Monitoring & Evaluation Committee is hereby constituted comprising with the following members for smooth execution of the ongoing projects of OUTR.
-     Bhubaneswar taken up by lOCO. Bhubaneswar and PWD (R&B Division-V). Bhubaneswar
+    A Furniture Committee is hereby constituted comprising with the following faculty members to looks after the Central Procurement Ferniture required by different Schools /Section of University 
   </p>
 
   <!-- Committee Navigation Menu -->
   <div class="max-w-7xl mx-auto px-4 mt-8 flex flex-wrap justify-center gap-3 relative z-10">
-    <a href="SA_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Student Activity</a>
+    <a href="sa-committee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Student Activity</a>
     <a href="/academic-council" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">A & R</a>
-    <a href="CB_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Campus Business</a>
-    <a href="F_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Furniture</a>
-    <a href="PME_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-[#d4af37] text-[#0b3c5d] shadow-[0_4px_12px_rgba(212,175,55,0.35)]">Project Monitoring</a>
-    <a href="Sm_commitee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Social Media</a>
+    <a href="cb-committee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Campus Business</a>
+    <a href="furniture-committee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-[#d4af37] text-[#0b3c5d] shadow-[0_4px_12px_rgba(212,175,55,0.35)]">Furniture</a>
+    <a href="pme-committee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Project Monitoring</a>
+    <a href="social-media-committee.html" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20">Social Media</a>
   </div>
 </header>
 
@@ -218,20 +249,20 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
 
   <div class="board-grid">
 
-    <!-- 1 -->
-   <article class="member-card">
-      <div class="card-top-bar"></div>
+    <!-- 1. Chairman -->
+    <article class="member-card card-chairman">
       <div class="card-photo-wrap">
+        <div class="chairman-badge">Chairman</div>
         <div class="photo-ring">
           <div class="photo-inner">
-            <img src="admin_cb/image copy 3.png" alt="image">
+            <img src="admin-cb/image copy 2.png" alt="image">
           </div>
         </div>
       </div>
       <div class="card-body">
-        <div class="member-name">Prof. Falbuni Balisarsingh</div>
-        <div class="member-role">PIC. Engineering Section</div>
-         <div class="member-role">Chairman</div>
+        <div class="member-name">Mr. A Mohapatra</div>
+        <div class="member-role">Asst. Professor,Electrical Engg</div>
+        <div class="member-role">Chairman</div>
         <div class="role-accent"></div>
       </div>
     </article>
@@ -242,13 +273,13 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       <div class="card-photo-wrap">
         <div class="photo-ring">
           <div class="photo-inner">
-            <img src="admin_cb/image copy 2.png" alt="image">
+            <img src="admin-fcommittee-photo/image.png" alt="image">
           </div>
         </div>
       </div>
       <div class="card-body">
-        <div class="member-name">Prof. Deba Prakash Satapathy</div>
-        <div class="member-role">Professor. Dept. of Civil Engineering.</div>
+        <div class="member-name">Dr. B.N Mohapatra</div>
+        <div class="member-role">Asst.Professor Mechanical Engg.</div>
          <div class="member-role"> Member</div>
         <div class="role-accent"></div>
       </div>
@@ -260,13 +291,13 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       <div class="card-photo-wrap">
         <div class="photo-ring">
           <div class="photo-inner">
-            <img src="admin_cb/image copy 2.png" alt="image">
+            <img src="admin-fcommittee-photo/image copy.png" alt="image">
           </div>
         </div>
       </div>
       <div class="card-body">
-        <div class="member-name">Mr. Sangram Mohanty</div>
-        <div class="member-role">Assistant Professor. Dept. of Architecture.</div>
+        <div class="member-name">Dr. D.R. Swain</div>
+        <div class="member-role">Asst. Professor,Electrical Engg.</div>
         <div class="member-role">Member</div>
         <div class="role-accent"></div>
       </div>
@@ -278,13 +309,13 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       <div class="card-photo-wrap">
         <div class="photo-ring">
           <div class="photo-inner">
-            <img src="admin_cb/image copy 2.png" alt="image">
+            <img src="admin-fcommittee-photo/image copy 2.png" alt="image">
           </div>
         </div>
       </div>
       <div class="card-body">
-        <div class="member-name">Mr. Kamalesh Chandra Rout</div>
-        <div class="member-role">PIC. Electrical Maintenance</div>
+        <div class="member-name">Dr. F .Baliarsingh</div>
+        <div class="member-role">Civil Engg.</div>
         <div class="member-role">Member</div>
         <div class="role-accent"></div>
       </div>
@@ -296,13 +327,13 @@ h1, h2, h3 { font-family: "Playfair Display", serif; }
       <div class="card-photo-wrap">
         <div class="photo-ring">
           <div class="photo-inner">
-            <img src="admin_cb/image copy 2.png" alt="image">
+            <img src="admin-fcommittee-photo/image copy 2.png" alt="image">
           </div>
         </div>
       </div>
       <div class="card-body">
-        <div class="member-name">Pramod Kumar Behera.</div>
-        <div class="member-role">PIC. Civil Maintenance</div>
+        <div class="member-name">Dr. P.K. Panda</div>
+        <div class="member-role">Professor,Mechanical Engg.</div>
         <div class="member-role">Member</div>
         <div class="role-accent"></div>
       </div>

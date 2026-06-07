@@ -293,7 +293,7 @@
         <div class="max-w-7xl mx-auto px-5 w-full flex justify-between items-center select-none font-sans">
           <div class="flex gap-5">
             <a href="/coming-soon.html?title=Careers" class="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Careers</a>
-            <a href="https://rti.gov.in/" target="_blank" rel="noopener noreferrer" class="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
+            <a href="/coming-soon.html?title=RTI" class="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
             <a href="/coming-soon.html?title=PIC%20Officers" class="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">PIC Officers</a>
             <a href="http://placement.cet.edu.in/" target="_blank" rel="noopener noreferrer" class="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Placement</a>
           </div>
@@ -344,7 +344,7 @@
                         <div class="dd-sub">Core values &amp; goals</div>
                       </div>
                     </a>
-                    <a href="/OUTR website/schools.html" class="dd-card">
+                    <a href="/outr-website/schools.html" class="dd-card">
                       <div class="dd-icon"><i data-lucide="award" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Accreditation</div>
@@ -365,35 +365,35 @@
                     <div>
                       <p class="[font-size:10.5px] font-semibold [color:#94a3b8] [letter-spacing:0.1em] [text-transform:uppercase] [margin-bottom:10px] [padding:0_4px]">Schools &amp; Departments</p>
                       <div class="grid grid-cols-1 gap-1 max-h-[280px] overflow-y-auto pr-1">
-                        <a href="/OUTR website/schools/scs.html" class="dd-card">
+                        <a href="/outr-website/schools/scs.html" class="dd-card">
                           <div class="dd-icon [background:#eff6ff]"><i data-lucide="monitor" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Computer Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sms.html" class="dd-card">
+                        <a href="/outr-website/schools/sms.html" class="dd-card">
                           <div class="dd-icon [background:#fff7ed]"><i data-lucide="settings" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Mechanical Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sIp.html" class="dd-card">
+                        <a href="/outr-website/schools/sIp.html" class="dd-card">
                           <div class="dd-icon [background:#f0fdf4]"><i data-lucide="building" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Infrastructure &amp; Planning</div>
                         </a>
-                        <a href="/OUTR website/schools/sElectronics.html" class="dd-card">
+                        <a href="/outr-website/schools/sElectronics.html" class="dd-card">
                           <div class="dd-icon [background:#fff1f2]"><i data-lucide="cpu" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Electronic Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sElectricals.html" class="dd-card">
+                        <a href="/outr-website/schools/sElectricals.html" class="dd-card">
                           <div class="dd-icon [background:#fffbeb]"><i data-lucide="zap" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Electrical Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sbsh.html" class="dd-card">
+                        <a href="/outr-website/schools/sbsh.html" class="dd-card">
                           <div class="dd-icon [background:#f5f3ff]"><i data-lucide="beaker" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">School of Basic Sciences &amp; Humanities</div>
                         </a>
-                        <a href="/OUTR website/schools/btd.html" class="dd-card">
+                        <a href="/outr-website/schools/btd.html" class="dd-card">
                           <div class="dd-icon [background:#ecfdf5]"><i data-lucide="dna" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">Biotechnology Department</div>
                         </a>
-                        <a href="/OUTR website/schools/ted.html" class="dd-card">
+                        <a href="/outr-website/schools/ted.html" class="dd-card">
                           <div class="dd-icon [background:#fff0f6]"><i data-lucide="scissors" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                           <div class="dd-title [font-size:12px]">Textile Engineering Department</div>
                         </a>
@@ -469,7 +469,7 @@
                       <div class="dd-icon [background:#fff0f6]"><i data-lucide="file-check" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">Controller of Exam</div>
                     </a>
-                    <a href="/administration/SA_commitee.html" class="dd-card">
+                    <a href="/administration/sa-committee.html" class="dd-card">
                       <div class="dd-icon [background:#eff6ff]"><i data-lucide="users" style="width: 15px; height: 15px; color: #0B3C5D;"></i></div>
                       <div class="dd-title [font-size:12.5px]">SAC Committee</div>
                     </a>
@@ -499,14 +499,14 @@
                         <div class="dd-sub">Join student organizations</div>
                       </div>
                     </a>
-                    <a href="/Student and Event/Hostel/hostel.html" class="dd-card">
+                    <a href="/student-and-event/Hostel/hostel.html" class="dd-card">
                       <div class="dd-icon"><i data-lucide="bed" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Hostels</div>
                         <div class="dd-sub">Accommodation details</div>
                       </div>
                     </a>
-                    <a href="/Student and Event/Campus_Facilities/CampusLife.html" class="dd-card">
+                    <a href="/student-and-event/Campus_Facilities/CampusLife.html" class="dd-card">
                       <div class="dd-icon"><i data-lucide="compass" style="width: 17px; height: 17px; color: #0B3C5D;"></i></div>
                       <div>
                         <div class="dd-title">Campus Life</div>
@@ -626,7 +626,7 @@
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
               <a href="/portal?view=about" class="text-[15px] text-slate-600 no-underline">About OUTR</a>
               <a href="/portal?view=mission" class="text-[15px] text-slate-600 no-underline">Vision and Mission</a>
-              <a href="/OUTR website/schools.html" class="text-[15px] text-slate-600 no-underline">Accreditation</a>
+              <a href="/outr-website/schools.html" class="text-[15px] text-slate-600 no-underline">Accreditation</a>
             </div>
           </details>
           <div class="h-px w-full bg-slate-200"></div>
@@ -637,7 +637,7 @@
               <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-1"></use></svg>
             </summary>
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-              <a href="/OUTR website/schools.html" class="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
+              <a href="/outr-website/schools.html" class="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
               <a href="/portal?view=academic-council" class="text-[15px] text-slate-600 no-underline">Committees</a>
               <a href="/portal?view=syllabus" class="text-[15px] text-slate-600 no-underline">Syllabus</a>
             </div>
@@ -658,7 +658,7 @@
               <a href="/portal?view=academic-council" class="text-[15px] text-slate-600 no-underline">Academic Council</a>
               <a href="/portal?view=students-grievance" class="text-[15px] text-slate-600 no-underline">Students Grievance</a>
               <a href="/portal?view=coe-desk" class="text-[15px] text-slate-600 no-underline">Controller of Exam</a>
-              <a href="/administration/SA_commitee.html" class="text-[15px] text-slate-600 no-underline">SAC Committee</a>
+              <a href="/administration/sa-committee.html" class="text-[15px] text-slate-600 no-underline">SAC Committee</a>
 
             </div>
           </details>
@@ -672,8 +672,8 @@
             <div class="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
               <a href="/coming-soon.html?title=Events%20and%20Notices" class="text-[15px] text-slate-600 no-underline">Event</a>
               <a href="/portal?view=clubs" class="text-[15px] text-slate-600 no-underline">Society / Clubs</a>
-              <a href="/Student and Event/Hostel/hostel.html" class="text-[15px] text-slate-600 no-underline">Hostels</a>
-              <a href="/Student and Event/Campus_Facilities/CampusLife.html" class="text-[15px] text-slate-600 no-underline">Campus Life</a>
+              <a href="/student-and-event/Hostel/hostel.html" class="text-[15px] text-slate-600 no-underline">Hostels</a>
+              <a href="/student-and-event/Campus_Facilities/CampusLife.html" class="text-[15px] text-slate-600 no-underline">Campus Life</a>
             </div>
           </details>
           <div class="h-px w-full bg-slate-200"></div>
@@ -748,10 +748,10 @@
           <div class="text-left">
             <h4 class="font-serif font-bold text-sm text-white mb-6 uppercase tracking-wider pl-0.5 border-b border-[#d4af37]/20 pb-2">Academics</h4>
             <ul class="space-y-3.5 p-0 m-0 list-none">
-              <li><a href="/OUTR website/schools.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
+              <li><a href="/outr-website/schools.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
               <li><a href="/portal?view=syllabus" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
               <li><a href="/portal?view=coe-desk" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Controller of Exam</a></li>
-              <li><a href="/Student and Event/Hostel/hostel.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
+              <li><a href="/student-and-event/Hostel/hostel.html" class="text-xs text-slate-400 hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
             </ul>
           </div>
 
@@ -772,8 +772,9 @@
         </div>
 
         <!-- Copyright Bottom -->
-        <div class="max-w-7xl mx-auto border-t border-white/5 pt-8 text-center text-xs text-slate-500">
-          © 2025 Odisha University of Technology and Research. All Rights Reserved. &bull; Bhubaneswar, Odisha
+        <div class="max-w-7xl mx-auto border-t border-white/5 pt-8 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2">
+          <span>© 2026 Odisha University of Technology and Research. All Rights Reserved. &bull; Bhubaneswar, Odisha</span>
+          <span style="font-size: 10px; color: #64748b;">Made by Amrita, Ramakanta, Sonali and Jyoti</span>
         </div>
       </footer>
 
@@ -1033,6 +1034,8 @@
           ln.textContent = langs[li];
           ln.style.opacity = "1";
           ln.style.transform = "translateY(0)";
+        }, 450);
+      }, 4500);
     }
   }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { 
   Mail, Landmark, Target, Award, Laptop, Settings, Building2, Cpu, Zap, Beaker, 
   Dna, Scissors, Users, BookOpen, Calendar, User, Briefcase, GraduationCap, 
@@ -10,6 +10,26 @@ export default function Navbar({ onNavigate }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const isDeskPage = [
+    '/vc-desk', 
+    '/coe-desk', 
+    '/deans', 
+    '/hods', 
+    '/syllabus', 
+    '/student-clearance', 
+    '/student clearance',
+    '/student%20clearance',
+    '/adviser-dashboard', 
+    '/hos-dashboard', 
+    '/dean-academic-dashboard', 
+    '/dean-pga-dashboard', 
+    '/controller-dashboard'
+  ].includes(location.pathname) || 
+  location.pathname.includes('clearance') || 
+  location.pathname.includes('dashboard') || 
+  location.pathname.includes('desk')
 
   // Listen to window scroll to trigger top-bar display identically to static sub-pages
   useEffect(() => {
@@ -27,9 +47,12 @@ export default function Navbar({ onNavigate }) {
   }, [])
 
   const handleNavigation = (view) => {
-    if (document.activeElement && typeof document.activeElement.blur === 'function') {
-      document.activeElement.blur()
-    }
+    // Force blur on the clicked element after default click-focus completes
+    setTimeout(() => {
+      if (document.activeElement && typeof document.activeElement.blur === 'function') {
+        document.activeElement.blur()
+      }
+    }, 50);
     if (view === 'home') {
       window.location.href = '/home.html'
     } else if (view === 'vc-desk') {
@@ -59,7 +82,7 @@ export default function Navbar({ onNavigate }) {
     } else if (view === 'clubs') {
       navigate('/clubs-societies')
     } else if (view === 'sa-committee') {
-      window.location.href = '/administration/SA_commitee.html'
+      window.location.href = '/administration/sa-committee.html'
     } else if (view === 'auth' || view === 'portal') {
       navigate('/portal')
     } else if (onNavigate) {
@@ -76,7 +99,7 @@ export default function Navbar({ onNavigate }) {
         <div className="max-w-7xl mx-auto px-5 w-full flex justify-between items-center select-none font-sans">
           <div className="flex gap-5">
             <a href="/coming-soon.html?title=Careers" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Careers</a>
-            <a href="https://rti.gov.in/" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
+            <a href="/coming-soon.html?title=RTI" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">RTI</a>
             <a href="/coming-soon.html?title=PIC%20Officers" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">PIC Officers</a>
             <a href="http://placement.cet.edu.in/" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:text-white transition-colors text-[11px] no-underline">Placement</a>
           </div>
@@ -132,7 +155,7 @@ export default function Navbar({ onNavigate }) {
                         <div className="dd-sub">Core values &amp; goals</div>
                       </div>
                     </button>
-                    <a href="/OUTR website/schools.html" className="dd-card">
+                    <a href="/outr-website/schools.html" className="dd-card">
                       <div className="dd-icon text-[#0B3C5D]"><Award className="w-[17px] h-[17px]" /></div>
                       <div>
                         <div className="dd-title">Accreditation</div>
@@ -153,35 +176,35 @@ export default function Navbar({ onNavigate }) {
                     <div>
                       <p className="text-[10.5px] font-semibold text-[#94a3b8] tracking-widest uppercase mb-2.5 px-1">Schools &amp; Departments</p>
                       <div className="grid grid-cols-1 gap-1 max-h-[280px] overflow-y-auto pr-1 text-left">
-                        <a href="/OUTR website/schools/scs.html" className="dd-card">
+                        <a href="/outr-website/schools/scs.html" className="dd-card">
                           <div className="dd-icon bg-[#eff6ff] text-[#0b3c5d]"><Laptop className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">School of Computer Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sms.html" class="dd-card">
+                        <a href="/outr-website/schools/sms.html" class="dd-card">
                           <div className="dd-icon bg-[#fff7ed] text-[#0b3c5d]"><Settings className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">School of Mechanical Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sIp.html" className="dd-card">
+                        <a href="/outr-website/schools/sIp.html" className="dd-card">
                           <div className="dd-icon bg-[#f0fdf4] text-[#0b3c5d]"><Building2 className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">School of Infrastructure &amp; Planning</div>
                         </a>
-                        <a href="/OUTR website/schools/sElectronics.html" className="dd-card">
+                        <a href="/outr-website/schools/sElectronics.html" className="dd-card">
                           <div className="dd-icon bg-[#fff1f2] text-[#0b3c5d]"><Cpu className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">School of Electronic Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sElectricals.html" className="dd-card">
+                        <a href="/outr-website/schools/sElectricals.html" className="dd-card">
                           <div className="dd-icon bg-[#fffbeb] text-[#0b3c5d]"><Zap className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">School of Electrical Sciences</div>
                         </a>
-                        <a href="/OUTR website/schools/sbsh.html" className="dd-card">
+                        <a href="/outr-website/schools/sbsh.html" className="dd-card">
                           <div className="dd-icon bg-[#f5f3ff] text-[#0b3c5d]"><Beaker className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">School of Basic Sciences &amp; Humanities</div>
                         </a>
-                        <a href="/OUTR website/schools/btd.html" className="dd-card">
+                        <a href="/outr-website/schools/btd.html" className="dd-card">
                           <div className="dd-icon bg-[#ecfdf5] text-[#0b3c5d]"><Dna className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">Biotechnology Department</div>
                         </a>
-                        <a href="/OUTR website/schools/ted.html" className="dd-card">
+                        <a href="/outr-website/schools/ted.html" className="dd-card">
                           <div className="dd-icon bg-[#fff0f6] text-[#0b3c5d]"><Scissors className="w-[15px] h-[15px]" /></div>
                           <div className="dd-title text-[12px]">Textile Engineering Department</div>
                         </a>
@@ -286,14 +309,14 @@ export default function Navbar({ onNavigate }) {
                         <div className="dd-sub">Join student organizations</div>
                       </div>
                     </button>
-                    <a href="/Student and Event/Hostel/hostel.html" className="dd-card">
+                    <a href="/student-and-event/Hostel/hostel.html" className="dd-card">
                       <div className="dd-icon text-[#0B3C5D]"><Home className="w-[17px] h-[17px]" /></div>
                       <div>
                         <div className="dd-title">Hostels</div>
                         <div className="dd-sub">Accommodation details</div>
                       </div>
                     </a>
-                    <a href="/Student and Event/Campus_Facilities/CampusLife.html" className="dd-card">
+                    <a href="/student-and-event/Campus_Facilities/CampusLife.html" className="dd-card">
                       <div className="dd-icon text-[#0B3C5D]"><Target className="w-[17px] h-[17px]" /></div>
                       <div>
                         <div className="dd-title">Campus Life</div>
@@ -339,14 +362,16 @@ export default function Navbar({ onNavigate }) {
 
             {/* Header Right: Access Desks & Mobile Toggle */}
             <div className="flex items-center gap-4 relative">
-              <div className="hidden lg:block ml-2">
-                <button 
-                  onClick={() => handleNavigation('auth')}
-                  className="font-bold text-xs py-2 px-5 rounded-full shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 border bg-[#0b3c5d] hover:bg-[#1f5a8a] text-white border-transparent"
-                >
-                  Access Desks
-                </button>
-              </div>
+              {!isDeskPage && (
+                <div className="hidden lg:block ml-2">
+                  <button 
+                    onClick={() => handleNavigation('auth')}
+                    className="font-bold text-xs py-2 px-5 rounded-full shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 border bg-[#0b3c5d] hover:bg-[#1f5a8a] text-white border-transparent"
+                  >
+                    Access Desks
+                  </button>
+                </div>
+              )}
 
               {/* Hamburger Button (Mobile) */}
               <button 
@@ -402,7 +427,7 @@ export default function Navbar({ onNavigate }) {
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
                   <button onClick={() => { handleNavigation('about'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">About OUTR</button>
                   <button onClick={() => { handleNavigation('vision-mission'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Vision and Mission</button>
-                  <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Accreditation</a>
+                  <a href="/outr-website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Accreditation</a>
                 </div>
               </details>
               <div className="h-px w-full bg-slate-200"></div>
@@ -413,7 +438,7 @@ export default function Navbar({ onNavigate }) {
                   <ChevronDown className="w-4.5 h-4.5 transition-transform group-open:rotate-180 text-slate-400" />
                 </summary>
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
-                  <a href="/OUTR website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
+                  <a href="/outr-website/schools.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Schools &amp; Departments</a>
                   <button onClick={() => { handleNavigation('academic-council'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Committees</button>
                   <button onClick={() => { handleNavigation('syllabus'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Syllabus</button>
                 </div>
@@ -447,8 +472,8 @@ export default function Navbar({ onNavigate }) {
                 <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-slate-100">
                   <a href="/coming-soon.html?title=Events%20and%20Notices" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Event</a>
                   <button onClick={() => { handleNavigation('clubs'); setMobileMenuOpen(false); }} className="text-[15px] text-slate-600 bg-transparent border-none text-left w-full cursor-pointer">Society / Clubs</button>
-                  <a href="/Student and Event/Hostel/hostel.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Hostels</a>
-                  <a href="/Student and Event/Campus_Facilities/CampusLife.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Campus Life</a>
+                  <a href="/student-and-event/Hostel/hostel.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Hostels</a>
+                  <a href="/student-and-event/Campus_Facilities/CampusLife.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Campus Life</a>
                 </div>
               </details>
               <div className="h-px w-full bg-slate-200"></div>
@@ -464,14 +489,17 @@ export default function Navbar({ onNavigate }) {
                   <a href="/social.html" onClick={() => setMobileMenuOpen(false)} className="text-[15px] text-slate-600 no-underline">Social Media Hub</a>
                 </div>
               </details>
-              <div className="h-px w-full bg-slate-200"></div>
-
-              <button 
-                onClick={() => { handleNavigation('auth'); setMobileMenuOpen(false); }}
-                className="w-full text-center block bg-[#0B3C5D] hover:bg-[#1f5a8a] text-white font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer border-none font-sans"
-              >
-                Access Desks
-              </button>
+              {!isDeskPage && (
+                <>
+                  <div className="h-px w-full bg-slate-200"></div>
+                  <button 
+                    onClick={() => { handleNavigation('auth'); setMobileMenuOpen(false); }}
+                    className="w-full text-center block bg-[#0B3C5D] hover:bg-[#1f5a8a] text-white font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer border-none font-sans"
+                  >
+                    Access Desks
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </>

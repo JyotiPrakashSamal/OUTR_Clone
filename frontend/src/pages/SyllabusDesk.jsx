@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Search, Calendar, BookOpen, FileText, CheckCircle2, X, Download } from 'lucide-react'
 
 export default function SyllabusDesk() {
@@ -743,7 +744,7 @@ export default function SyllabusDesk() {
       </div>
 
       {/* Details Modal */}
-      {activeModalData && (
+      {activeModalData && createPortal(
         <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 animate-modal-in flex flex-col text-left">
             
@@ -822,7 +823,8 @@ export default function SyllabusDesk() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

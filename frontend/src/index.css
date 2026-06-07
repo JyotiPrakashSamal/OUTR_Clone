@@ -49,8 +49,8 @@
 
 /* Print-Only Layout Rules */
 @media print {
-  /* Completely hide the main React application container */
-  #root {
+  /* Completely hide all elements in body except #print-area (including React portals) */
+  body > *:not(#print-area) {
     display: none !important;
   }
   /* Position and display the print area perfectly at the top-left */

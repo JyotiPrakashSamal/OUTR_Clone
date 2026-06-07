@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../../../supabaseClient'
 import { capitalizeName, handlePrintAdmitCardFromModal } from '../utils/fileTrackingHelpers'
 import { 
@@ -56,7 +57,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
     exam_type: 'Regular Examinations',
     dob: ''
   })
-  const [admitSubjects, setAdmitSubjects] = useState([{ code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])
+  const [admitSubjects, setAdmitSubjects] = useState([{ code: '', name: '', date: '', time: '2:00 PM - 5:00 PM' }])
   const [editingAdmitCardId, setEditingAdmitCardId] = useState(null)
   const [showAdmitModal, setShowAdmitModal] = useState(false)
 
@@ -238,7 +239,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
         exam_type: 'Regular Examinations',
         dob: ''
       })
-      setAdmitSubjects([{ code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])
+      setAdmitSubjects([{ code: '', name: '', date: '', time: '2:00 PM - 5:00 PM' }])
       setShowAdmitModal(false)
       fetchAdmitCards()
     } catch (err) {
@@ -635,7 +636,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                       exam_type: 'Regular Examinations',
                       dob: ''
                     })
-                    setAdmitSubjects([{ code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])
+                    setAdmitSubjects([{ code: '', name: '', date: '', time: '2:00 PM - 5:00 PM' }])
                     setShowAdmitModal(true)
                   }}
                   className="btn-brand-primary text-xs flex items-center gap-1 cursor-pointer"
@@ -738,23 +739,24 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
             </div>
 
             {/* ADMIT CARD EDITOR MODAL */}
-            {showAdmitModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-                <div className="bg-white rounded-3xl border border-slate-200 max-w-xl w-full p-6 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
+            {showAdmitModal && createPortal(
+              <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+                <div className="bg-white rounded-3xl border border-slate-200 max-w-xl w-full p-6 shadow-2xl relative flex flex-col max-h-[90vh]">
                   <button
                     onClick={() => setShowAdmitModal(false)}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
+                    className="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
-                  <div>
-                    <h3 className="font-serif text-lg font-bold text-primary">
-                      {editingAdmitCardId ? 'Edit Student Admit Card' : 'Generate New Admit Card'}
-                    </h3>
-                    <p className="text-[10px] text-slate-400">Fill in semester schedule and date of birth info</p>
-                  </div>
+                  <div className="overflow-y-auto pr-1 space-y-6 flex-grow text-left">
+                    <div>
+                      <h3 className="font-serif text-lg font-bold text-primary">
+                        {editingAdmitCardId ? 'Edit Student Admit Card' : 'Generate New Admit Card'}
+                      </h3>
+                      <p className="text-[10px] text-slate-400">Fill in semester schedule and date of birth info</p>
+                    </div>
 
-                  <form onSubmit={handleSaveAdmitCard} className="space-y-4 text-xs font-semibold text-primary">
+                    <form onSubmit={handleSaveAdmitCard} className="space-y-4 text-xs font-semibold text-primary">
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="block uppercase tracking-wider text-[10px] mb-1">Student Name *</label>
@@ -835,7 +837,7 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                         <span>Subjects and Exam Schedule</span>
                         <button
                           type="button"
-                          onClick={() => setAdmitSubjects([...admitSubjects, { code: '', name: '', date: '', time: '2:00 PM – 5:00 PM' }])}
+                          onClick={() => setAdmitSubjects([...admitSubjects, { code: '', name: '', date: '', time: '2:00 PM - 5:00 PM' }])}
                           className="text-secondary hover:underline lowercase font-bold flex items-center gap-0.5 cursor-pointer"
                         >
                           <Plus className="w-3 h-3" /> Add Subject
@@ -903,8 +905,10 @@ export default function ExamManagementDesk({ role, sessionUser, applications = [
                       {editingAdmitCardId ? 'Update Admit Card' : 'Publish Admit Card'}
                     </button>
                   </form>
+                  </div>
                 </div>
-              </div>
+              </div>,
+              document.body
             )}
           </div>
         )

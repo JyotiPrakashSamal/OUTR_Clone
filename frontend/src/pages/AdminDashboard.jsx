@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../supabaseClient'
 import { createClient } from '@supabase/supabase-js'
 import Layout from '../components/Layout'
-import { Settings, LogOut, AlertTriangle, CheckCircle2, Inbox, Eye, EyeOff } from 'lucide-react'
+import { Settings, LogOut, AlertTriangle, CheckCircle2, Inbox, Eye, EyeOff, RotateCcw, X } from 'lucide-react'
 
 // Initialize secondary client that DOES NOT persist or overwrite local storage session!
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -29,6 +30,15 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
   const [profiles, setProfiles] = useState([])
   const [loadingProfiles, setLoadingProfiles] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
+  const [showResetModal, setShowResetModal] = useState(false)
+
+  // Clear browser local storage cache
+  const handleConfirmClearCache = () => {
+    localStorage.removeItem('OUTR_APPLICATIONS')
+    setShowResetModal(false)
+    setSuccessMsg('Clearance browser cache successfully cleared!')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   // Form State
   const [name, setName] = useState('')
@@ -153,12 +163,21 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
               </p>
             </div>
           </div>
-          <button
-            onClick={onSignOut}
-            className="px-6 py-2.5 bg-rose-50 border border-rose-100 hover:bg-rose-100/50 text-rose-700 font-bold text-xs rounded-xl shadow-sm transition-all duration-300 cursor-pointer flex items-center gap-1.5"
-          >
-            <LogOut className="w-4 h-4" /> Sign Out of Admin Desk
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+            <button
+              onClick={() => setShowResetModal(true)}
+              className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-sm transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5"
+              title="Clear browser cache and sync with live database"
+            >
+              <RotateCcw className="w-4 h-4" /> Clear Cache &amp; Sync
+            </button>
+            <button
+              onClick={onSignOut}
+              className="px-6 py-2.5 bg-rose-50 border border-rose-100 hover:bg-rose-100/50 text-rose-700 font-bold text-xs rounded-xl shadow-sm transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <LogOut className="w-4 h-4" /> Sign Out of Admin Desk
+            </button>
+          </div>
         </div>
 
         {/* Two Column Layout */}
@@ -388,6 +407,48 @@ export default function AdminDashboard({ onSignOut, onNavigate, sessionUser }) {
         </div>
 
       </div>
+
+      {/* Reset Cache Confirmation Modal */}
+      {showResetModal && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans text-left">
+          <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl relative space-y-6">
+            <button 
+              onClick={() => setShowResetModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer animate-fade-in"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            
+            <div className="space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center border border-amber-200">
+                <AlertTriangle className="w-6 h-6 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="font-serif text-lg font-bold text-primary">Clear Clearance Cache?</h3>
+                <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">
+                  This will purge the cached clearance applications (`OUTR_APPLICATIONS`) from the browser's local storage. The system will pull the latest student tracks and records directly from Supabase on the next load.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowResetModal(false)}
+                className="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl shadow-sm transition-all duration-300 cursor-pointer text-center"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmClearCache}
+                className="flex-1 px-4 py-2.5 bg-rose-50 border border-rose-100 hover:bg-rose-100 text-rose-700 font-bold text-xs rounded-xl shadow-sm transition-all duration-300 cursor-pointer text-center flex items-center justify-center gap-1.5"
+              >
+                <RotateCcw className="w-3.5 h-3.5" /> Clear &amp; Sync
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </Layout>
   )
 }

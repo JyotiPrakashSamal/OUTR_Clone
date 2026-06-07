@@ -6,22 +6,22 @@ import {
 // 1. BOARD OF GOVERNORS / MANAGEMENT
 export function BoardOfGovernors() {
   const members = [
-    { name: "Prof. Bibhuti Bhusan Biswal", role: "Vice Chancellor, OUTR", isChair: true, photo: "/administration/admin_bom_photo/image.png" },
-    { name: "Shri Bhupendra Singh Poonia", role: "Commissioner-Cum-Secretary to Govt, SD&TE Department, Odisha", photo: "/administration/admin_bom_photo/image copy.png" },
-    { name: "Sri Sanjeeb Kumar Mishra", role: "Principal Secretary to Govt., Finance Department, Odisha", photo: "/administration/admin_bom_photo/image copy 2.png" },
-    { name: "Shri Chakravarti Singh Rathore", role: "Director of Technical Education and Training, Odisha", photo: "/administration/admin_bom_photo/image copy 3.png" },
-    { name: "Amiya Kumar Rath", role: "Vice-Chancellor, BPUT, Odisha", photo: "/administration/admin_bom_photo/image copy 4.png" },
-    { name: "Prof. Meera Viswavandya", role: "Registrar, OUTR", photo: "/administration/admin_bom_photo/image copy 5.png" },
-    { name: "Prof. Aruna Tripathy", role: "Professor, Electronics & Instrumentation Engineering, OUTR", photo: "/administration/admin_bom_photo/image copy 6.png" },
-    { name: "Prof. Jibitesh Mishra", role: "Professor, CSA, OUTR", photo: "/administration/admin_bom_photo/image copy 7.png" },
-    { name: "Prof. Bhibhu Prasad Dash", role: "Professor, Textile Engineering, OUTR", photo: "/administration/admin_bom_photo/image copy 8.png" },
-    { name: "Dr. Prakash Kumar Ray", role: "Associate Professor, Electrical Engineering, OUTR", photo: "/administration/admin_bom_photo/image copy 9.png" },
-    { name: "Dr. Subhendu Pattnaik", role: "Former Dy. Director (Tech.), Pathani Samanta Planetarium", photo: "/administration/admin_bom_photo/image copy 10.png" },
-    { name: "Dr. M. K. Pradhan", role: "GM (F&B), OSDMA, Odisha", photo: "/administration/admin_bom_photo/image copy 11.png" },
-    { name: "Prof. Bijaya Ketan Panigrahi", role: "Professor, IIT Delhi", photo: "/administration/admin_bom_photo/image copy 12.png" },
-    { name: "Dr. Mahendra Prasad", role: "Director, SOA, Bhubaneswar", photo: "/administration/admin_bom_photo/image copy 13.png" },
-    { name: "Shri Babu Singh", role: "Hon'ble M.L.A, Odisha Legislative Assembly", photo: "/administration/admin_bom_photo/image copy 14.png" },
-    { name: "Shri Sanat Kumar Gartia", role: "Hon'ble M.L.A, Odisha Legislative Assembly", photo: "/administration/admin_bom_photo/image copy 15.png" }
+    { name: "Prof. Bibhuti Bhusan Biswal", role: "Vice Chancellor, OUTR", isChair: true, photo: "/administration/admin-bom-photo/image.png" },
+    { name: "Shri Bhupendra Singh Poonia", role: "Commissioner-Cum-Secretary to Govt, SD&TE Department, Odisha", photo: "/administration/admin-bom-photo/image copy.png" },
+    { name: "Sri Sanjeeb Kumar Mishra", role: "Principal Secretary to Govt., Finance Department, Odisha", photo: "/administration/admin-bom-photo/image copy 2.png" },
+    { name: "Shri Chakravarti Singh Rathore", role: "Director of Technical Education and Training, Odisha", photo: "/administration/admin-bom-photo/image copy 3.png" },
+    { name: "Amiya Kumar Rath", role: "Vice-Chancellor, BPUT, Odisha", photo: "/administration/admin-bom-photo/image copy 4.png" },
+    { name: "Prof. Meera Viswavandya", role: "Registrar, OUTR", photo: "/administration/admin-bom-photo/image copy 5.png" },
+    { name: "Prof. Aruna Tripathy", role: "Professor, Electronics & Instrumentation Engineering, OUTR", photo: "/administration/admin-bom-photo/image copy 6.png" },
+    { name: "Prof. Jibitesh Mishra", role: "Professor, CSA, OUTR", photo: "/administration/admin-bom-photo/image copy 7.png" },
+    { name: "Prof. Bhibhu Prasad Dash", role: "Professor, Textile Engineering, OUTR", photo: "/administration/admin-bom-photo/image copy 8.png" },
+    { name: "Dr. Prakash Kumar Ray", role: "Associate Professor, Electrical Engineering, OUTR", photo: "/administration/admin-bom-photo/image copy 9.png" },
+    { name: "Dr. Subhendu Pattnaik", role: "Former Dy. Director (Tech.), Pathani Samanta Planetarium", photo: "/administration/admin-bom-photo/image copy 10.png" },
+    { name: "Dr. M. K. Pradhan", role: "GM (F&B), OSDMA, Odisha", photo: "/administration/admin-bom-photo/image copy 11.png" },
+    { name: "Prof. Bijaya Ketan Panigrahi", role: "Professor, IIT Delhi", photo: "/administration/admin-bom-photo/image copy 12.png" },
+    { name: "Dr. Mahendra Prasad", role: "Director, SOA, Bhubaneswar", photo: "/administration/admin-bom-photo/image copy 13.png" },
+    { name: "Shri Babu Singh", role: "Hon'ble M.L.A, Odisha Legislative Assembly", photo: "/administration/admin-bom-photo/image copy 14.png" },
+    { name: "Shri Sanat Kumar Gartia", role: "Hon'ble M.L.A, Odisha Legislative Assembly", photo: "/administration/admin-bom-photo/image copy 15.png" }
   ]
 
   return (
@@ -239,7 +239,7 @@ export function VCDesk() {
             
             <div className="w-48 h-56 rounded-2xl border-2 border-accent/50 overflow-hidden mb-6 bg-secondary/35 shadow-md flex items-center justify-center">
               <img 
-                src="/administration/admin_module_photo/director-img.png" 
+                src="/administration/admin-module-photo/director-img.png" 
                 alt="Dr. Bibhuti Bhusan Biswal" 
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -495,7 +495,7 @@ export function AboutPage() {
             <div className="relative rounded-3xl overflow-hidden shadow-xl flex-grow group min-h-[340px]">
               {/* Full-bleed image fills entire card */}
               <img
-                src="/OUTR website/images/statue.png"
+                src="/outr-website/images/statue.png"
                 alt="OUTR Techno Campus Statue"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 select-none"
                 onError={(e) => {
@@ -623,7 +623,7 @@ export function LocationPage() {
           <div className="relative rounded-3xl overflow-hidden shadow-xl group min-h-[360px] bg-slate-100">
             {/* Full-bleed Odisha map image */}
             <img
-              src="/OUTR website/images/MAPf.jpg"
+              src="/outr-website/images/MAPf.jpg"
               alt="Odisha State Map showing OUTR location"
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 select-none"
               onError={(e) => {
@@ -690,12 +690,12 @@ export function LocationPage() {
 // 8. AR COMMITTEE (ACADEMIC COUNCIL)
 export function ARCommittee() {
   const members = [
-    { name: "Dr. Aruna Tripathy", role: "Professor, Department of Electronics & Instrumentation Engineering and PIC, Accreditation and Ranking", tag: "Chairperson", photo: "/administration/admin_Arcommitee_photo/image.png" },
-    { name: "Mr. Bishnu Narayan Mahapatra", role: "Assistant Professor, Department of Mechanical Engineering", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy.png" },
-    { name: "Mr. Santanu Sen", role: "Assistant Professor & Head, Department of EE", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" },
-    { name: "Mrs Ananya Dastidar", role: "Assistant Professor, Department of Electronics & Instrumentation Engineering", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" },
-    { name: "Mrs. Rosalin Dalai", role: "Assistant Professor, Department of Civil Engg.", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" },
-    { name: "Mrs. Swapna Sarita Swain", role: "Assistant Professor & Head, Department of Planning", tag: "Member", photo: "/administration/admin_Arcommitee_photo/image copy 2.png" }
+    { name: "Dr. Aruna Tripathy", role: "Professor, Department of Electronics & Instrumentation Engineering and PIC, Accreditation and Ranking", tag: "Chairperson", photo: "/administration/admin-arcommittee-photo/image.png" },
+    { name: "Mr. Bishnu Narayan Mahapatra", role: "Assistant Professor, Department of Mechanical Engineering", tag: "Member", photo: "/administration/admin-arcommittee-photo/image copy.png" },
+    { name: "Mr. Santanu Sen", role: "Assistant Professor & Head, Department of EE", tag: "Member", photo: "/administration/admin-arcommittee-photo/image copy 2.png" },
+    { name: "Mrs Ananya Dastidar", role: "Assistant Professor, Department of Electronics & Instrumentation Engineering", tag: "Member", photo: "/administration/admin-arcommittee-photo/image copy 2.png" },
+    { name: "Mrs. Rosalin Dalai", role: "Assistant Professor, Department of Civil Engg.", tag: "Member", photo: "/administration/admin-arcommittee-photo/image copy 2.png" },
+    { name: "Mrs. Swapna Sarita Swain", role: "Assistant Professor & Head, Department of Planning", tag: "Member", photo: "/administration/admin-arcommittee-photo/image copy 2.png" }
   ]
 
   return (
@@ -748,11 +748,11 @@ export function ARCommittee() {
 // 9. LEGAL & GRIEVANCE COMMITTEE
 export function LegalCommittee() {
   const members = [
-    { name: "Registrar", role: "OUTR University Administration", tag: "Chairman", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" },
-    { name: "Dr. Pramod Kumar Parida", role: "Professor, ME", tag: "Member", photo: "/administration/admin_Lcommitee_photo/image.png" },
-    { name: "Dr. Ranjan Kumar Jana", role: "Professor, EE", tag: "Member", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" },
-    { name: "Dr. Tapas Kumar Patra", role: "Professor, I & E", tag: "Member", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" },
-    { name: "Mr. Neelakantha Guru", role: "Asst. Professor, EE", tag: "Coordinator", photo: "/administration/admin_Lcommitee_photo/image copy 2.png" }
+    { name: "Registrar", role: "OUTR University Administration", tag: "Chairman", photo: "/administration/admin-lcommittee-photo/image copy 2.png" },
+    { name: "Dr. Pramod Kumar Parida", role: "Professor, ME", tag: "Member", photo: "/administration/admin-lcommittee-photo/image.png" },
+    { name: "Dr. Ranjan Kumar Jana", role: "Professor, EE", tag: "Member", photo: "/administration/admin-lcommittee-photo/image copy 2.png" },
+    { name: "Dr. Tapas Kumar Patra", role: "Professor, I & E", tag: "Member", photo: "/administration/admin-lcommittee-photo/image copy 2.png" },
+    { name: "Mr. Neelakantha Guru", role: "Asst. Professor, EE", tag: "Coordinator", photo: "/administration/admin-lcommittee-photo/image copy 2.png" }
   ]
 
   return (

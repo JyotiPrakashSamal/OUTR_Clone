@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect, no-unused-vars, no-empty, react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../supabaseClient'
 import Layout from '../components/Layout'
 import { 
@@ -384,8 +385,9 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
         })
         
         const dbIds = new Set(mappedData.map(a => a.id))
+        const dummyIds = new Set(['APP-LR8K3F9J', 'APP-JW9L2X5P', 'APP-HD8V4N7M', 'APP-KM9B4X7D'])
         for (const la of localApps) {
-          if (!dbIds.has(la.id)) {
+          if (!dbIds.has(la.id) && dummyIds.has(la.id)) {
             mergedApps.push(la)
           }
         }
@@ -574,6 +576,8 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
     setApplications(updatedList)
     localStorage.setItem('OUTR_APPLICATIONS', JSON.stringify(updatedList))
   }
+
+
 
   // Handle File Uploads (Drag & Drop or Selection)
   const handleStudentFileSelect = (e) => {
@@ -1837,8 +1841,8 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
           ==================================================================== */}
 
       {/* 1. File Viewer Modal */}
-      {showFileModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans">
+      {showFileModal && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans">
           <div className="bg-white rounded-3xl border border-slate-200 max-w-3xl w-full p-6 shadow-2xl relative space-y-4">
             <button 
               onClick={() => { setShowFileModal(false); setActiveFile(null); }}
@@ -1864,12 +1868,13 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 2. Decision Review Form Modal */}
-      {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans text-left">
+      {showReviewModal && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans text-left">
           <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl relative space-y-6">
             <button 
               onClick={() => setShowReviewModal(false)}
@@ -1935,98 +1940,102 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 3. Official Stamped Order Document Modal */}
-      {showDocModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans">
-          <div className="bg-white rounded-3xl border border-slate-200 max-w-xl w-full p-6 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto text-left">
+      {showDocModal && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans">
+          <div className="bg-white rounded-3xl border border-slate-200 max-w-xl w-full p-6 shadow-2xl relative flex flex-col max-h-[90vh] text-left">
             <button 
               onClick={() => { setShowDocModal(false); setDocApp(null); }}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
+              className="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
             
-            <div className="border border-slate-200 p-6 rounded-2xl bg-white space-y-6">
-              {/* Document Header */}
-              <div className="text-center border-b-2 border-slate-800 pb-3 flex flex-col items-center">
-                <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" className="w-10 h-10 object-contain mb-1" />
-                <h4 className="font-serif font-black text-sm uppercase text-slate-800 leading-tight">Odisha University of Technology and Research</h4>
-                <p className="text-[8px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Techno Campus, Ghatikia, Bhubaneswar - 751003</p>
-                <p className="text-[7px] text-[#0b3c5d] font-bold tracking-widest uppercase mt-1">Office of the Academics Resolution Cell</p>
-              </div>
+            <div className="overflow-y-auto pr-1 space-y-6 flex-grow">
+              <div className="border border-slate-200 p-6 rounded-2xl bg-white space-y-6">
+                {/* Document Header */}
+                <div className="text-center border-b-2 border-slate-800 pb-3 flex flex-col items-center">
+                  <img src="https://outr.ac.in/public/uploads/logo_4.png" alt="OUTR Seal" className="w-10 h-10 object-contain mb-1" />
+                  <h4 className="font-serif font-black text-sm uppercase text-slate-800 leading-tight">Odisha University of Technology and Research</h4>
+                  <p className="text-[8px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Techno Campus, Ghatikia, Bhubaneswar - 751003</p>
+                  <p className="text-[7px] text-[#0b3c5d] font-bold tracking-widest uppercase mt-1">Office of the Academics Resolution Cell</p>
+                </div>
 
-              {/* Reference */}
-              <div className="flex justify-between items-center text-[8.5px] text-slate-500 font-bold">
-                <span>REF NO: OUTR/ARC/2026/{docApp?.id}</span>
-                <span>DATE: {new Date(docApp?.resolved_at || docApp?.submitted_at).toLocaleDateString()}</span>
-              </div>
+                {/* Reference */}
+                <div className="flex justify-between items-center text-[8.5px] text-slate-500 font-bold">
+                  <span>REF NO: OUTR/ARC/2026/{docApp?.id}</span>
+                  <span>DATE: {new Date(docApp?.resolved_at || docApp?.submitted_at).toLocaleDateString()}</span>
+                </div>
 
-              {/* Subject */}
-              <h5 className="font-serif font-black text-xs text-center uppercase underline tracking-wide text-primary">
-                Subject: Resolution Order regarding {docApp?.type?.toUpperCase()}
-              </h5>
+                {/* Subject */}
+                <h5 className="font-serif font-black text-xs text-center uppercase underline tracking-wide text-primary">
+                  Subject: Resolution Order regarding {docApp?.type?.toUpperCase()}
+                </h5>
 
-              {/* Document Copy */}
-              <p className="text-xs text-slate-700 leading-relaxed font-medium">
-                This official resolution statement is issued to <strong className="font-bold text-primary">{capitalizeName(docApp?.student_name)}</strong>, registration roll number <strong className="font-bold text-slate-800">#{docApp?.regd_no}</strong>, pursuing course work under <strong className="font-bold text-slate-800">{docApp?.program}</strong> in the department of <strong className="font-bold text-slate-800">{docApp?.school_name}</strong>.
-              </p>
-
-              <div className="p-3 bg-slate-50 border-l-2 border-slate-400 text-[10px] italic text-slate-500 font-medium leading-relaxed rounded-r-xl">
-                "Applicant Statement: {docApp?.description}"
-              </div>
-
-              <p className="text-xs text-slate-700 leading-relaxed font-medium">
-                The academic approval cell has reviewed the evaluations submitted by the Faculty Advisor and verified by the Head of School. It is hereby resolved that the request for <strong>{docApp?.type}</strong> stands 
-                <strong className={`font-black uppercase ml-1 ${docApp?.status === 'resolved' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                  {docApp?.status === 'resolved' ? 'APPROVED' : 'DECLINED'}
-                </strong>.
-              </p>
-
-              {docApp?.controller_comment && (
+                {/* Document Copy */}
                 <p className="text-xs text-slate-700 leading-relaxed font-medium">
-                  <strong>Special Directives / Conditions:</strong> "{docApp.controller_comment}"
+                  This official resolution statement is issued to <strong className="font-bold text-primary">{capitalizeName(docApp?.student_name)}</strong>, registration roll number <strong className="font-bold text-slate-800">#{docApp?.regd_no}</strong>, pursuing course work under <strong className="font-bold text-slate-800">{docApp?.program}</strong> in the department of <strong className="font-bold text-slate-800">{docApp?.school_name}</strong>.
                 </p>
-              )}
 
-              {/* Signatures */}
-              <div className="flex justify-between items-end pt-6">
-                {/* Stamp */}
-                <div className="border border-emerald-500 text-emerald-500 border-dashed rounded-full w-14 h-14 flex flex-col items-center justify-center text-[5px] font-black text-center transform -rotate-12 opacity-85 bg-emerald-50/20">
-                  <span>OUTR</span>
-                  <span className="border-t border-b border-emerald-500 py-0.5 my-0.5 px-0.5">APPROVED</span>
-                  <span>ACADEMICS</span>
+                <div className="p-3 bg-slate-50 border-l-2 border-slate-400 text-[10px] italic text-slate-500 font-medium leading-relaxed rounded-r-xl">
+                  "Applicant Statement: {docApp?.description}"
                 </div>
 
-                {/* Stamped signature */}
-                <div className="text-right text-[9px] font-bold text-slate-800">
-                  <div className="border-t border-slate-400 w-28 ml-auto mb-1.5"></div>
-                  <div>
-                    {docApp?.forwarded_to === 'dean_pga' ? 'Dr. Debabrata Dhupal' : docApp?.forwarded_to === 'dean_academic' ? 'Dr. Ranjan Kumar Senapati' : 'Dr. Anupama Rath'}
+                <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                  The academic approval cell has reviewed the evaluations submitted by the Faculty Advisor and verified by the Head of School. It is hereby resolved that the request for <strong>{docApp?.type}</strong> stands 
+                  <strong className={`font-black uppercase ml-1 ${docApp?.status === 'resolved' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    {docApp?.status === 'resolved' ? 'APPROVED' : 'DECLINED'}
+                  </strong>.
+                </p>
+
+                {docApp?.controller_comment && (
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                    <strong>Special Directives / Conditions:</strong> "{docApp.controller_comment}"
+                  </p>
+                )}
+
+                {/* Signatures */}
+                <div className="flex justify-between items-end pt-6">
+                  {/* Stamp */}
+                  <div className="border border-emerald-500 text-emerald-500 border-dashed rounded-full w-14 h-14 flex flex-col items-center justify-center text-[5px] font-black text-center transform -rotate-12 opacity-85 bg-emerald-50/20">
+                    <span>OUTR</span>
+                    <span className="border-t border-b border-emerald-500 py-0.5 my-0.5 px-0.5">APPROVED</span>
+                    <span>ACADEMICS</span>
                   </div>
-                  <div className="text-[6.5px] text-slate-500 uppercase font-semibold mt-0.5 leading-none">
-                    {docApp?.forwarded_to === 'dean_pga' ? 'Dean, Post Graduate Affairs' : docApp?.forwarded_to === 'dean_academic' ? 'Dean, Academic Affairs' : 'Exam Controller'}
+
+                  {/* Stamped signature */}
+                  <div className="text-right text-[9px] font-bold text-slate-800">
+                    <div className="border-t border-slate-400 w-28 ml-auto mb-1.5"></div>
+                    <div>
+                      {docApp?.forwarded_to === 'dean_pga' ? 'Dr. Debabrata Dhupal' : docApp?.forwarded_to === 'dean_academic' ? 'Dr. Ranjan Kumar Senapati' : 'Dr. Anupama Rath'}
+                    </div>
+                    <div className="text-[6.5px] text-slate-500 uppercase font-semibold mt-0.5 leading-none">
+                      {docApp?.forwarded_to === 'dean_pga' ? 'Dean, Post Graduate Affairs' : docApp?.forwarded_to === 'dean_academic' ? 'Dean, Academic Affairs' : 'Exam Controller'}
+                    </div>
+                    <div className="text-[5.5px] text-slate-400">Odisha University of Tech &amp; Research</div>
                   </div>
-                  <div className="text-[5.5px] text-slate-400">Odisha University of Tech &amp; Research</div>
                 </div>
               </div>
-            </div>
 
-            <button
-              onClick={() => handlePrintOfficialDoc(docApp)}
-              className="btn-brand-primary w-full shadow-md py-3.5 uppercase text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <Printer className="w-4 h-4" /> Print Resolution Order
-            </button>
+              <button
+                onClick={() => handlePrintOfficialDoc(docApp)}
+                className="btn-brand-primary w-full shadow-md py-3.5 uppercase text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Printer className="w-4 h-4" /> Print Resolution Order
+              </button>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 4. Controller Attachments Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans text-left">
+      {showUploadModal && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans text-left">
           <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl relative space-y-6">
             <button 
               onClick={() => setShowUploadModal(false)}
@@ -2078,16 +2087,19 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               </div>
 
               <div>
-                <label className="block uppercase tracking-wider text-[10px] mb-1.5 block">Select File (PDF/Image max 10MB) *</label>
-                <div className="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50 relative cursor-pointer group">
+                <label className="block uppercase tracking-wider text-[10px] mb-1.5">Select File (PDF/Image max 10MB) *</label>
+                <div 
+                  onClick={() => document.getElementById('ctrl_file_upload')?.click()}
+                  className="border-2 border-dashed border-slate-200 hover:border-accent/40 rounded-2xl p-6 text-center cursor-pointer transition-all bg-slate-50 hover:bg-slate-50/50 flex flex-col items-center justify-center min-h-[90px]"
+                >
                   <input 
                     type="file" id="ctrl_file_upload" accept="application/pdf,image/*"
                     onChange={handleCtrlFileUpload}
-                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    className="hidden"
                   />
                   {uploadFile ? (
-                    <span className="text-primary font-bold text-[10px] flex items-center justify-center gap-1">
-                      <Paperclip className="w-3.5 h-3.5 text-slate-500" /> Selected: <span className="underline">{uploadFile.name}</span>
+                    <span className="text-[#0b3c5d] font-bold text-xs flex items-center gap-1.5 truncate max-w-[280px]">
+                      <Paperclip className="w-4 h-4 shrink-0 text-accent" /> {uploadFile.name}
                     </span>
                   ) : (
                     <span className="text-slate-400 font-semibold text-[10px] block flex flex-col items-center gap-1.5">
@@ -2106,12 +2118,13 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 5. Custom Reusable Alert/Dialog Modal */}
-      {customModal.show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans">
+      {customModal.show && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-sans">
           <div className="bg-white rounded-3xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl text-center space-y-4 relative overflow-hidden">
             {customModal.type === 'confirm' ? (
               <>
@@ -2158,17 +2171,21 @@ export default function FileTrackingDashboard({ role, onSignOut, onNavigate, ses
               </>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 6. Push notifications toast container */}
-      <div className="fixed bottom-4 left-4 z-50 space-y-2.5 max-w-sm w-full font-sans select-none pointer-events-none">
-        {toasts.map(t => (
-          <div key={t.id} className="p-3.5 bg-slate-900/95 text-white border border-slate-700/80 rounded-2xl shadow-xl flex items-center gap-3 animate-shake pointer-events-auto">
-            <span className="text-xs font-semibold leading-snug">{t.text}</span>
-          </div>
-        ))}
-      </div>
+      {createPortal(
+        <div className="fixed bottom-4 left-4 z-[2000] space-y-2.5 max-w-sm w-full font-sans select-none pointer-events-none">
+          {toasts.map(t => (
+            <div key={t.id} className="p-3.5 bg-slate-900/95 text-white border border-slate-700/80 rounded-2xl shadow-xl flex items-center gap-3 animate-shake pointer-events-auto">
+              <span className="text-xs font-semibold leading-snug">{t.text}</span>
+            </div>
+          ))}
+        </div>,
+        document.body
+      )}
 
     </Layout>
   )

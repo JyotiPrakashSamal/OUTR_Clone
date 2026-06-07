@@ -1,4 +1,4 @@
-# OUTR Portal — Netlify Deployment Guide
+# OUTR Portal - Netlify Deployment Guide
 
 ## What gets deployed
 
@@ -6,7 +6,7 @@ Only the **`frontend/`** folder is built and published. Netlify serves the Vite 
 
 | Content | Examples |
 |---------|----------|
-| React SPA | `index.html`, JS/CSS bundles — portal, dashboards, institutional React pages |
+| React SPA | `index.html`, JS/CSS bundles - portal, dashboards, institutional React pages |
 | Static marketing site | `home.html`, `social.html`, school pages, committee HTML |
 | Assets | Images, JSON data, `style.css` |
 
@@ -34,7 +34,7 @@ You do **not** deploy `Phase-1 Integration/` (legacy copy; removed from the acti
 
 ---
 
-## Supabase — run once, not on every deploy
+## Supabase - run once, not on every deploy
 
 Database schema is **not** executed by Netlify. You configure Supabase **once** per project (or when schema changes).
 
@@ -58,7 +58,7 @@ Database schema is **not** executed by Netlify. You configure Supabase **once** 
 
 | Situation | Action |
 |-----------|--------|
-| New Netlify deploy / code push | **Nothing** — same Supabase project, same data |
+| New Netlify deploy / code push | **Nothing** - same Supabase project, same data |
 | New teammate / new environment | Point `.env` / Netlify env vars to the **same** or a **new** Supabase project; if new project, run `supabase_schema.sql` once |
 | You change tables or RLS in code | Run an **incremental** migration SQL in Supabase (update `supabase_schema.sql` in repo for documentation) |
 
@@ -86,8 +86,8 @@ npm run dev
 - [ ] `supabase_schema.sql` executed on shared Supabase project  
 - [ ] At least one admin user exists  
 - [ ] Auth redirect URLs include the Netlify domain  
-- [ ] Visit `/` — should show university homepage  
-- [ ] Visit `/portal?role=student` — desk pre-selected  
+- [ ] Visit `/` - should show university homepage  
+- [ ] Visit `/portal?role=student` - desk pre-selected  
 - [ ] Placeholder links (Careers, Tenders, etc.) open **Coming soon** page  
 
 ### Dev login shortcuts (after users exist in Supabase)

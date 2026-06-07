@@ -70,8 +70,8 @@ OUTR_Clone/
 │       ├── style.css                  # Global styles for static pages
 │       ├── navbar-footer-loader.js    # Unified nav/footer injector for sub-pages
 │       ├── data/                      # JSON content (home, footer, i18n locales)
-│       ├── OUTR website/              # School pages, courses, faculty, images
-│       ├── Student and Event/         # Campus facilities, hostel pages
+│       ├── outr-website/              # School pages, courses, faculty, images
+│       ├── student-and-event/         # Campus facilities, hostel pages
 │       └── administration/            # Committee pages + member photos
 │
 ├── docs/                              # Architecture notes
@@ -116,9 +116,9 @@ npm run lint     # ESLint checks
 ## 👥 The Development Team
 
 - **Jyoti Prakash Samal** ([@JyotiPrakashSamal](https://github.com/JyotiPrakashSamal)) — Repository Owner. Homepage, global search, i18n, React SPA architecture, CI/CD, and deployment.
-- **Amrita Sahu** ([@AmritaSahu25](https://github.com/AmritaSahu25)) — Core Contributor. `OUTR website/` module: departments, courses, location, and faculty profiles.
+- **Amrita Sahu** ([@AmritaSahu25](https://github.com/AmritaSahu25)) — Core Contributor. `outr-website/` module: departments, courses, location, and faculty profiles.
 - **Rama** ([@Rama-Desk](https://github.com/Rama-Desk)) — Core Contributor. `administration/` module: governance desks, committees, admit cards, and results.
-- **Sonali Gupta** ([@sonaligupta-04047](https://github.com/sonaligupta-04047)) — Core Contributor. `Student and Event/` module: campus facilities, hostels, and student life.
+- **Sonali Gupta** ([@sonaligupta-04047](https://github.com/sonaligupta-04047)) — Core Contributor. `student-and-event/` module: campus facilities, hostels, and student life.
 
 ---
 

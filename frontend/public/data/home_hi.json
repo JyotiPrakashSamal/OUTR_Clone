@@ -39,48 +39,48 @@
   "gallery": [
     {
       "group": "कैंपस",
-      "cover": "OUTR website/images/gallery/clg.jpg",
+      "cover": "outr-website/images/gallery/clg.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg.jpg", "label": "मुख्य भवन - हवाई दृश्य" },
-        { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "कैंपस मैदान" }
+        { "image": "outr-website/images/gallery/clg.jpg", "label": "मुख्य भवन - हवाई दृश्य" },
+        { "image": "outr-website/images/gallery/clg 2.jpg", "label": "कैंपस मैदान" }
       ]
     },
     {
       "group": "कार्यक्रम",
-      "cover": "OUTR website/images/gallery/event.jpg",
+      "cover": "outr-website/images/gallery/event.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/event.jpg", "label": "उद्घाटन समारोह" },
-        { "image": "OUTR website/images/gallery/event 2.jpg", "label": "सांस्कृतिक उत्सव" },
-        { "image": "OUTR website/images/gallery/event 3.jpg", "label": "टेक फेस्ट कार्यक्रम" },
-        { "image": "OUTR website/images/gallery/function.jpg", "label": "वार्षिक दीक्षांत समारोह" },
-        { "image": "OUTR website/images/gallery/function 2.jpg", "label": "आधिकारिक उद्घाटन समारोह" }
+        { "image": "outr-website/images/gallery/event.jpg", "label": "उद्घाटन समारोह" },
+        { "image": "outr-website/images/gallery/event 2.jpg", "label": "सांस्कृतिक उत्सव" },
+        { "image": "outr-website/images/gallery/event 3.jpg", "label": "टेक फेस्ट कार्यक्रम" },
+        { "image": "outr-website/images/gallery/function.jpg", "label": "वार्षिक दीक्षांत समारोह" },
+        { "image": "outr-website/images/gallery/function 2.jpg", "label": "आधिकारिक उद्घाटन समारोह" }
       ]
     },
     {
       "group": "कैंपस जीवन",
-      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "cover": "outr-website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग - शाम का दृश्य" },
-        { "image": "OUTR website/images/gallery/dance.jpg", "label": "पारंपरिक नृत्य प्रदर्शन" },
-        { "image": "OUTR website/images/gallery/dj.jpg", "label": "डीजे नाइट और सांस्कृतिक उत्सव" }
+        { "image": "outr-website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग - शाम का दृश्य" },
+        { "image": "outr-website/images/gallery/dance.jpg", "label": "पारंपरिक नृत्य प्रदर्शन" },
+        { "image": "outr-website/images/gallery/dj.jpg", "label": "डीजे नाइट और सांस्कृतिक उत्सव" }
       ]
     },
     {
       "group": "नाइट लाइफ",
-      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "cover": "outr-website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग - रात्रि दृश्य" },
-        { "image": "OUTR website/images/gallery/dj.jpg", "label": "डीजे नाइट और उत्सव" },
-        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "वार्षिक महोत्सव - XTASY नाइट कॉन्सर्ट" },
-        { "image": "OUTR website/images/gallery/dance.jpg", "label": "सांस्कृतिक रात्रि प्रदर्शन" }
+        { "image": "outr-website/images/gallery/clg night.jpg", "label": "कैंपस मार्ग - रात्रि दृश्य" },
+        { "image": "outr-website/images/gallery/dj.jpg", "label": "डीजे नाइट और उत्सव" },
+        { "image": "outr-website/images/gallery/xtasy function.jpg", "label": "वार्षिक महोत्सव - XTASY नाइट कॉन्सर्ट" },
+        { "image": "outr-website/images/gallery/dance.jpg", "label": "सांस्कृतिक रात्रि प्रदर्शन" }
       ]
     },
     {
       "group": "खेलकूद",
-      "cover": "OUTR website/images/gallery/sports.jpg",
+      "cover": "outr-website/images/gallery/sports.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/sports.jpg", "label": "वार्षिक खेलकूद प्रतियोगिता" },
-        { "image": "OUTR website/images/gallery/sports 2.jpg", "label": "एथलेटिक्स प्रतियोगिता" }
+        { "image": "outr-website/images/gallery/sports.jpg", "label": "वार्षिक खेलकूद प्रतियोगिता" },
+        { "image": "outr-website/images/gallery/sports 2.jpg", "label": "एथलेटिक्स प्रतियोगिता" }
       ]
     }
   ],
@@ -104,13 +104,13 @@
         { "label": "होम", "href": "#hero" },
         { "label": "OUTR के बारे में", "href": "/about" },
         { "label": "प्रवेश", "href": "https://ojee.nic.in/" },
-        { "label": "आरटीआई", "href": "https://rti.gov.in/" },
+        { "label": "आरटीआई", "href": "/coming-soon.html?title=RTI" },
         { "label": "करियर", "href": "/coming-soon.html?title=Careers" },
         { "label": "निविदाएं", "href": "/coming-soon.html?title=Tenders" },
         { "label": "एनआईआरएफ डेटा", "href": "https://www.nirfindia.org/" }
       ],
       "academics": [
-        { "label": "पाठ्यक्रमों की पेशकश", "href": "OUTR website/schools.html" },
+        { "label": "पाठ्यक्रमों की पेशकश", "href": "outr-website/schools.html" },
         { "label": "यूजी सिलेबस", "href": "/syllabus" },
         { "label": "पीजी सिलेबस", "href": "/syllabus" },
         { "label": "अकादमिक कैलेंडर", "href": "/coming-soon.html?title=Academic%20Calendar" },
@@ -128,6 +128,6 @@
     },
     "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },
     "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
-    "copyright": "© 2025 ओडिशा प्रौद्योगिकी और अनुसंधान विश्वविद्यालय। सर्वाधिकार सुरक्षित।"
+    "copyright": "© 2026 ओडिशा प्रौद्योगिकी और अनुसंधान विश्वविद्यालय। सर्वाधिकार सुरक्षित। • Made by Amrita, Ramakanta, Sonali and Jyoti"
   }
 }

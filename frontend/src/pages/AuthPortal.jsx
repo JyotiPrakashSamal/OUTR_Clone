@@ -170,7 +170,7 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
             <div className="relative z-10 flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-0.5 shadow-sm active:scale-95 transition-transform duration-200 cursor-pointer">
                 <img 
-                  src="/OUTR website/images/outrLogo.png" 
+                  src="/outr-website/images/outrLogo.png" 
                   alt="OUTR Logo" 
                   onClick={handleLogoClick}
                   className="w-full h-full object-contain select-none"
@@ -345,9 +345,9 @@ export default function AuthPortal({ onLoginSuccess, initialRole }) {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 px-4 border-t border-slate-200/60 bg-white/50 text-center text-xs text-muted select-text">
-        <div>&copy; {new Date().getFullYear()} Odisha University of Technology and Research. All Rights Reserved.</div>
-        <div className="mt-1 text-slate-400">Security Standard: Supabase Auth v2 (Bcrypt Hashed)</div>
+      <footer className="py-6 px-4 border-t border-slate-200/60 bg-white/50 text-center text-xs text-muted select-text flex flex-col sm:flex-row justify-between items-center gap-2 max-w-7xl mx-auto w-full">
+        <div>&copy; 2026 Odisha University of Technology and Research. All Rights Reserved.</div>
+        <div className="text-[10px] text-slate-400">Made by Amrita, Ramakanta, Sonali and Jyoti</div>
       </footer>
     </div>
   )

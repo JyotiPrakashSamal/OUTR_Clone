@@ -136,10 +136,10 @@ export default function Footer() {
             Academics
           </h4>
           <ul className="space-y-3.5 p-0 m-0 list-none text-xs text-[#8ca8c0]">
-            <li><a href="/OUTR website/schools.html" className="hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
+            <li><a href="/outr-website/schools.html" className="hover:text-white transition-colors no-underline">8 Schools Desk</a></li>
             <li><a href="/syllabus" className="hover:text-white transition-colors no-underline">UG/PG Course Syllabus</a></li>
             <li><a href="/portal?view=coe-desk" className="hover:text-white transition-colors no-underline">Controller of Exam</a></li>
-            <li><a href="/Student and Event/Hostel/hostel.html" className="hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
+            <li><a href="/student-and-event/Hostel/hostel.html" className="hover:text-white transition-colors no-underline">Hostels Allocation</a></li>
           </ul>
         </div>
  
@@ -163,8 +163,9 @@ export default function Footer() {
       </div>
 
       {/* Copyright Bottom */}
-      <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 text-center text-xs text-slate-500 font-semibold">
-        &copy; {new Date().getFullYear()} Odisha University of Technology and Research. All Rights Reserved. &bull; Bhubaneswar, Odisha
+      <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 text-center text-xs text-slate-500 font-semibold flex flex-col sm:flex-row justify-between items-center gap-2">
+        <span>&copy; 2026 Odisha University of Technology and Research. All Rights Reserved. &bull; Bhubaneswar, Odisha</span>
+        <span className="text-[10px] text-slate-600 font-medium">Made by Amrita, Ramakanta, Sonali and Jyoti</span>
       </div>
 
     </footer>

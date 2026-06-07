@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 export default function HODDesk() {
   const [selectedSchool, setSelectedSchool] = useState('all')
@@ -190,7 +191,7 @@ export default function HODDesk() {
       role: 'Professor',
       phone: '+91-9437360517',
       email: 'rkdash@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image.png',
+      photo: '/administration/admin-hod-photo/image.png',
       location: 'CS Department Block',
       about: 'He is currently a Professor in the Department of Computer Science and Application. He has a genuine passion for learning and actively mentors students in project and research work. He has more than 50 publications in different international journals/conferences.',
       education: ['Ph.D.', 'M.Tech', 'B.Tech'],
@@ -201,7 +202,7 @@ export default function HODDesk() {
       ],
       researchInterests: ['Network Reliability', 'Graph Theory', 'Interconnection Networks'],
       experience: '23 years of teaching experience out of which 15 years of teaching experience at CET/OUTR',
-      researchGuidance: 'Ph.D. - 3 students (awarded) and 1 student (ongoing); M.Tech – 10 students (awarded) and 1 student (ongoing)'
+      researchGuidance: 'Ph.D. - 3 students (awarded) and 1 student (ongoing); M.Tech - 10 students (awarded) and 1 student (ongoing)'
     },
     {
       id: 'mech',
@@ -212,13 +213,13 @@ export default function HODDesk() {
       role: 'Associate Professor, Mechanical',
       phone: '+91-9337645056',
       email: 'sudhansu@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy.png',
+      photo: '/administration/admin-hod-photo/image copy.png',
       location: 'Mechanical Department Block',
       about: "Dr. Sudhansu Sekhar Sahoo, presently working as Professor in the School of Mechanical Sciences at Odisha University of Technology and Research (OUTR), Bhubaneswar. He obtained his B.E. in Mechanical Engineering from UCE Burla, M.Tech in Thermal Engineering from IIT Delhi under GATE Fellowship, and PhD in Renewable Energy from IIT Bombay under QIP Fellowship. His PhD work was related to modelling and analysis of linear Fresnel reflector-based solar thermal power plants.\n\nHe was the recipient of the prestigious Bhaskara Advanced Solar Energy (BASE) Fellowship Program-2017, sponsored by DST and IUSSTF. He has received various awards including Best International Faculty Award (2017), Green Award by NALCO India (2019), Faculty Research Awards from BPUT Odisha (2019) and OUTR (2023, 2024). He has secured a spot among the world's top 2% of Scientists recognized by Stanford University for the year 2024. He has published more than 90 papers in International Journals and more than 15 books/book chapters. The Indian Patent Office has granted him over 35 Patents/Designs.",
       education: [
-        'Ph.D. – Renewable Energy, IIT Bombay',
-        'M.Tech – Thermal Engineering, IIT Delhi',
-        'B.E. – Mechanical Engineering, UCE Burla (VSSUT)'
+        'Ph.D. - Renewable Energy, IIT Bombay',
+        'M.Tech - Thermal Engineering, IIT Delhi',
+        'B.E. - Mechanical Engineering, UCE Burla (VSSUT)'
       ],
       publications: [
         'Impact of wind velocity and angle of attack on restricting input heat flow for solar-assisted thermoelectric power generator with plate heat sink with cylindrical fins (2026)',
@@ -240,13 +241,13 @@ export default function HODDesk() {
       role: 'Professor',
       phone: '+91-9438324244',
       email: 'lokanath@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy 2.png',
+      photo: '/administration/admin-hod-photo/image copy 2.png',
       location: 'Electrical Department Block',
       about: 'Dr. Lokanath Tripathy is currently serving as Professor & Head, School of Electrical Sciences, OUTR, Bhubaneswar since 2018. He completed his PhD from IIT Bhubaneswar in Power System Protection (2014), M.Tech from IISc Bangalore in Computer Aided Power System Analysis (2005), and B.Tech from IGIT Sarang (1993). He has 25 years of teaching experience and 4 years of industry experience. He has published more than 55 research papers and guided 20 M.Tech students and 2 PhD students, with 4 more PhD students currently under his guidance.\n\nHe has received the Best Performance Award from Reliance Filament Ltd. (1996), the Best Engineer Award from Petrofils Cooperatives (1997) and the prestigious POSOCO-2016 Award for Doctoral Category from Power System Operation Corporation, Govt. of India. He is an executive member of IEEE, Life member of ISTE New Delhi, and fellow of Institute of Engineers.',
       education: [
-        'Ph.D. – Power System Protection, IIT Bhubaneswar, 2014',
-        'M.Tech – Computer Aided Power System Analysis, IISc Bangalore, 2005',
-        'B.Tech – Electrical, IGIT Sarang, 1993'
+        'Ph.D. - Power System Protection, IIT Bhubaneswar, 2014',
+        'M.Tech - Computer Aided Power System Analysis, IISc Bangalore, 2005',
+        'B.Tech - Electrical, IGIT Sarang, 1993'
       ],
       publications: [
         'An efficient robust optimized functional link broad learning system for solar irradiance prediction (2022)',
@@ -269,13 +270,13 @@ export default function HODDesk() {
       role: 'Associate Professor, E & I Engg.',
       phone: '+91-9437295015',
       email: 'mctripathy@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy 3.png',
+      photo: '/administration/admin-hod-photo/image copy 3.png',
       location: 'Electronics Department Block',
       about: 'Dr. Madhab Chandra Tripathy is currently serving as Professor & Head, School of Electronic Sciences, OUTR, Bhubaneswar. He completed his Ph.D. from IIT Kharagpur (Electrical Engineering, 2014), M.Tech from IIEST West Bengal (Electronics & Communication), and B.Tech from College of Engineering & Technology, Bhubaneswar (1996). He has 27 years of teaching experience. He received the Armen H. Zemanin Best Paper Award in circuits and systems (2013) and three IEEE Best Paper Awards (ICDCECE 2022, SSITCON 2024, iCONNECT 2025). He is a Life member of ISTE, member of IEEE, and fellow of Institute of Engineers. He has published more than 45 research papers and guided 22 M.Tech and 3 PhD students, with 5 more PhD students ongoing.',
       education: [
-        'Ph.D. – Electrical Engineering, IIT Kharagpur, 2014',
-        'M.Tech – Electronics & Communication Engineering, IIEST, West Bengal',
-        'B.Tech – Electronics Engineering, CET Bhubaneswar, 1996'
+        'Ph.D. - Electrical Engineering, IIT Kharagpur, 2014',
+        'M.Tech - Electronics & Communication Engineering, IIEST, West Bengal',
+        'B.Tech - Electronics Engineering, CET Bhubaneswar, 1996'
       ],
       publications: [
         'FOPID-Based Soft-Switching Boost Converter for Improved Power Factor, EMI Reduction, and Enhanced System Stability (2026)',
@@ -283,7 +284,7 @@ export default function HODDesk() {
       ],
       researchInterests: ['Fractional-Order Circuits', 'Signal Processing', 'Sensors & Instrumentation Systems'],
       patents: [
-        'Electromagnetic thin film propulsion – Patent No. 435958',
+        'Electromagnetic thin film propulsion - Patent No. 435958',
         'Design: Water efficient sensor cum mechanical based commode'
       ]
     },
@@ -296,7 +297,7 @@ export default function HODDesk() {
       role: 'Professor',
       phone: '+91-9658728145',
       email: 'asimte@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy 4.png',
+      photo: '/administration/admin-hod-photo/image copy 4.png',
       location: 'Textile Block',
       about: 'HOD, Textile Engineering. Innovation Ambassador, IIC-MHRD. SPOC, ICT Sophisticated Lab.',
       education: ['Ph.D.', 'M.Tech', 'B.Tech'],
@@ -314,7 +315,7 @@ export default function HODDesk() {
       role: 'Professor, Chemistry',
       phone: '+91-9437182654',
       email: 'brdas@cet.edu.in',
-      photo: '/administration/admin_hod_photo/image copy 5.png',
+      photo: '/administration/admin-hod-photo/image copy 5.png',
       location: 'Basic Sciences & Humanities Block',
       about: 'Head, School of Basic Sciences and Humanities. Professor in the Department of Chemistry at OUTR, Bhubaneswar.',
       education: ['Ph.D.', 'M.Tech', 'B.Tech'],
@@ -337,7 +338,7 @@ export default function HODDesk() {
       role: 'Associate Professor, Physics',
       phone: '+91-9861387760',
       email: 'babitaojhacet@gmail.com',
-      photo: '/administration/admin_hod_photo/profile-picture.png',
+      photo: '/administration/admin-hod-photo/profile-picture.png',
       location: 'Basic Sciences & Humanities Block',
       about: 'Dr. Babita Ojha is currently an Associate Professor of Physics at the School of Basic Sciences & Humanities, Odisha University of Technology and Research, Bhubaneswar. She obtained her M.Sc. from Utkal University and PhD degrees in Physics from Sambalpur University, Odisha, India.',
       researchInterests: ['Dielectric', 'Optical', 'Magnetic', 'Condensed Matter Physics of Nanomaterials (Spinel Ferrites & Perovskites)'],
@@ -354,7 +355,7 @@ export default function HODDesk() {
       role: 'Assistant Professor, English',
       phone: '+91-9861089261',
       email: 'mpmishra@cet.edu.in',
-      photo: '/administration/admin_hod_photo/profile-picture.png',
+      photo: '/administration/admin-hod-photo/profile-picture.png',
       location: 'Basic Sciences & Humanities Block',
       about: 'Minakshi Prasad Mishra completed his Post Graduation in English from Berhampur University in the year 2000 and later completed his Ph.D in English Literature from Berhampur University. He has nearly 20 years of teaching experience in institutions of repute. He is working in the Department of Humanities, School of Basic Sciences and Humanities since 2013.\n\nHe has been a visiting faculty to Institute of Management Technology, Nagpur and adjunct faculty to IISER, Berhampur. He teaches courses like English for Communication, English for Technical Writing, Communication and Report Writing, English for Research Paper Writing as well as Research and Publication Ethics to Ph.D students of the University.',
       researchInterests: [
@@ -374,7 +375,7 @@ export default function HODDesk() {
       role: 'Assistant Professor, Mathematics',
       phone: '+91-9437211153',
       email: 'mishrapkdr@gmail.com',
-      photo: '/administration/admin_hod_photo/image copy 6.png',
+      photo: '/administration/admin-hod-photo/image copy 6.png',
       location: 'Basic Sciences & Humanities Block',
       about: 'Associate Head in the School of Basic Sciences & Humanities, Assistant Professor of Mathematics.',
       designation: 'Assistant Professor, Mathematics'
@@ -388,7 +389,7 @@ export default function HODDesk() {
       role: 'Associate Professor',
       phone: '+91-8917558334',
       email: 'rkpradhan@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy 7.png',
+      photo: '/administration/admin-hod-photo/image copy 7.png',
       location: 'Biotechnology Block',
       about: 'Dr. Ranjan Kumar Pradhan is serving as Head, School of Biotechnology & Biomedical Engineering, OUTR, Bhubaneswar. Associate Professor, School of Biotechnology & Biomedical Engineering.'
     },
@@ -401,7 +402,7 @@ export default function HODDesk() {
       role: 'Associate Professor',
       phone: '+91-9437374185',
       email: 'sdash@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy 8.png',
+      photo: '/administration/admin-hod-photo/image copy 8.png',
       location: 'Infrastructure & Planning Block',
       about: 'Prof. Sabita Dash is serving as Head, School of Infrastructure & Planning, OUTR, Bhubaneswar. She is an Associate Professor in the School of Infrastructure & Planning.',
       education: [
@@ -426,7 +427,7 @@ export default function HODDesk() {
       role: 'Asst. Professor, Architecture',
       phone: '+91-7873999555',
       email: 'sangramm@gmail.com',
-      photo: '/administration/admin_hod_photo/profile-picture.png',
+      photo: '/administration/admin-hod-photo/profile-picture.png',
       location: 'Infrastructure & Planning Block',
       about: 'Associate Head in the School of Infrastructure & Planning, Assistant Professor of Architecture.'
     },
@@ -439,7 +440,7 @@ export default function HODDesk() {
       role: 'Asst. Professor, Planning',
       phone: '+91-8249242624',
       email: 'bhabaniplanning@outr.ac.in',
-      photo: '/administration/admin_hod_photo/image copy 9.png',
+      photo: '/administration/admin-hod-photo/image copy 9.png',
       location: 'Infrastructure & Planning Block',
       about: 'Associate Head in the School of Infrastructure & Planning. Assistant Professor, Planning.'
     }
@@ -577,7 +578,7 @@ export default function HODDesk() {
       </div>
 
       {/* Details Modal */}
-      {activeModalData && (
+      {activeModalData && createPortal(
         <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 animate-modal-in flex flex-col text-left">
             
@@ -730,7 +731,8 @@ export default function HODDesk() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

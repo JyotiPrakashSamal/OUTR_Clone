@@ -20,7 +20,7 @@
     { "day": "18", "month": "OCT", "title": "Zairzest 2025 - Robotics & Software Exhibition (by Zairza)", "location": "SAC Seminar Hall, OUTR Campus", "color": "var(--primary)", "href": "https://zairza.in/" },
     { "day": "05", "month": "NOV", "title": "Spectrum Hackathon - 36-Hour National Coding Challenge", "location": "School of CSE Lab, Block C", "color": "var(--secondary)", "href": "https://spectrumcet.in/" },
     { "day": "22", "month": "NOV", "title": "WebCraft Bootcamp - Full-Stack Development Workshop (by Zigbee)", "location": "MCA Block Seminar Room", "color": "#1e293b", "href": "https://zigbeeoutr.in/" },
-    { "day": "12", "month": "DEC", "title": "Blue Jay Racing - m-BAJA Motorsports Vehicle Showcase", "location": "Techno Campus Main Ground, OUTR", "color": "var(--accent)", "href": "/Student and Event/Campus_Facilities/CampusLife.html" }
+    { "day": "12", "month": "DEC", "title": "Blue Jay Racing - m-BAJA Motorsports Vehicle Showcase", "location": "Techno Campus Main Ground, OUTR", "color": "var(--accent)", "href": "/student-and-event/Campus_Facilities/CampusLife.html" }
   ],
   "departments": [
     { "icon": "icon-8", "title": "School of Computer Sciences", "subtitle": "CSE - IT - MCA - AI&ML" },
@@ -39,48 +39,48 @@
   "gallery": [
     {
       "group": "Campus",
-      "cover": "OUTR website/images/gallery/clg.jpg",
+      "cover": "outr-website/images/gallery/clg.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg.jpg", "label": "Main Building - Aerial View" },
-        { "image": "OUTR website/images/gallery/clg 2.jpg", "label": "Campus Grounds" }
+        { "image": "outr-website/images/gallery/clg.jpg", "label": "Main Building - Aerial View" },
+        { "image": "outr-website/images/gallery/clg 2.jpg", "label": "Campus Grounds" }
       ]
     },
     {
       "group": "Events",
-      "cover": "OUTR website/images/gallery/event.jpg",
+      "cover": "outr-website/images/gallery/event.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/event.jpg", "label": "Inauguration Ceremony" },
-        { "image": "OUTR website/images/gallery/event 2.jpg", "label": "Cultural Celebration" },
-        { "image": "OUTR website/images/gallery/event 3.jpg", "label": "Tech Fest Event" },
-        { "image": "OUTR website/images/gallery/function.jpg", "label": "Annual Convocation Ceremony" },
-        { "image": "OUTR website/images/gallery/function 2.jpg", "label": "Official Inaugural Function" }
+        { "image": "outr-website/images/gallery/event.jpg", "label": "Inauguration Ceremony" },
+        { "image": "outr-website/images/gallery/event 2.jpg", "label": "Cultural Celebration" },
+        { "image": "outr-website/images/gallery/event 3.jpg", "label": "Tech Fest Event" },
+        { "image": "outr-website/images/gallery/function.jpg", "label": "Annual Convocation Ceremony" },
+        { "image": "outr-website/images/gallery/function 2.jpg", "label": "Official Inaugural Function" }
       ]
     },
     {
       "group": "Campus Life",
-      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "cover": "outr-website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway - Evening View" },
-        { "image": "OUTR website/images/gallery/dance.jpg", "label": "Traditional Dance Performance" },
-        { "image": "OUTR website/images/gallery/dj.jpg", "label": "DJ Night & Cultural Celebration" }
+        { "image": "outr-website/images/gallery/clg night.jpg", "label": "Campus Walkway - Evening View" },
+        { "image": "outr-website/images/gallery/dance.jpg", "label": "Traditional Dance Performance" },
+        { "image": "outr-website/images/gallery/dj.jpg", "label": "DJ Night & Cultural Celebration" }
       ]
     },
     {
       "group": "Night Life",
-      "cover": "OUTR website/images/gallery/clg night.jpg",
+      "cover": "outr-website/images/gallery/clg night.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/clg night.jpg", "label": "Campus Walkway - Night View" },
-        { "image": "OUTR website/images/gallery/dj.jpg", "label": "DJ Night & Celebration" },
-        { "image": "OUTR website/images/gallery/xtasy function.jpg", "label": "Annual Fest - XTASY Night Concert" },
-        { "image": "OUTR website/images/gallery/dance.jpg", "label": "Cultural Night Performance" }
+        { "image": "outr-website/images/gallery/clg night.jpg", "label": "Campus Walkway - Night View" },
+        { "image": "outr-website/images/gallery/dj.jpg", "label": "DJ Night & Celebration" },
+        { "image": "outr-website/images/gallery/xtasy function.jpg", "label": "Annual Fest - XTASY Night Concert" },
+        { "image": "outr-website/images/gallery/dance.jpg", "label": "Cultural Night Performance" }
       ]
     },
     {
       "group": "Sports",
-      "cover": "OUTR website/images/gallery/sports.jpg",
+      "cover": "outr-website/images/gallery/sports.jpg",
       "photos": [
-        { "image": "OUTR website/images/gallery/sports.jpg", "label": "Annual Sports Meet" },
-        { "image": "OUTR website/images/gallery/sports 2.jpg", "label": "Athletics Event" }
+        { "image": "outr-website/images/gallery/sports.jpg", "label": "Annual Sports Meet" },
+        { "image": "outr-website/images/gallery/sports 2.jpg", "label": "Athletics Event" }
       ]
     }
   ],
@@ -104,13 +104,13 @@
         { "label": "Home", "href": "#hero" },
         { "label": "About OUTR", "href": "/about" },
         { "label": "Admissions", "href": "https://ojee.nic.in/" },
-        { "label": "RTI", "href": "https://rti.gov.in/" },
+        { "label": "RTI", "href": "/coming-soon.html?title=RTI" },
         { "label": "Careers", "href": "/coming-soon.html?title=Careers" },
         { "label": "Tenders", "href": "/coming-soon.html?title=Tenders" },
         { "label": "NIRF Data", "href": "https://www.nirfindia.org/" }
       ],
       "academics": [
-        { "label": "Programs Offered", "href": "OUTR website/schools.html" },
+        { "label": "Programs Offered", "href": "outr-website/schools.html" },
         { "label": "UG Syllabus", "href": "/syllabus" },
         { "label": "PG Syllabus", "href": "/syllabus" },
         { "label": "Academic Calendar", "href": "/documents/academic-calendar-2025-26.pdf" },
@@ -128,6 +128,6 @@
     },
     "aqi": { "value": "144", "status": "Poor", "location": "PM2.5 - Bhubaneswar" },
     "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5!2d85.776639!3d20.275845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a7f9d486f7c3%3A0xde71ead59307dcca!2sOdisha%20University%20of%20Technology%20and%20Research!5e0!3m2!1sen!2sin!4v1710000000000",
-    "copyright": "© 2025 Odisha University of Technology and Research. All Rights Reserved."
+    "copyright": "© 2026 Odisha University of Technology and Research. All Rights Reserved. • Made by Amrita, Ramakanta, Sonali and Jyoti"
   }
 }
