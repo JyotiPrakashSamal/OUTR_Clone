@@ -1,0 +1,17 @@
+# Netlify: set Base directory to `frontend` in site settings.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# University marketing homepage at site root
+[[redirects]]
+  from = "/"
+  to = "/home.html"
+  status = 200
+
+# React SPA fallback (static files in dist are served first when they exist)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
