@@ -1,9 +1,5 @@
 # Netlify: set Base directory to `frontend` in site settings.
 
-[build]
-  command = "npm run build"
-  publish = "dist"
-
 # University marketing homepage at site root
 [[redirects]]
   from = "/"

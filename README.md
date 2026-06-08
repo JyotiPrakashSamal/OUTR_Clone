@@ -23,16 +23,15 @@ This project recreates the digital presence of OUTR with a hybrid architecture �
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 19 + React Router v7 |
-| Build Tool | Vite 8 |
-| Styling | Tailwind CSS 4 + Vanilla CSS |
-| Database & Auth | Supabase (PostgreSQL + Auth + Storage + Realtime) |
-| Static Pages | HTML5 + Vanilla JS (homepage, schools, faculty profiles) |
-| Testing | Vitest + React Testing Library |
-| CI/CD | None |
-| Hosting | Netlify (static + SPA) |
+| Layer           | Technology                                               |
+| --------------- | -------------------------------------------------------- |
+| Framework       | React 19 + React Router v7                               |
+| Build Tool      | Vite 8                                                   |
+| Styling         | Tailwind CSS 4 + Vanilla CSS                             |
+| Database & Auth | Supabase (PostgreSQL + Auth + Storage + Realtime)        |
+| Static Pages    | HTML5 + Vanilla JS (homepage, schools, faculty profiles) |
+| Testing         | Vitest + React Testing Library                           |
+| Hosting         | Netlify (static + SPA)                                   |
 
 ---
 
@@ -85,6 +84,7 @@ OUTR_Clone/
 ## 🚀 How to Run Locally
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 
 ### Setup
@@ -97,11 +97,11 @@ npm install
 npm run dev
 ```
 
-| URL | What it shows |
-|-----|---------------|
+| URL                               | What it shows       |
+| --------------------------------- | ------------------- |
 | `http://localhost:5173/home.html` | University homepage |
-| `http://localhost:5173/portal` | Login portal |
-| `http://localhost:5173/about` | About OUTR (React) |
+| `http://localhost:5173/portal`    | Login portal        |
+| `http://localhost:5173/about`     | About OUTR (React)  |
 
 ### Build & Test
 
@@ -115,10 +115,10 @@ npm run lint     # ESLint checks
 
 ## 👥 The Development Team
 
-- **Jyoti Prakash Samal** ([@JyotiPrakashSamal](https://github.com/JyotiPrakashSamal)) — Repository Owner. Homepage, global search, i18n, React SPA architecture, CI/CD, and deployment.
-- **Amrita Sahu** ([@AmritaSahu25](https://github.com/AmritaSahu25)) — Core Contributor. `outr-website/` module: departments, courses, location, and faculty profiles.
-- **Rama** ([@Rama-Desk](https://github.com/Rama-Desk)) — Core Contributor. `administration/` module: governance desks, committees, admit cards, and results.
-- **Sonali Gupta** ([@sonaligupta-04047](https://github.com/sonaligupta-04047)) — Core Contributor. `student-and-event/` module: campus facilities, hostels, and student life.
+- **Jyoti Prakash Samal** ([@JyotiPrakashSamal](https://github.com/JyotiPrakashSamal)) — Repository Owner. Homepage, global search, React SPA architecture, and deployment.
+- **Amrita Sahu** ([@AmritaSahu25](https://github.com/AmritaSahu25)) — Core Contributor. `outr-website/` module: departments, courses, location, and faculty profiles, language translation(i18n+google).
+- **Rama** ([@Rama-Desk](https://github.com/Rama-Desk)) — Core Contributor. `administration/` module: governance desks, committees, admit cards, and results,social media page.
+- **Sonali Gupta** ([@sonaligupta-04047](https://github.com/sonaligupta-04047)) — Core Contributor. `student-and-event/` module: campus facilities, hostels, Clubs and Societies and student life.
 
 ---
 

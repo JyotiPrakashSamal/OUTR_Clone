@@ -1,0 +1,404 @@
+================================================================================
+OUTR CLONE — CLEAN, PAGE-BY-PAGE MERMAID DIAGRAMS
+================================================================================
+The following diagrams have been broken down into smaller, logical sub-sections.
+This ensures that they will easily fit within standard A4 pages for your report 
+and remain fully readable.
+
+You can paste these raw blocks directly into the Mermaid Live Editor (https://mermaid.live).
+
+================================================================================
+CHAPTER 1: SYSTEM ARCHITECTURE (SPLIT INTO 1A & 1B)
+================================================================================
+
+--------------------------------------------------------------------------------
+DIAGRAM 1A: Client-Side Routing and Navigation Architecture (A4 Page 1)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    User([User Browser]) --> Netlify{Netlify CDN / Router}
+    
+    %% Static Layer Route
+    Netlify -->|Path: / or /home.html| Static[Static HTML & CSS Layer]
+    Static -->|Keyboard Trigger / Spotlight| Search[Spotlight Search: Fuse.js]
+    
+    %% React SPA Route
+    Netlify -->|Path: /portal, /admin-dashboard, etc.| SPA[React 19 SPA Entry]
+    SPA --> Router[React Router v7 Engine]
+    Router --> ProtectedGuard{Role Protected Guard?}
+    ProtectedGuard -->|No: Public| PublicRoutes[Syllabus, About, HODs, VC Desk]
+    ProtectedGuard -->|Yes: Auth Required| DashboardDesks[Admin, Student, Adviser, HOS, Dean, Controller Desks]
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 1B: Frontend-to-Backend Integration Architecture (A4 Page 2)
+--------------------------------------------------------------------------------
+```mermaid
+graph LR
+    subgraph Client: React SPA Layer
+        SessionState[Session & Role State]
+        CRUD[Data Forms & Desks]
+        UploadCtrl[Storage Uploader]
+        NotifyState[Real-time Listener]
+    end
+    
+    subgraph Backend: Supabase Services
+        S_Auth[Supabase Auth: JWT Session]
+        S_DB[(Postgres DB: RLS Protected)]
+        S_Storage[Supabase Storage: clearance-letters]
+        S_Realtime[Supabase Realtime: WebSockets]
+    end
+    
+    SessionState <-->|Sign-in / Refresh| S_Auth
+    CRUD <-->|Auto REST API Queries| S_DB
+    UploadCtrl -->|Private Upload / Signed URLs| S_Storage
+    NotifyState <-->|WS Listen Channel| S_Realtime
+    
+    %% Sync trigger
+    S_Auth -->|Trigger on signup| S_DB
+```
+
+================================================================================
+CHAPTER 2: USE CASE DIAGRAMS (SPLIT BY ACCESS SCOPE FOR A4 PAGES)
+================================================================================
+
+--------------------------------------------------------------------------------
+DIAGRAM 2A: Public & Student Use Case Diagram (A4 Page 3)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    Public[Public User] --> UC_Search[Use Spotlight Search]
+    
+    Student[Student Actor] --> UC_Login[Login to Result Portal]
+    Student --> UC_SubmitClearance[Submit Clearance & Upload PDF]
+    Student --> UC_TrackClearance[Track Clearance Status Chain]
+    Student --> UC_ViewGrades[View Grade Sheets]
+    Student --> UC_ViewAdmit[View Exam Admit Cards]
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 2B: Super Administrator Use Case Diagram (A4 Page 4)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    Admin[Super Administrator] --> UC_AdminLogin[Login to Admin Control]
+    Admin --> UC_Provision[Provision Accounts: Dual Client Pattern]
+    Admin --> UC_UserRegistry[Search Registered User Registry]
+    Admin --> UC_ClearCache[Clear System Caches]
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 2C: Academic Reviewer & Exam Controller Use Case Diagram (A4 Page 5)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    subgraph Reviewers
+        Warden[Hostel Warden]
+        Adviser[Faculty Adviser]
+        HOS[Head of School]
+        Dean[Dean: Academic / PGA]
+    end
+    
+    subgraph Controller
+        Exams[Exam Controller]
+    end
+    
+    Warden --> UC_WardenLogin[Login to Warden Portal]
+    Warden --> UC_WardenRoster[Manage Hostel Roster & Search]
+    Warden --> UC_WardenToggle[Toggle Student Status: Active / Out]
+    Warden --> UC_WardenStats[View Occupancy Statistics]
+    
+    Adviser --> UC_AdviserReview[Review Pending Files]
+    Adviser --> UC_AdviserApprove[Approve / Reject with Remarks]
+    
+    HOS --> UC_HOSReview[Review Pending Files]
+    HOS --> UC_HOSForward[Forward File to Dean Academic / PGA / Controller]
+    
+    Dean --> UC_DeanReview[Review Forwarded Files]
+    Dean --> UC_DeanApprove[Final Approval / Rejection]
+    
+    Exams --> UC_ExamReview[Review Forwarded Files]
+    Exams --> UC_GradesCRUD[Manage Student Grades: JSONB CRUD]
+    Exams --> UC_AdmitCRUD[Manage Admit Cards: JSONB CRUD]
+    Exams --> UC_PrintCtrl[Print Grades / Admit Cards]
+```
+
+================================================================================
+CHAPTER 3: AUTHENTICATION FLOWS (SPLIT INTO 3A & 3B)
+================================================================================
+
+--------------------------------------------------------------------------------
+DIAGRAM 3A: User Credentials Verification Sequence (A4 Page 6)
+--------------------------------------------------------------------------------
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User Browser
+    participant Portal as AuthPortal.jsx
+    participant Auth as Supabase Auth Service
+    
+    User->>Portal: Select Role Card & Input Credentials
+    Portal->>Auth: signInWithPassword(email, password)
+    
+    alt Auth Credentials Valid
+        Auth-->>Portal: Return Session JWT Token
+        Note over Portal: Proceed to Role Verification
+    else Auth Credentials Invalid
+        Auth-->>Portal: Return AuthError
+        Portal-->>User: Display Error: "Invalid credentials"
+    end
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 3B: Database Role Verification & Routing Sequence (A4 Page 7)
+--------------------------------------------------------------------------------
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Portal as AuthPortal.jsx
+    participant DB as profiles Table
+    participant Router as React Router Engine
+    actor User as User Browser
+    
+    Note over Portal: Session JWT verified
+    Portal->>DB: Query profile row by auth.uid()
+    DB-->>Portal: Return profile record (name, role, school_id)
+    
+    alt Selected Portal Role == DB Profile Role
+        Portal->>Router: Redirect to Dashboard (/student-clearance, /admin-dashboard, etc.)
+        Router-->>User: Mount and Render Dashboard Component
+    else Selected Portal Role != DB Profile Role
+        Portal->>Portal: Call auth.signOut() (Invalidate session tokens)
+        Portal-->>User: Display Access Denied: "Role Mismatch"
+    end
+```
+
+================================================================================
+CHAPTER 4: FILE CLEARANCE PIPELINE (SPLIT INTO 4A & 4B)
+================================================================================
+
+--------------------------------------------------------------------------------
+DIAGRAM 4A: Application Initiation and Adviser Review Flow (A4 Page 8)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    Student[Student User] -->|1. Submit Clearance Form| SPA[React SPA Form]
+    SPA -->|2. Upload Document PDF| Storage[Supabase Storage: clearance-letters]
+    Storage -->|Return Document URL| SPA
+    SPA -->|3. Insert Database Row| DB[(file_tracking Table)]
+    DB -->|Status: adviser_status = Pending| Adviser[Faculty Adviser Desk]
+    
+    Adviser -->|Action: Review & Decision| AdviserAction{Adviser Decision}
+    AdviserAction -->|Reject| S_Reject[Clearance Terminated]
+    AdviserAction -->|Approve: update DB| S_Forward[Proceed to HOS Stage]
+    
+    DB -.->|Real-time Insert Broadcast| Realtime((Supabase Realtime))
+    Realtime -.->|Toast Alert| Adviser
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 4B: Forwarding and Final Multi-Role Approval Flow (A4 Page 9)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    AdviserApprove[From Adviser Approval] --> HOS[Head of School Desk]
+    
+    HOS -->|Action: Review File| HOSDecision{HOS Decision}
+    HOSDecision -->|Reject| S_Reject[Clearance Terminated]
+    HOSDecision -->|Approve: Select Forward Target| HOSRouting{forwarded_to Value}
+    
+    HOSRouting -->|dean_pga| DeanPGA[Dean PGA Review]
+    HOSRouting -->|dean_academic| DeanAcad[Dean Academic Review]
+    HOSRouting -->|controller| Controller[Exam Controller Review]
+    
+    DeanPGA -->|Final Decision| FinalApproval{Approved?}
+    DeanAcad -->|Final Decision| FinalApproval
+    Controller -->|Final Decision| FinalApproval
+    
+    FinalApproval -->|Yes| S_Success[Official Clearance Letter Generated]
+    FinalApproval -->|No| S_Reject
+    
+    %% Sockets
+    DeanPGA -.->|Real-time update| Realtime((Supabase Realtime))
+    DeanAcad -.->|Real-time update| Realtime
+    Controller -.->|Real-time update| Realtime
+    Realtime -.->|Push Notifications| Users[All Users UI]
+```
+
+================================================================================
+CHAPTER 5: DATABASE SCHEMAS (SPLIT INTO 5A, 5B & 5C)
+================================================================================
+
+--------------------------------------------------------------------------------
+DIAGRAM 5A: Core Platform & Security Schema ERD (A4 Page 10)
+--------------------------------------------------------------------------------
+```mermaid
+erDiagram
+    auth_users {
+        uuid id PK
+        string email
+        string encrypted_password
+    }
+    
+    profiles {
+        uuid id PK, FK
+        string name
+        string role
+        string school_id
+        timestamp created_at
+    }
+    
+    file_tracking {
+        uuid id PK
+        string file_no UK
+        string student_name
+        string student_regd
+        string school_id
+        jsonb subject
+        string file_url
+        string adviser_status
+        string adviser_name
+        string hos_status
+        string hos_name
+        string forwarded_to
+        string dean_status
+        string dean_name
+        string controller_status
+        string controller_name
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    auth_users ||--|| profiles : "one-to-one mapping (Trigger synchronized)"
+    profiles ||--o| file_tracking : "owns/reviews (matched via email/regd_no)"
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 5B: Student Academic & Exam Records ERD (A4 Page 11)
+--------------------------------------------------------------------------------
+```mermaid
+erDiagram
+    profiles {
+        uuid id PK
+        string name
+        string role
+        string school_id
+        timestamp created_at
+    }
+    
+    student_grades {
+        uuid id PK
+        string regd_no
+        string name
+        string class_name
+        string semester
+        string exam_type
+        string status
+        jsonb subjects "JSONB array of subject marks and credits"
+        timestamp created_at
+    }
+    
+    student_admit_cards {
+        uuid id PK
+        string regd_no
+        string name
+        string branch
+        string semester
+        string academic_year
+        string exam_type
+        date dob
+        jsonb subjects "JSONB array of exam dates and times"
+        timestamp issued_at
+    }
+    
+    profiles ||--o| student_grades : "views result (matched via regd_no)"
+    profiles ||--o| student_admit_cards : "views admit card (matched via regd_no)"
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 5C: Hostel Roster Management ERD (A4 Page 12)
+--------------------------------------------------------------------------------
+```mermaid
+erDiagram
+    profiles {
+        uuid id PK
+        string name
+        string role "warden / student"
+        string school_id "hostel affiliation for wardens"
+        timestamp created_at
+    }
+    
+    students_hostel {
+        uuid id PK
+        string regd_no UK
+        string name
+        string hostel
+        string room
+        string status "Active / Checked Out"
+        string email
+        string phone
+        timestamp created_at
+    }
+    
+    profiles ||--o| students_hostel : "manages/housed (matched via hostel/email)"
+```
+
+================================================================================
+CHAPTER 6: ADMIN USER PROVISIONING FLOWS (SPLIT INTO 6A & 6B)
+================================================================================
+
+--------------------------------------------------------------------------------
+DIAGRAM 6A: Dual Supabase Client Isolation Architecture (A4 Page 13)
+--------------------------------------------------------------------------------
+```mermaid
+graph TD
+    subgraph Browser Session State
+        AdminJWT[Admin Auth Session in LocalStorage]
+    end
+    
+    subgraph React Application Initialization
+        PrimaryClient["Primary Supabase Client (Default initialization)"]
+        SecondaryClient["Secondary Supabase Client (custom settings)"]
+    end
+    
+    AdminJWT -->|Automatically read & synchronized by| PrimaryClient
+    
+    subgraph Secondary Settings Override
+        Opt1[persistSession: false]
+        Opt2[autoRefreshToken: false]
+        Opt3[detectSessionInUrl: false]
+    end
+    
+    Opt1 --> SecondaryClient
+    Opt2 --> SecondaryClient
+    Opt3 --> SecondaryClient
+    
+    Note over SecondaryClient: This client does not write to or read from browser LocalStorage.
+```
+
+--------------------------------------------------------------------------------
+DIAGRAM 6B: Provisioning API Sequence & Trigger Lifecycle (A4 Page 14)
+--------------------------------------------------------------------------------
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Admin as Super Admin
+    participant Form as AdminDashboard.jsx Form
+    participant Client2 as Secondary Supabase Client
+    participant Auth as Supabase Auth Service
+    participant Trigger as Database Trigger: on_auth_user_created
+    participant DB as profiles Table
+    
+    Admin->>Form: Enter name, email, password, role, school_id
+    Admin->>Form: Click "Create User"
+    Form->>Client2: signUp(email, password, options.data)
+    Client2->>Auth: POST /signup with metadata
+    Auth->>Auth: 1. Create authentication account
+    Auth->>Trigger: 2. Fire trigger handle_new_user()
+    Trigger->>DB: 3. Insert record (id, name, role, school_id)
+    Auth-->>Client2: Return signup response (JWT session for new user)
+    Client2-->>Form: Return success response
+    Note over Form: AdminDashboard ignores the returned JWT.<br>Primary client remains active with Admin's session.
+    Form-->>Admin: Display "User Created Successfully", refresh registry table
+```
+================================================================================
